@@ -8,6 +8,7 @@ import MountainScroll from '@/components/MountainScroll';
 import HeroOverlay from '@/components/HeroOverlay';
 import { LoadingProvider } from '@/components/LoadingContext';
 import ScrollIndicator from '@/components/ScrollIndicator';
+import MascotCursor from '@/components/MascotCursor';
 
 // Lazy load below-the-fold components
 const AboutTeam = dynamic(() => import('@/components/AboutTeam'), { ssr: false });
@@ -26,6 +27,7 @@ export default function Home() {
         {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
 
         <ScrollIndicator />
+        <MascotCursor />
 
         <Navbar />
         <MountainScroll />
