@@ -17,16 +17,9 @@ export default function PussSideBar() {
                     loop
                     muted
                     playsInline
-                    poster="/images/pussinboots-hd/ezgif-frame-050.webp"
                     className="w-full h-full object-cover object-center opacity-80 scale-[1.4] origin-top"
                 >
                     <source src="/images/puss-bongo-v2.mp4" type="video/mp4" />
-                    {/* Fallback to image if video fails or format not supported */}
-                    <img
-                        src="/images/pussinboots-hd/ezgif-frame-050.webp"
-                        alt="Cyber Puss Mascot"
-                        className="w-full h-full object-cover object-center"
-                    />
                 </video>
 
                 {/* Glitch Overlay Effect (CSS/Framer) */}

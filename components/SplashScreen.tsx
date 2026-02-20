@@ -2,14 +2,14 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLoading } from './LoadingContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
     const { isComplete } = useLoading();
     const [shouldExit, setShouldExit] = useState(false);
 
     const onCompleteRef = useRef(onComplete);
-    
+
     // Always keep the ref updated to the latest callback without triggering a full effect teardown
     useEffect(() => {
         onCompleteRef.current = onComplete;
@@ -30,7 +30,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
                 setShouldExit(true);
                 setTimeout(() => onCompleteRef.current(), 800);
             }, 500); // Slight delay for smoothness (reduced from 800ms)
-            
+
             return () => {
                 clearTimeout(timeout);
                 clearTimeout(safetyTimeout);

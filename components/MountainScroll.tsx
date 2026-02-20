@@ -118,25 +118,43 @@ export default function MountainScroll() {
         loadBatch(0, 1);
 
         // 2. Intelligent Scroll-Based Loading (The "No Network Freeze" Fix)
-        // Instead of downloading 192 images all at once and killing the browser queue,
-        // we only download a small chunk AHEAD of where the user currently is.
         const PRELOAD_BUFFER = 15; // How many frames to keep loaded ahead of the scroll
 
         let lastLoadedFrame = 0; // We loaded frame 0 instantly
+        let isLoadingChunk = false;
 
         const checkScrollAndLoad = () => {
             const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
             const scrollProgress = Math.min(Math.max(scrollTop / docHeight, 0), 1);
             const currentFrame = Math.round(scrollProgress * (TOTAL_FRAMES - 1));
 
             // Calculate how far ahead we need to load
             const targetFrame = Math.min(currentFrame + PRELOAD_BUFFER, TOTAL_FRAMES);
 
-            if (targetFrame > lastLoadedFrame) {
-                // Load from last loaded up to our new target
-                loadBatch(lastLoadedFrame + 1, targetFrame + 1);
-                lastLoadedFrame = targetFrame;
+            if (targetFrame > lastLoadedFrame && !isLoadingChunk) {
+                isLoadingChunk = true;
+
+                // STAGGER FIX: Enforce strict chunking to protect the network queue
+                const framesToLoad = targetFrame - lastLoadedFrame;
+                const chunkSize = 8;
+                let chunksDispatched = 0;
+
+                for (let offset = 0; offset < framesToLoad; offset += chunkSize) {
+                    const start = lastLoadedFrame + offset + 1;
+                    const end = Math.min(start + chunkSize, targetFrame + 1);
+
+                    setTimeout(() => {
+                        loadBatch(start, end);
+                    }, chunksDispatched * 150); // Stagger by 150ms
+
+                    chunksDispatched++;
+                }
+
+                setTimeout(() => {
+                    lastLoadedFrame = targetFrame;
+                    isLoadingChunk = false;
+                }, chunksDispatched * 150 + 50);
             }
         };
 
@@ -144,7 +162,7 @@ export default function MountainScroll() {
         window.addEventListener('scroll', checkScrollAndLoad, { passive: true });
 
         // Wait a tiny bit for layout to settle before initial check
-        setTimeout(checkScrollAndLoad, 100);
+        setTimeout(checkScrollAndLoad, 200);
 
         resize();
         window.addEventListener('scroll', onScroll, { passive: true });
