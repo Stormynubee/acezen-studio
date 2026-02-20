@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import SplashScreen from '@/components/SplashScreen';
@@ -36,20 +36,22 @@ export default function Home() {
         <div className="h-[100vh]" />
 
         <div className="relative z-10 bg-zinc-950 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-          <div id="about">
-            <AboutTeam />
-          </div>
-          <div id="services">
-            <ServicesBento />
-          </div>
-          <div id="work">
-            <WorkShowcase />
-          </div>
-          <Ticker />
-          <Process />
-          <div id="contact">
-            <Footer />
-          </div>
+          <React.Suspense fallback={<div className="h-screen bg-zinc-950" />}>
+            <div id="about">
+              <AboutTeam />
+            </div>
+            <div id="services">
+              <ServicesBento />
+            </div>
+            <div id="work">
+              <WorkShowcase />
+            </div>
+            <Ticker />
+            <Process />
+            <div id="contact">
+              <Footer />
+            </div>
+          </React.Suspense>
         </div>
       </main>
     </LoadingProvider>
