@@ -42,31 +42,7 @@ export default function HeroOverlay() {
                 </motion.div>
             </div>
 
-            {/* Minimalist Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.5, duration: 1 }}
-                className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
-            >
-                {/* Scroll Text Prompt */}
-                <span className="text-[9px] uppercase tracking-[0.4em] text-zinc-500 font-mono">
-                    Scroll To Explore
-                </span>
 
-                {/* Animated Vertical Track */}
-                <div className="w-[1px] h-12 md:h-16 bg-white/10 relative overflow-hidden rounded-full">
-                    <motion.div
-                        className="w-full h-1/3 bg-gradient-to-b from-transparent via-white to-transparent"
-                        animate={{ y: ['-100%', '300%'] }}
-                        transition={{
-                            repeat: Infinity,
-                            duration: 1.5,
-                            ease: 'linear'
-                        }}
-                    />
-                </div>
-            </motion.div>
         </div>
     );
 }
