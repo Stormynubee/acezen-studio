@@ -63,7 +63,7 @@ export default function Navbar() {
             >
                 {/* Dynamic Context Label — desktop only */}
                 <motion.div
-                    className="hidden lg:flex items-center justify-center bg-black/40 backdrop-blur-3xl border border-white/10 rounded-full px-5 py-2 shadow-2xl min-w-[140px]"
+                    className="hidden lg:flex items-center justify-center bg-zinc-900/90 border border-white/10 rounded-full px-5 py-2 shadow-2xl min-w-[140px]"
                 >
                     <AnimatePresence mode="wait">
                         <motion.span
@@ -79,7 +79,7 @@ export default function Navbar() {
                 </motion.div>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-2 bg-black/40 backdrop-blur-3xl border border-white/5 rounded-full p-2 pl-6 shadow-2xl">
+                <div className="hidden md:flex items-center gap-2 bg-zinc-900/90 border border-white/5 rounded-full p-2 pl-6 shadow-2xl">
                     <div className="flex gap-6 mr-4">
                         {['about', 'services', 'work'].map((tab) => (
                             <button
@@ -156,7 +156,7 @@ export default function Navbar() {
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -6 }}
-                            className="text-white text-[10px] tracking-[0.2em] uppercase font-medium bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-4 py-2"
+                            className="text-white text-[10px] tracking-[0.2em] uppercase font-medium bg-zinc-900/95 border border-white/10 rounded-full px-4 py-2"
                         >
                             {activeText}
                         </motion.span>
@@ -164,7 +164,7 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
-                        className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center"
+                        className="w-10 h-10 rounded-full bg-zinc-900/95 border border-white/10 flex items-center justify-center"
                         aria-label="Menu"
                     >
                         <div className="flex flex-col gap-[5px]">
@@ -193,7 +193,7 @@ export default function Navbar() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
+                        className="fixed inset-0 z-40 bg-zinc-950/95 flex flex-col items-center justify-center gap-8"
                     >
                         {['about', 'services', 'work'].map((tab, i) => (
                             <motion.button

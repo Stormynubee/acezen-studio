@@ -30,7 +30,7 @@ export default function HeroOverlay() {
                     transition={{ duration: 1.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="md:max-w-sm mb-2"
                 >
-                    <div className="bg-black/40 backdrop-blur-3xl border border-white/5 rounded-2xl p-6 md:p-8 transform-gpu">
+                    <div className="bg-zinc-900/90 border border-white/5 rounded-2xl p-6 md:p-8 transform-gpu">
                         <p className="text-sm md:text-base font-light leading-relaxed text-zinc-300">
                             We transcend traditional development. Engineering cinematic digital realities from system kernels to immersive brand experiences.
                         </p>
