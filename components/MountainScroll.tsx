@@ -117,26 +117,34 @@ export default function MountainScroll() {
         // 1. Critical: Frame 0 (Instant)
         loadBatch(0, 1);
 
-        // 2. Main Sequence: Load after window is fully loaded to prevent JS hydration blocking
-        const loadAllFrames = () => {
-            const chunkSize = 15; // Faster chunking now that the network queue is safe
-            for (let i = 1; i < TOTAL_FRAMES; i += chunkSize) {
-                setTimeout(() => {
-                    // Only load if the user is still on the page
-                    if (isMobileRef.current) {
-                        loadBatch(i, Math.min(i + 8, TOTAL_FRAMES));
-                    } else {
-                        loadBatch(i, i + chunkSize);
-                    }
-                }, i * 50); // Much faster stagger (50ms instead of 150ms)
+        // 2. Intelligent Scroll-Based Loading (The "No Network Freeze" Fix)
+        // Instead of downloading 192 images all at once and killing the browser queue,
+        // we only download a small chunk AHEAD of where the user currently is.
+        const PRELOAD_BUFFER = 15; // How many frames to keep loaded ahead of the scroll
+
+        let lastLoadedFrame = 0; // We loaded frame 0 instantly
+
+        const checkScrollAndLoad = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = Math.min(Math.max(scrollTop / docHeight, 0), 1);
+            const currentFrame = Math.round(scrollProgress * (TOTAL_FRAMES - 1));
+
+            // Calculate how far ahead we need to load
+            const targetFrame = Math.min(currentFrame + PRELOAD_BUFFER, TOTAL_FRAMES);
+
+            if (targetFrame > lastLoadedFrame) {
+                // Load from last loaded up to our new target
+                loadBatch(lastLoadedFrame + 1, targetFrame + 1);
+                lastLoadedFrame = targetFrame;
             }
         };
 
-        if (document.readyState === 'complete') {
-            loadAllFrames();
-        } else {
-            window.addEventListener('load', loadAllFrames);
-        }
+        // Attach to scroll and fire once to load the first immediate chunk
+        window.addEventListener('scroll', checkScrollAndLoad, { passive: true });
+
+        // Wait a tiny bit for layout to settle before initial check
+        setTimeout(checkScrollAndLoad, 100);
 
         resize();
         window.addEventListener('scroll', onScroll, { passive: true });
