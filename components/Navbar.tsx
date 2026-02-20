@@ -105,39 +105,34 @@ export default function Navbar() {
                         target="_blank"
                         rel="noopener noreferrer"
                         animate={isScrolled ? {
-                            scale: [1, 1.05, 1],
-                            boxShadow: [
-                                "0px 0px 0px rgba(255, 255, 255, 0)",
-                                "0px 0px 30px rgba(255, 255, 255, 0.6)",
-                                "0px 0px 0px rgba(255, 255, 255, 0)"
-                            ],
-                            backgroundColor: ["#ffffff", "#f0f0f0", "#ffffff"],
+                            scale: [1, 1.02, 1],
+                            backgroundColor: ["#ffffff", "#f4f4f5", "#ffffff"],
                             color: "#000000"
                         } : {
                             scale: 1,
-                            boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
                             backgroundColor: "#ffffff",
                             color: "#000000"
                         }}
                         transition={isScrolled ? {
-                            duration: 1.5,
+                            duration: 3,
                             repeat: Infinity,
                             ease: "easeInOut"
                         } : { duration: 0.3 }}
-                        whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
-                        className="relative overflow-hidden bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors transform-gpu group"
+                        whileHover={{ scale: 1.05 }}
+                        className="relative overflow-hidden isolate bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors group"
+                        style={{ WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}
                     >
                         <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Portfolio</span>
-                        {/* Premium Shimmer effect triggered on scroll - highly visible */}
+                        {/* Premium Shimmer effect - slowed down, WebKit clipping bugs fixed */}
                         {isScrolled && (
                             <motion.div
-                                className="absolute top-0 bottom-0 z-0 w-[50%] bg-gradient-to-r from-transparent via-black/40 to-transparent skew-x-[-20deg]"
-                                animate={{ left: ['-100%', '200%'] }}
+                                className="absolute top-0 bottom-0 z-0 w-[150%] left-[-150%] bg-gradient-to-r from-transparent via-black/10 to-transparent skew-x-[-20deg] pointer-events-none"
+                                animate={{ x: ['0%', '250%'] }}
                                 transition={{
-                                    duration: 1.5,
+                                    duration: 3,
                                     repeat: Infinity,
                                     ease: "linear",
-                                    repeatDelay: 0.5
+                                    repeatDelay: 1.5
                                 }}
                             />
                         )}
