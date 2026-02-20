@@ -108,10 +108,10 @@ export default function Navbar() {
                             scale: [1, 1.05, 1],
                             boxShadow: [
                                 "0px 0px 0px rgba(255, 255, 255, 0)",
-                                "0px 0px 20px rgba(255, 255, 255, 0.4)",
+                                "0px 0px 30px rgba(255, 255, 255, 0.6)",
                                 "0px 0px 0px rgba(255, 255, 255, 0)"
                             ],
-                            backgroundColor: "#ffffff",
+                            backgroundColor: ["#ffffff", "#f0f0f0", "#ffffff"],
                             color: "#000000"
                         } : {
                             scale: 1,
@@ -120,21 +120,21 @@ export default function Navbar() {
                             color: "#000000"
                         }}
                         transition={isScrolled ? {
-                            duration: 2,
+                            duration: 1.5,
                             repeat: Infinity,
                             ease: "easeInOut"
                         } : { duration: 0.3 }}
                         whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
                         className="relative overflow-hidden bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors transform-gpu group"
                     >
-                        <span className="relative z-10 group-hover:opacity-80 transition-opacity">Portfolio</span>
-                        {/* Premium Shimmer effect triggered on scroll */}
+                        <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Portfolio</span>
+                        {/* Premium Shimmer effect triggered on scroll - highly visible */}
                         {isScrolled && (
                             <motion.div
-                                className="absolute inset-0 -translate-x-full z-0 w-[150%] h-[100%] bg-gradient-to-r from-transparent via-black/10 to-transparent skew-x-12"
-                                animate={{ translateX: ['-100%', '100%'] }}
+                                className="absolute top-0 bottom-0 z-0 w-[50%] bg-gradient-to-r from-transparent via-black/40 to-transparent skew-x-[-20deg]"
+                                animate={{ left: ['-100%', '200%'] }}
                                 transition={{
-                                    duration: 2.5,
+                                    duration: 1.5,
                                     repeat: Infinity,
                                     ease: "linear",
                                     repeatDelay: 0.5

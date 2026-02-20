@@ -54,9 +54,9 @@ export default function AboutTeam() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6, duration: 0.8 }}
-                        className="text-white font-bold text-3xl md:text-4xl tracking-tighter"
+                        className="text-white font-bold text-3xl tracking-tighter"
                     >
-                        Cyber Puss
+                        Puss x Bongo
                     </motion.h3>
                 </div>
             </motion.div>
@@ -105,7 +105,7 @@ export default function AboutTeam() {
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover/hansraj:animate-pulse" />
                         </p>
 
-                        <h2 className="text-5xl md:text-8xl lg:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left md:origin-right">
+                        <h2 className="text-4xl md:text-7xl lg:text-[6rem] xl:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left md:origin-right whitespace-nowrap">
                             Hansraj<br /><span className="text-zinc-600 group-hover/hansraj:text-white transition-colors duration-700">Tiwari</span>
                         </h2>
 
@@ -141,7 +141,7 @@ export default function AboutTeam() {
                         </AnimatePresence>
 
                         {/* Static Number */}
-                        <span className="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-[6rem] md:text-[12rem] leading-none font-black text-zinc-900 group-hover/hansraj:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/hansraj:from-blue-900/10 group-hover/hansraj:to-transparent">
+                        <span className="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-[5rem] md:text-[10rem] lg:text-[12rem] leading-none font-black text-zinc-900 group-hover/hansraj:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/hansraj:from-blue-900/10 group-hover/hansraj:to-transparent">
                             01
                         </span>
                     </div>
@@ -176,7 +176,7 @@ export default function AboutTeam() {
                             Visual Director
                         </p>
 
-                        <h2 className="text-5xl md:text-8xl lg:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left">
+                        <h2 className="text-4xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left whitespace-nowrap">
                             Sayli<br /><span className="text-zinc-600 group-hover/sayli:text-white transition-colors duration-700">Changan</span>
                         </h2>
 
@@ -211,7 +211,7 @@ export default function AboutTeam() {
                         </AnimatePresence>
 
                         {/* Static Number */}
-                        <span className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-[6rem] md:text-[12rem] leading-none font-black text-zinc-900 group-hover/sayli:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/sayli:from-purple-900/10 group-hover/sayli:to-transparent">
+                        <span className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-[5rem] md:text-[10rem] lg:text-[12rem] leading-none font-black text-zinc-900 group-hover/sayli:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/sayli:from-purple-900/10 group-hover/sayli:to-transparent">
                             02
                         </span>
                     </div>
