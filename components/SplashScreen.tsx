@@ -8,20 +8,29 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
     const { isComplete } = useLoading();
     const [shouldExit, setShouldExit] = useState(false);
 
+    const onCompleteRef = useRef(onComplete);
+    
+    // Always keep the ref updated to the latest callback without triggering a full effect teardown
     useEffect(() => {
-        // Safety: Force exit after 5 seconds max
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
+
+    useEffect(() => {
+        // If we are already exiting, do nothing and do not reset timers.
+        if (shouldExit) return;
+
+        // Safety: Force exit after 3 seconds max (reduced from 5s for peppier reloads)
         const safetyTimeout = setTimeout(() => {
-            if (!shouldExit) {
-                setShouldExit(true);
-                setTimeout(onComplete, 800);
-            }
-        }, 5000);
+            setShouldExit(true);
+            setTimeout(() => onCompleteRef.current(), 800);
+        }, 3000);
 
         if (isComplete) {
             const timeout = setTimeout(() => {
                 setShouldExit(true);
-                setTimeout(onComplete, 800);
-            }, 800); // Slight delay for smoothness
+                setTimeout(() => onCompleteRef.current(), 800);
+            }, 500); // Slight delay for smoothness (reduced from 800ms)
+            
             return () => {
                 clearTimeout(timeout);
                 clearTimeout(safetyTimeout);
@@ -29,7 +38,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         }
 
         return () => clearTimeout(safetyTimeout);
-    }, [isComplete, onComplete, shouldExit]);
+    }, [isComplete, shouldExit]);
 
     return (
         <AnimatePresence>
