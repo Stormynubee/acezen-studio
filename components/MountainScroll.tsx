@@ -117,25 +117,26 @@ export default function MountainScroll() {
         // 1. Critical: Frame 0 (Instant)
         loadBatch(0, 1);
 
-        // 2. Main Sequence: Load everything in parallel chunks
-        // We MUST delay this aggressively so we don't saturate the browser's 
-        // 6-connection HTTP limit and block Next.js from downloading critical JS chunks 
-        // (which causes the site to infinitely hang on reload).
-        setTimeout(() => {
-            const chunkSize = 10; // Smaller chunks (10 instead of 20)
+        // 2. Main Sequence: Load after window is fully loaded to prevent JS hydration blocking
+        const loadAllFrames = () => {
+            const chunkSize = 15; // Faster chunking now that the network queue is safe
             for (let i = 1; i < TOTAL_FRAMES; i += chunkSize) {
-                // Stagger significantly to avoid freezing main thread and network queue
                 setTimeout(() => {
                     // Only load if the user is still on the page
                     if (isMobileRef.current) {
-                        // Mobile devices get even smaller chunks and slower loading to save memory
-                        loadBatch(i, Math.min(i + 5, TOTAL_FRAMES));
+                        loadBatch(i, Math.min(i + 8, TOTAL_FRAMES));
                     } else {
                         loadBatch(i, i + chunkSize);
                     }
-                }, i * 150);
+                }, i * 50); // Much faster stagger (50ms instead of 150ms)
             }
-        }, 2500); // Wait 2.5s (until splash screen is mostly done) before spamming network
+        };
+
+        if (document.readyState === 'complete') {
+            loadAllFrames();
+        } else {
+            window.addEventListener('load', loadAllFrames);
+        }
 
         resize();
         window.addEventListener('scroll', onScroll, { passive: true });
