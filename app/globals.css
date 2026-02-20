@@ -29,12 +29,9 @@
   --background-end-rgb: 10, 10, 10;
 }
 
-/* Smooth Scrolling */
+/* Smooth Scrolling Managed by Lenis via layout.tsx */
 html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  overflow-y: auto !important;
-  /* Force scroll capability */
+  /* Removed strict overflow to prevent Lenis calculate-height freeze */
 }
 
 body {
@@ -42,7 +39,26 @@ body {
   background: transparent;
   /* Changed to transparent to let MountainScroll show */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto !important;
-  /* Force scroll capability */
+}
+
+/* Mandatory Lenis Scroll Engine Classes */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
