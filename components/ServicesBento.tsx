@@ -195,6 +195,7 @@ export default function ServicesBento() {
                             <div className="sticky top-0 z-10 flex justify-end p-4">
                                 <button
                                     onClick={() => setActiveModal(null)}
+                                    aria-label="Close modal"
                                     className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
                                 >
                                     ✕
