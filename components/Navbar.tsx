@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { useState } from 'react';
 import clsx from 'clsx';
 
 export default function Navbar() {
@@ -9,35 +9,41 @@ export default function Navbar() {
     const [activeTab, setActiveTab] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const height = window.innerHeight;
+    const [isScrolled, setIsScrolled] = useState(false);
+    const { scrollY } = useScroll();
 
-            if (scrollY < height * 0.5) {
-                setActiveText('AceZen');
-                setActiveTab('');
-            } else if (scrollY < height * 1.5) {
-                setActiveText('The Journey');
-                setActiveTab('');
-            } else if (scrollY < height * 2.5) {
-                setActiveText('The Founder');
-                setActiveTab('about');
-            } else if (scrollY < height * 3.5) {
-                setActiveText('Expertise');
-                setActiveTab('services');
-            } else if (scrollY < height * 5.5) {
-                setActiveText('Selected Works');
-                setActiveTab('work');
-            } else {
-                setActiveText('Get in Touch');
-                setActiveTab('portfolio');
-            }
-        };
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        // High-performance scroll tracking using Framer Motion (optimized API request frame)
+        if (typeof window === 'undefined') return;
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        const height = window.innerHeight;
+
+        if (latest < height * 0.5) {
+            setActiveText('AceZen');
+            setActiveTab('');
+            setIsScrolled(false);
+        } else if (latest < height * 1.5) {
+            setActiveText('The Journey');
+            setActiveTab('');
+            setIsScrolled(true);
+        } else if (latest < height * 2.5) {
+            setActiveText('The Founder');
+            setActiveTab('about');
+            setIsScrolled(true);
+        } else if (latest < height * 3.5) {
+            setActiveText('Expertise');
+            setActiveTab('services');
+            setIsScrolled(true);
+        } else if (latest < height * 5.5) {
+            setActiveText('Selected Works');
+            setActiveTab('work');
+            setIsScrolled(true);
+        } else {
+            setActiveText('Get in Touch');
+            setActiveTab('portfolio');
+            setIsScrolled(true);
+        }
+    });
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
@@ -98,9 +104,13 @@ export default function Navbar() {
                         href="https://hansraj-dev.vercel.app/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        animate={activeTab === 'portfolio' ? {
-                            scale: 1.05,
-                            boxShadow: "0px 0px 20px rgba(255, 255, 255, 0.2)",
+                        animate={isScrolled ? {
+                            scale: [1, 1.05, 1],
+                            boxShadow: [
+                                "0px 0px 0px rgba(255, 255, 255, 0)",
+                                "0px 0px 20px rgba(255, 255, 255, 0.4)",
+                                "0px 0px 0px rgba(255, 255, 255, 0)"
+                            ],
                             backgroundColor: "#ffffff",
                             color: "#000000"
                         } : {
@@ -109,11 +119,28 @@ export default function Navbar() {
                             backgroundColor: "#ffffff",
                             color: "#000000"
                         }}
-                        transition={{ duration: 0.3 }}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors"
+                        transition={isScrolled ? {
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        } : { duration: 0.3 }}
+                        whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
+                        className="relative overflow-hidden bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors transform-gpu group"
                     >
-                        Portfolio
+                        <span className="relative z-10 group-hover:opacity-80 transition-opacity">Portfolio</span>
+                        {/* Premium Shimmer effect triggered on scroll */}
+                        {isScrolled && (
+                            <motion.div
+                                className="absolute inset-0 -translate-x-full z-0 w-[150%] h-[100%] bg-gradient-to-r from-transparent via-black/10 to-transparent skew-x-12"
+                                animate={{ translateX: ['-100%', '100%'] }}
+                                transition={{
+                                    duration: 2.5,
+                                    repeat: Infinity,
+                                    ease: "linear",
+                                    repeatDelay: 0.5
+                                }}
+                            />
+                        )}
                     </motion.a>
                 </div>
 
