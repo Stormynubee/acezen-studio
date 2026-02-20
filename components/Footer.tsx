@@ -25,7 +25,7 @@ export default function Footer() {
                 >
                     <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-white/30 mb-4 md:mb-6">Get in touch</p>
                     <a
-                        href="mailto:hansrajtiwari@acezen.studio"
+                        href="mailto:priyanktiwari434@gmail.com"
                         className="group inline-block"
                     >
                         <h2 className="text-3xl sm:text-5xl md:text-8xl font-bold tracking-tighter transition-colors duration-300 group-hover:text-white/60">
