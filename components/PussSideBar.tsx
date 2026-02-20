@@ -18,7 +18,7 @@ export default function PussSideBar() {
                     muted
                     playsInline
                     poster="/images/pussinboots-hd/ezgif-frame-050.webp"
-                    className="w-full h-full object-cover object-center opacity-80 scale-[1.2] origin-top"
+                    className="w-full h-full object-cover object-center opacity-80 scale-[1.35] origin-top"
                 >
                     <source src="/images/puss-loop.mp4" type="video/mp4" />
                     {/* Fallback to image if video fails or format not supported */}
