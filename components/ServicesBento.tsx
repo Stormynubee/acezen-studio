@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import ScrambleText from './ScrambleText';
@@ -44,6 +44,11 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isHovered, setIsHovered] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+    }, []);
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -55,7 +60,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!divRef.current) return;
+        if (isMobile || !divRef.current) return;
         const rect = divRef.current.getBoundingClientRect();
 
         // For the static radial glare
@@ -73,6 +78,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     };
 
     const handleMouseEnter = () => {
+        if (isMobile) return;
         setIsHovered(true);
         if (videoRef.current) {
             videoRef.current.play().catch(() => { });
@@ -80,6 +86,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     };
 
     const handleMouseLeave = () => {
+        if (isMobile) return;
         setIsHovered(false);
         x.set(0);
         y.set(0);
@@ -100,7 +107,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            style={{
+            style={isMobile ? {} : {
                 rotateX,
                 rotateY,
                 transformStyle: "preserve-3d",

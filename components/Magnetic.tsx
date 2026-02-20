@@ -1,18 +1,23 @@
 'use client';
 
-import { useRef, useState, ReactNode } from 'react';
+import { useRef, useState, ReactNode, useEffect } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 export default function Magnetic({ children, strength = 0.5 }: { children: ReactNode, strength?: number }) {
     const ref = useRef<HTMLDivElement>(null);
     const [isHovered, setIsHovered] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+    }, []);
 
     const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
     const x = useSpring(0, springConfig);
     const y = useSpring(0, springConfig);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
+        if (isMobile || !ref.current) return;
         const { clientX, clientY } = e;
         const { width, height, left, top } = ref.current.getBoundingClientRect();
         const middleX = clientX - (left + width / 2);
@@ -22,6 +27,7 @@ export default function Magnetic({ children, strength = 0.5 }: { children: React
     };
 
     const handleMouseLeave = () => {
+        if (isMobile) return;
         setIsHovered(false);
         x.set(0);
         y.set(0);
@@ -31,11 +37,11 @@ export default function Magnetic({ children, strength = 0.5 }: { children: React
         <motion.div
             ref={ref}
             onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={() => !isMobile && setIsHovered(true)}
             onMouseLeave={handleMouseLeave}
-            animate={{ scale: isHovered ? 1.05 : 1 }}
+            animate={{ scale: isHovered && !isMobile ? 1.05 : 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            style={{ x, y }}
+            style={isMobile ? {} : { x, y }}
             className="flex items-center justify-center cursor-pointer"
         >
             {children}
