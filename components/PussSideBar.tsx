@@ -11,16 +11,16 @@ export default function PussSideBar() {
                 transition={{ duration: 0.8 }}
                 className="relative w-full h-full"
             >
-                {/* Optimized Video Loop - Scaled and originate from top to crop out bottom 'LOADING' baked text */}
+                {/* Optimized Video Loop - Scaled to 1.4x to crop out 'LOADING' and renamed to bust CDN cache */}
                 <video
                     autoPlay
                     loop
                     muted
                     playsInline
                     poster="/images/pussinboots-hd/ezgif-frame-050.webp"
-                    className="w-full h-full object-cover object-center opacity-80 scale-[1.35] origin-top"
+                    className="w-full h-full object-cover object-center opacity-80 scale-[1.4] origin-top"
                 >
-                    <source src="/images/puss-loop.mp4" type="video/mp4" />
+                    <source src="/images/puss-bongo-v2.mp4" type="video/mp4" />
                     {/* Fallback to image if video fails or format not supported */}
                     <img
                         src="/images/pussinboots-hd/ezgif-frame-050.webp"
