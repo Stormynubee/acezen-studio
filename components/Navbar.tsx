@@ -4,10 +4,40 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-
 import { useState } from 'react';
 import clsx from 'clsx';
 
+function useUISound() {
+    const playClick = () => {
+        try {
+            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioContext) return;
+            // Create a short, high-quality UI "tick" using an oscillator
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.05);
+
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.05);
+        } catch (e) {
+            // Silently fail if audio context is blocked by user interaction policies
+        }
+    };
+    return { playClick };
+}
+
 export default function Navbar() {
     const [activeText, setActiveText] = useState('AceZen');
     const [activeTab, setActiveTab] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
+    const { playClick } = useUISound();
 
     const [isScrolled, setIsScrolled] = useState(false);
     const { scrollY } = useScroll();
@@ -85,6 +115,7 @@ export default function Navbar() {
                             <button
                                 key={tab}
                                 onClick={() => scrollToSection(tab)}
+                                onMouseEnter={playClick}
                                 className={clsx(
                                     "text-[10px] transition-colors uppercase tracking-[0.2em] font-medium relative py-1",
                                     activeTab === tab ? "text-white" : "text-zinc-500 hover:text-white"
@@ -104,6 +135,7 @@ export default function Navbar() {
                         href="https://hansraj-dev.vercel.app/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onMouseEnter={playClick}
                         animate={isScrolled ? {
                             scale: [1, 1.02, 1],
                             boxShadow: [

@@ -16,6 +16,7 @@ const WorkShowcase = dynamic(() => import('@/components/WorkShowcase'), { ssr: f
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
 const Ticker = dynamic(() => import('@/components/Ticker'), { ssr: false });
 const Process = dynamic(() => import('@/components/Process'), { ssr: false });
+const TerminalEasterEgg = dynamic(() => import('@/components/TerminalEasterEgg'), { ssr: false });
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
@@ -23,6 +24,7 @@ export default function Home() {
   return (
     <LoadingProvider>
       <main className="min-h-screen">
+        <TerminalEasterEgg />
         {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
 
         <ScrollIndicator />
