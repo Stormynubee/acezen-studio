@@ -1,9 +1,10 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
+import ScrambleText from './ScrambleText';
 
 type ServiceKey = 'video' | 'marketing' | 'design' | 'designing' | 'building' | null;
 
@@ -44,10 +45,31 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const [isHovered, setIsHovered] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
+    const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
+
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!divRef.current) return;
         const rect = divRef.current.getBoundingClientRect();
+
+        // For the static radial glare
         setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+
+        // 3D Tilt calculation
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        const xPct = mouseX / width - 0.5;
+        const yPct = mouseY / height - 0.5;
+        x.set(xPct);
+        y.set(yPct);
     };
 
     const handleMouseEnter = () => {
@@ -59,6 +81,8 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
 
     const handleMouseLeave = () => {
         setIsHovered(false);
+        x.set(0);
+        y.set(0);
         if (videoRef.current) {
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
@@ -76,8 +100,13 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+            }}
             className={clsx(
-                'group relative overflow-hidden rounded-xl p-6 md:p-8 bg-zinc-950 cursor-pointer border border-white/5 transition-all duration-700',
+                'group relative overflow-hidden rounded-xl p-6 md:p-8 bg-zinc-950 cursor-pointer border border-white/5 transition-colors duration-700',
                 service.className
             )}
         >
@@ -154,7 +183,7 @@ export default function ServicesBento() {
                 className="mb-16 md:mb-32 flex justify-between items-end"
             >
                 <h2 className="text-5xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter leading-none text-white">
-                    Expertise<span className="text-zinc-800">.</span>
+                    <ScrambleText text="Expertise" /><span className="text-zinc-800">.</span>
                 </h2>
                 <p className="hidden md:block text-[10px] text-zinc-500 uppercase tracking-[0.4em] font-mono pb-4">
                     Four Pillars

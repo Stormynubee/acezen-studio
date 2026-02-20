@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PussSideBar from './PussSideBar';
+import ScrambleText from './ScrambleText';
 
 const TEAM = [
     {
@@ -106,7 +107,7 @@ export default function AboutTeam() {
                         </p>
 
                         <h2 className="text-4xl md:text-7xl lg:text-[6rem] xl:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left md:origin-right whitespace-nowrap">
-                            Hansraj<br /><span className="text-zinc-600 group-hover/hansraj:text-white transition-colors duration-700">Tiwari</span>
+                            <ScrambleText text="Hansraj" speed={60} /><br /><span className="text-zinc-600 group-hover/hansraj:text-white transition-colors duration-700">Tiwari</span>
                         </h2>
 
                         {/* Description Reveal - Using AnimatePresence for smoothness */}
@@ -177,7 +178,7 @@ export default function AboutTeam() {
                         </p>
 
                         <h2 className="text-4xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left whitespace-nowrap">
-                            Sayli<br /><span className="text-zinc-600 group-hover/sayli:text-white transition-colors duration-700">Changan</span>
+                            <ScrambleText text="Sayli" speed={60} /><br /><span className="text-zinc-600 group-hover/sayli:text-white transition-colors duration-700">Changan</span>
                         </h2>
 
                         {/* Description Reveal - Using AnimatePresence for smoothness */}

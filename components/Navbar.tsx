@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useState } from 'react';
 import clsx from 'clsx';
+import Magnetic from './Magnetic';
 
 function useUISound() {
     const playClick = () => {
@@ -112,72 +113,75 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-2 bg-zinc-900/90 border border-white/5 rounded-full p-2 pl-6 shadow-2xl">
                     <div className="flex gap-6 mr-4">
                         {['about', 'services', 'work'].map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => scrollToSection(tab)}
-                                onMouseEnter={playClick}
-                                className={clsx(
-                                    "text-[10px] transition-colors uppercase tracking-[0.2em] font-medium relative py-1",
-                                    activeTab === tab ? "text-white" : "text-zinc-500 hover:text-white"
-                                )}
-                            >
-                                {tab}
-                                {activeTab === tab && (
-                                    <motion.div
-                                        layoutId="active-dot"
-                                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"
-                                    />
-                                )}
-                            </button>
+                            <Magnetic key={tab} strength={0.25}>
+                                <button
+                                    onClick={() => scrollToSection(tab)}
+                                    onMouseEnter={playClick}
+                                    className={clsx(
+                                        "text-[10px] transition-colors uppercase tracking-[0.2em] font-medium relative py-1",
+                                        activeTab === tab ? "text-white" : "text-zinc-500 hover:text-white"
+                                    )}
+                                >
+                                    {tab}
+                                    {activeTab === tab && (
+                                        <motion.div
+                                            layoutId="active-dot"
+                                            className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                                        />
+                                    )}
+                                </button>
+                            </Magnetic>
                         ))}
                     </div>
-                    <motion.a
-                        href="https://hansraj-dev.vercel.app/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onMouseEnter={playClick}
-                        animate={isScrolled ? {
-                            scale: [1, 1.02, 1],
-                            boxShadow: [
-                                "0px 0px 0px rgba(255, 255, 255, 0)",
-                                "0px 0px 20px rgba(255, 255, 255, 0.5)",
-                                "0px 0px 0px rgba(255, 255, 255, 0)"
-                            ],
-                            backgroundColor: ["#ffffff", "#f4f4f5", "#ffffff"],
-                            color: "#000000"
-                        } : {
-                            scale: 1,
-                            boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
-                            backgroundColor: "#ffffff",
-                            color: "#000000"
-                        }}
-                        transition={isScrolled ? {
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        } : { duration: 0.3 }}
-                        whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
-                        className="relative bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors group"
-                    >
-                        <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Portfolio</span>
+                    <Magnetic strength={0.3}>
+                        <motion.a
+                            href="https://hansraj-dev.vercel.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onMouseEnter={playClick}
+                            animate={isScrolled ? {
+                                scale: [1, 1.02, 1],
+                                boxShadow: [
+                                    "0px 0px 0px rgba(255, 255, 255, 0)",
+                                    "0px 0px 20px rgba(255, 255, 255, 0.5)",
+                                    "0px 0px 0px rgba(255, 255, 255, 0)"
+                                ],
+                                backgroundColor: ["#ffffff", "#f4f4f5", "#ffffff"],
+                                color: "#000000"
+                            } : {
+                                scale: 1,
+                                boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
+                                backgroundColor: "#ffffff",
+                                color: "#000000"
+                            }}
+                            transition={isScrolled ? {
+                                duration: 3,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            } : { duration: 0.3 }}
+                            whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
+                            className="relative bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors group"
+                        >
+                            <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Portfolio</span>
 
-                        {/* Inner wrapper for shimmer clipping to bypass Safari artifacts */}
-                        <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
-                            {/* Premium Shimmer effect - slowed down, highly visible */}
-                            {isScrolled && (
-                                <motion.div
-                                    className="absolute top-0 bottom-0 z-0 w-[150%] left-[-150%] bg-gradient-to-r from-transparent via-black/20 to-transparent skew-x-[-20deg]"
-                                    animate={{ x: ['0%', '250%'] }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                        repeatDelay: 1.5
-                                    }}
-                                />
-                            )}
-                        </div>
-                    </motion.a>
+                            {/* Inner wrapper for shimmer clipping to bypass Safari artifacts */}
+                            <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+                                {/* Premium Shimmer effect - slowed down, highly visible */}
+                                {isScrolled && (
+                                    <motion.div
+                                        className="absolute top-0 bottom-0 z-0 w-[150%] left-[-150%] bg-gradient-to-r from-transparent via-black/20 to-transparent skew-x-[-20deg]"
+                                        animate={{ x: ['0%', '250%'] }}
+                                        transition={{
+                                            duration: 3,
+                                            repeat: Infinity,
+                                            ease: "linear",
+                                            repeatDelay: 1.5
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </motion.a>
+                    </Magnetic>
                 </div>
 
                 {/* Mobile: context pill + hamburger */}

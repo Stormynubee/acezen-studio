@@ -62,3 +62,10 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* Custom Cursor Overrides */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
