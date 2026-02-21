@@ -31,7 +31,7 @@ export default function AboutTeam() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     return (
-        <section className="relative w-full min-h-[800px] md:h-[800px] bg-zinc-950 flex flex-col md:flex-row border-y border-white/5 overflow-hidden">
+        <section className="relative w-full min-h-[800px] lg:h-[800px] bg-zinc-950 flex flex-col lg:flex-row border-y border-white/5 overflow-hidden">
 
             {/* 1. Left Sidebar: Puss in Boots (50% Width on Desktop) */}
             <motion.div
@@ -39,7 +39,7 @@ export default function AboutTeam() {
                 whileInView={{ x: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="w-full md:w-1/2 h-[280px] md:h-full relative border-b md:border-b-0 md:border-r border-white/10 z-10 shrink-0 bg-black"
+                className="w-full lg:w-1/2 h-[280px] lg:h-full relative border-b lg:border-b-0 lg:border-r border-white/10 z-10 shrink-0 bg-black"
             >
                 <PussSideBar />
                 <div className="absolute bottom-8 left-8 pointer-events-none">
@@ -68,10 +68,10 @@ export default function AboutTeam() {
                 whileInView={{ x: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="flex-1 flex flex-col md:flex-row md:h-full relative bg-zinc-950 overflow-hidden"
+                className="flex-1 flex flex-col lg:flex-row lg:h-full relative bg-zinc-950 overflow-hidden"
             >
                 {/* Connecting Ampersand */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none mix-blend-difference hidden md:block select-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none mix-blend-difference hidden lg:block select-none">
                     <span className="text-[200px] font-black italic text-zinc-800/50 leading-none">&</span>
                 </div>
 
@@ -86,7 +86,7 @@ export default function AboutTeam() {
                         flex: hoveredId === 'hansraj' ? 2 : (hoveredId === 'sayli' ? 0.5 : 1),
                         backgroundColor: hoveredId === 'hansraj' ? '#18181b' : '#09090b'
                     }}
-                    className="relative group/hansraj border-b md:border-b-0 md:border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 md:p-12 min-h-[280px]"
+                    className="relative group/hansraj border-b lg:border-b-0 lg:border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[280px]"
                 >
                     {/* Background Effect: Code Matrix (Subtle) */}
                     <div className="absolute inset-0 opacity-0 group-hover/hansraj:opacity-10 transition-opacity duration-700 pointer-events-none">
@@ -100,13 +100,13 @@ export default function AboutTeam() {
                         </div>
                     </div>
 
-                    <div className="relative z-10 space-y-6 md:text-right flex flex-col md:items-end">
-                        <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] flex items-center justify-start md:justify-end gap-3 group-hover/hansraj:text-blue-400 transition-colors">
+                    <div className="relative z-10 space-y-6 lg:text-right flex flex-col lg:items-end">
+                        <p className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em] flex items-center justify-start lg:justify-end gap-3 group-hover/hansraj:text-blue-400 transition-colors">
                             System & VFX
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover/hansraj:animate-pulse" />
                         </p>
 
-                        <h2 className="text-4xl md:text-7xl lg:text-[6rem] xl:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left md:origin-right whitespace-nowrap">
+                        <h2 className="text-6xl lg:text-[6rem] xl:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left lg:origin-right">
                             <ScrambleText text="Hansraj" speed={60} /><br /><span className="text-zinc-600 group-hover/hansraj:text-white transition-colors duration-700">Tiwari</span>
                         </h2>
 
@@ -125,9 +125,9 @@ export default function AboutTeam() {
                                             A polymath bridging raw code and cinematic storytelling. Architecting complete digital realities from complex React/Node.js ecosystems to Hardware Prototyping (IoT).
                                         </p>
 
-                                        <div className="pl-4 border-l border-blue-500/20 md:border-l-0 md:border-r md:pr-4 md:pl-0">
+                                        <div className="pl-4 border-l border-blue-500/20 lg:border-l-0 lg:border-r lg:pr-4 lg:pl-0">
                                             <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600 mb-3">Specializing in:</p>
-                                            <ul className="text-xs text-blue-300 grid grid-cols-1 gap-y-1.5 font-mono text-left md:text-right">
+                                            <ul className="text-xs text-blue-300 grid grid-cols-1 gap-y-1.5 font-mono text-left lg:text-right">
                                                 <li>System Architecture •</li>
                                                 <li>Full Stack Dev •</li>
                                                 <li className="text-white font-bold opacity-100">Video Editing •</li>
@@ -142,7 +142,7 @@ export default function AboutTeam() {
                         </AnimatePresence>
 
                         {/* Static Number */}
-                        <span className="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-[5rem] md:text-[10rem] lg:text-[12rem] leading-none font-black text-zinc-900 group-hover/hansraj:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/hansraj:from-blue-900/10 group-hover/hansraj:to-transparent">
+                        <span className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 text-[5rem] lg:text-[10rem] leading-none font-black text-zinc-900 group-hover/hansraj:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/hansraj:from-blue-900/10 group-hover/hansraj:to-transparent">
                             01
                         </span>
                     </div>
@@ -159,7 +159,7 @@ export default function AboutTeam() {
                         flex: hoveredId === 'sayli' ? 2 : (hoveredId === 'hansraj' ? 0.5 : 1),
                         backgroundColor: hoveredId === 'sayli' ? '#18181b' : '#09090b'
                     }}
-                    className="relative group/sayli overflow-hidden flex flex-col justify-center p-8 md:p-12 min-h-[280px]"
+                    className="relative group/sayli overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[280px]"
                 >
                     {/* Background Effect: Wireframe (Subtle) */}
                     <div className="absolute inset-0 opacity-0 group-hover/sayli:opacity-10 transition-opacity duration-700 pointer-events-none">
@@ -172,12 +172,12 @@ export default function AboutTeam() {
                     </div>
 
                     <div className="relative z-10 space-y-6">
-                        <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] flex items-center gap-3 group-hover/sayli:text-purple-400 transition-colors">
+                        <p className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em] flex items-center gap-3 group-hover/sayli:text-purple-400 transition-colors">
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 group-hover/sayli:animate-pulse" />
                             Visual Director
                         </p>
 
-                        <h2 className="text-4xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left whitespace-nowrap">
+                        <h2 className="text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left">
                             <ScrambleText text="Sayli" speed={60} /><br /><span className="text-zinc-600 group-hover/sayli:text-white transition-colors duration-700">Changan</span>
                         </h2>
 
@@ -212,7 +212,7 @@ export default function AboutTeam() {
                         </AnimatePresence>
 
                         {/* Static Number */}
-                        <span className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-[5rem] md:text-[10rem] lg:text-[12rem] leading-none font-black text-zinc-900 group-hover/sayli:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/sayli:from-purple-900/10 group-hover/sayli:to-transparent">
+                        <span className="absolute bottom-4 right-4 lg:bottom-8 lg:right-8 text-[5rem] lg:text-[10rem] leading-none font-black text-zinc-900 group-hover/sayli:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/sayli:from-purple-900/10 group-hover/sayli:to-transparent">
                             02
                         </span>
                     </div>
