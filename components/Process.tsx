@@ -67,11 +67,17 @@ export default function Process() {
     const [isHovering, setIsHovering] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
+    // FIX: Framework hook must remain at the top level, never conditionally nested!
+    const maskImageTemplate = useMotionTemplate`radial-gradient(${isHovering ? '450px' : '0px'} circle at ${mouseX}px ${mouseY}px, black 20%, transparent 100%)`;
+
     useEffect(() => {
-        setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            setIsMobile(!!window.matchMedia("(pointer: coarse)")?.matches);
+        }
     }, []);
 
     function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+        if (isMobile) return;
         const { left, top } = currentTarget.getBoundingClientRect();
         mouseX.set(clientX - left);
         mouseY.set(clientY - top);
@@ -94,8 +100,8 @@ export default function Process() {
                 <motion.div
                     className="absolute inset-0 z-20 pointer-events-none py-32 px-5 md:px-12 bg-zinc-950 flex items-center"
                     style={{
-                        maskImage: useMotionTemplate`radial-gradient(${isHovering ? '450px' : '0px'} circle at ${mouseX}px ${mouseY}px, black 20%, transparent 100%)`,
-                        WebkitMaskImage: useMotionTemplate`radial-gradient(${isHovering ? '450px' : '0px'} circle at ${mouseX}px ${mouseY}px, black 20%, transparent 100%)`,
+                        maskImage: maskImageTemplate,
+                        WebkitMaskImage: maskImageTemplate,
                         transition: 'mask-image 0.2s ease-out, -webkit-mask-image 0.2s ease-out',
                     }}
                 >
