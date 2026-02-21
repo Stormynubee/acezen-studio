@@ -86,7 +86,7 @@ function WorkCard({ work }: { work: typeof works[0] }) {
     const isLogo = work.category === 'Concept Logo';
 
     return (
-        <div className="relative h-[27vh] w-[45vw] min-w-[500px] overflow-hidden bg-zinc-950 group cursor-none flex-none border border-white/5 shadow-2xl rounded-sm">
+        <div className="relative h-[27vh] w-[45vw] min-w-[500px] overflow-hidden bg-zinc-950 group cursor-pointer flex-none border border-white/5 shadow-2xl rounded-sm">
             <div className="absolute inset-0 flex items-center justify-center bg-black">
                 {work.video ? (
                     <video

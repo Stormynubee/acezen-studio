@@ -63,9 +63,4 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* Custom Cursor Overrides */
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
+/* End Cursor Overrides */

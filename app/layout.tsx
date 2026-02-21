@@ -104,7 +104,6 @@ export default function RootLayout({
             }),
           }}
         />
-        <CustomCursor />
         <SmoothScroll>
           {children}
         </SmoothScroll>
