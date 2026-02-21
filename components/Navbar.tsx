@@ -1,17 +1,43 @@
 'use client';
 
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import Magnetic from './Magnetic';
 
 function useUISound() {
+    const ctxRef = useRef<AudioContext | null>(null);
+
+    // Pre-warm the AudioContext on first user interaction
+    useEffect(() => {
+        const warmUp = () => {
+            try {
+                const AC = window.AudioContext || (window as any).webkitAudioContext;
+                if (AC && !ctxRef.current) {
+                    ctxRef.current = new AC();
+                }
+            } catch (e) { /* silently fail */ }
+            window.removeEventListener('pointerdown', warmUp);
+            window.removeEventListener('mousemove', warmUp);
+        };
+        window.addEventListener('pointerdown', warmUp, { once: true });
+        window.addEventListener('mousemove', warmUp, { once: true });
+        return () => {
+            window.removeEventListener('pointerdown', warmUp);
+            window.removeEventListener('mousemove', warmUp);
+        };
+    }, []);
+
     const playClick = () => {
         try {
-            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-            if (!AudioContext) return;
-            // Create a short, high-quality UI "tick" using an oscillator
-            const ctx = new AudioContext();
+            if (!ctxRef.current) {
+                const AC = window.AudioContext || (window as any).webkitAudioContext;
+                if (!AC) return;
+                ctxRef.current = new AC();
+            }
+            const ctx = ctxRef.current;
+            if (ctx.state === 'suspended') ctx.resume();
+
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
@@ -28,7 +54,7 @@ function useUISound() {
             osc.start();
             osc.stop(ctx.currentTime + 0.05);
         } catch (e) {
-            // Silently fail if audio context is blocked by user interaction policies
+            // Silently fail if audio context is blocked
         }
     };
     return { playClick };
