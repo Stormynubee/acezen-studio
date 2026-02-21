@@ -90,7 +90,7 @@ export default function Navbar() {
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1 }}
-                className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3"
+                className="fixed top-4 lg:top-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3"
             >
                 {/* Dynamic Context Label — desktop only */}
                 <motion.div
@@ -110,7 +110,7 @@ export default function Navbar() {
                 </motion.div>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-2 bg-zinc-900/90 border border-white/5 rounded-full p-2 pl-6 shadow-2xl">
+                <div className="hidden lg:flex items-center gap-2 bg-zinc-900/90 border border-white/5 rounded-full p-2 pl-6 shadow-2xl">
                     <div className="flex gap-6 mr-4">
                         {['about', 'services', 'work'].map((tab) => (
                             <Magnetic key={tab} strength={0.25}>
@@ -185,14 +185,14 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile: context pill + hamburger */}
-                <div className="flex md:hidden items-center gap-3">
+                <div className="flex lg:hidden items-center gap-3">
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={activeText}
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -6 }}
-                            className="text-white text-[10px] tracking-[0.2em] uppercase font-medium bg-zinc-900/95 border border-white/10 rounded-full px-4 py-2"
+                            className="text-white text-xs tracking-[0.2em] uppercase font-medium bg-zinc-900/95 border border-white/10 rounded-full px-5 py-2.5"
                         >
                             {activeText}
                         </motion.span>
@@ -200,7 +200,7 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
-                        className="w-10 h-10 rounded-full bg-zinc-900/95 border border-white/10 flex items-center justify-center"
+                        className="w-12 h-12 rounded-full bg-zinc-900/95 border border-white/10 flex items-center justify-center"
                         aria-label="Menu"
                     >
                         <div className="flex flex-col gap-[5px]">
