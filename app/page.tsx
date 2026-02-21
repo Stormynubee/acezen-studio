@@ -31,9 +31,11 @@ export default function Home() {
 
         <Navbar />
         <MountainScroll />
-        <section className="relative h-screen w-full">
+
+        {/* Hero text — fixed on mobile so it overlays the mountain on the first screen */}
+        <div className="fixed lg:relative inset-0 lg:inset-auto z-10 lg:z-0 h-screen w-full pointer-events-none">
           <HeroOverlay />
-        </section>
+        </div>
 
         <div className="h-[100vh]" />
 
