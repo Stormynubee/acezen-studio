@@ -6,31 +6,24 @@ const puppeteer = require('puppeteer');
 
     await page.emulate(puppeteer.KnownDevices['iPhone 12 Pro']);
 
-    console.log("Navigating to localhost:3000...");
-
     try {
-        const response = await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
-        console.log("Navigation finished. HTTP Status:", response?.status());
+        const bust = Math.random().toString(36).substring(7);
+        const url = `https://www.acezen.in/?cachebust=${bust}`;
+        console.log("Navigating to:", url);
+        const response = await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
+        console.log("Navigation finished.");
 
-        // Scrape for the Next.js error overlay
-        await page.waitForFunction(() => !!document.querySelector('nextjs-portal'), { timeout: 10000 }).catch(() => { });
+        const pageText = await page.evaluate(() => document.body.innerText);
 
-        const portal = await page.$('nextjs-portal');
-        if (portal) {
-            console.log("DETECTED NEXT.JS ERROR PORTAL.");
-            // Next.js injects a shadow DOM for the error overlay. We need to query inside it.
-            const errorText = await page.evaluate(() => {
-                const portalNode = document.querySelector('nextjs-portal');
-                if (portalNode && portalNode.shadowRoot) {
-                    return portalNode.shadowRoot.textContent;
-                }
-                return portalNode ? portalNode.textContent : "No text found";
-            });
-            console.log("================ ERROR OVERLAY TEXT ================");
-            console.log(errorText);
-            console.log("====================================================");
+        if (pageText.includes("CRITICAL PRODUCTION CRASH") || pageText.includes("Next.js failed to render")) {
+            console.log("================ NEW ERROR BOUNDARY DETECTED ================");
+            console.log(pageText);
+            console.log("=============================================================");
+        } else if (pageText.includes("Application error: a client-side exception has occurred")) {
+            console.log("OLD ERROR DETECTED: Vercel is still serving the old deployment or cache.");
         } else {
-            console.log("No Next.js error portal detected.");
+            console.log("SUCCESS: No crash detected at all!");
+            console.log("First 100 chars:", pageText.substring(0, 100));
         }
     } catch (err) {
         console.error("Navigation error:", err);

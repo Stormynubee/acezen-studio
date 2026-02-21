@@ -31,7 +31,7 @@ export default function AboutTeam() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     return (
-        <section className="relative w-full h-[800px] bg-zinc-950 flex flex-col md:flex-row border-y border-white/5 overflow-hidden">
+        <section className="relative w-full min-h-[800px] md:h-[800px] bg-zinc-950 flex flex-col md:flex-row border-y border-white/5 overflow-hidden">
 
             {/* 1. Left Sidebar: Puss in Boots (50% Width on Desktop) */}
             <motion.div
@@ -39,7 +39,7 @@ export default function AboutTeam() {
                 whileInView={{ x: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="w-full md:w-1/2 aspect-video md:aspect-auto md:h-full relative border-b md:border-b-0 md:border-r border-white/10 z-10 shrink-0 bg-black"
+                className="w-full md:w-1/2 h-[280px] md:h-full relative border-b md:border-b-0 md:border-r border-white/10 z-10 shrink-0 bg-black"
             >
                 <PussSideBar />
                 <div className="absolute bottom-8 left-8 pointer-events-none">
@@ -68,7 +68,7 @@ export default function AboutTeam() {
                 whileInView={{ x: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="flex-1 flex flex-col md:flex-row h-full relative bg-zinc-950 overflow-hidden"
+                className="flex-1 flex flex-col md:flex-row md:h-full relative bg-zinc-950 overflow-hidden"
             >
                 {/* Connecting Ampersand */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none mix-blend-difference hidden md:block select-none">
@@ -86,7 +86,7 @@ export default function AboutTeam() {
                         flex: hoveredId === 'hansraj' ? 2 : (hoveredId === 'sayli' ? 0.5 : 1),
                         backgroundColor: hoveredId === 'hansraj' ? '#18181b' : '#09090b'
                     }}
-                    className="relative group/hansraj border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 md:p-12"
+                    className="relative group/hansraj border-b md:border-b-0 md:border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 md:p-12 min-h-[280px]"
                 >
                     {/* Background Effect: Code Matrix (Subtle) */}
                     <div className="absolute inset-0 opacity-0 group-hover/hansraj:opacity-10 transition-opacity duration-700 pointer-events-none">
@@ -159,7 +159,7 @@ export default function AboutTeam() {
                         flex: hoveredId === 'sayli' ? 2 : (hoveredId === 'hansraj' ? 0.5 : 1),
                         backgroundColor: hoveredId === 'sayli' ? '#18181b' : '#09090b'
                     }}
-                    className="relative group/sayli overflow-hidden flex flex-col justify-center p-8 md:p-12"
+                    className="relative group/sayli overflow-hidden flex flex-col justify-center p-8 md:p-12 min-h-[280px]"
                 >
                     {/* Background Effect: Wireframe (Subtle) */}
                     <div className="absolute inset-0 opacity-0 group-hover/sayli:opacity-10 transition-opacity duration-700 pointer-events-none">
