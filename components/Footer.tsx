@@ -18,9 +18,8 @@ export default function Footer() {
         setStatus('submitting');
 
         const formData = new FormData(e.currentTarget);
-        // We will need the user to supply their own Web3Forms Access Key here.
-        // For now, it will return an error until they configure it, but the UI is intact.
-        formData.append("access_key", "YOUR_WEB3FORMS_ACCESS_KEY");
+        // Added the user's active Web3Forms Access Key
+        formData.append("access_key", "f9237d81-4d93-4504-bd8e-bd3536170da2");
 
         try {
             const res = await fetch("https://api.web3forms.com/submit", {
