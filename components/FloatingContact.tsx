@@ -14,8 +14,8 @@ export default function FloatingContact() {
             const windowHeight = window.innerHeight;
             const documentHeight = document.body.scrollHeight;
 
-            // Show after scrolling 300px down
-            const pastHero = scrollY > 300;
+            // Show after scrolling past 1.5x the window height (around the Team section)
+            const pastHero = scrollY > windowHeight * 1.5;
             // Hide when within 800px of the bottom (footer form is visible)
             const nearBottom = scrollY + windowHeight >= documentHeight - 800;
 
@@ -29,10 +29,31 @@ export default function FloatingContact() {
     }, []);
 
     const scrollToFooter = () => {
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth'
-        });
+        const targetPosition = document.body.scrollHeight;
+        const startPosition = window.scrollY;
+        const distance = targetPosition - startPosition;
+        // Adjust this duration (in ms) to control the speed. 2000ms = 2 seconds for a slow glide.
+        const duration = 2000;
+        let start: number | null = null;
+
+        // Cinematic Ease In Out Cubic easing function for super smooth acceleration and deceleration
+        const easeInOutCubic = (t: number) => {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        };
+
+        const animation = (currentTime: number) => {
+            if (start === null) start = currentTime;
+            const timeElapsed = currentTime - start;
+            const progress = Math.min(timeElapsed / duration, 1);
+
+            window.scrollTo(0, startPosition + distance * easeInOutCubic(progress));
+
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        };
+
+        requestAnimationFrame(animation);
     };
 
     return (
