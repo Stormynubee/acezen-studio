@@ -32,8 +32,8 @@ export default function FloatingContact() {
         const targetPosition = document.body.scrollHeight;
         const startPosition = window.scrollY;
         const distance = targetPosition - startPosition;
-        // Adjust this duration (in ms) to control the speed. 2000ms = 2 seconds for a slow glide.
-        const duration = 2000;
+        // Adjust this duration (in ms) to control the speed. 3500ms = 3.5 seconds for a very slow glide.
+        const duration = 3500;
         let start: number | null = null;
 
         // Cinematic Ease In Out Cubic easing function for super smooth acceleration and deceleration
