@@ -57,7 +57,7 @@ export default function AboutTeam() {
                         transition={{ delay: 0.6, duration: 0.8 }}
                         className="text-white font-bold text-3xl tracking-tighter"
                     >
-                        Puss x Bongo
+                        Puss x Bongo Cat
                     </motion.h3>
                 </div>
             </motion.div>
