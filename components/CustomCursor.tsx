@@ -14,10 +14,12 @@ export default function CustomCursor() {
     const cursorY = useSpring(-100, springConfig);
 
     useEffect(() => {
-        // Detect touch devices to disable custom cursor
-        if (window.matchMedia("(pointer: coarse)").matches) {
-            setHidden(true);
-            return;
+        // Detect touch devices to disable custom cursor safely (bypasses extreme browser privacy blocks)
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            if (window.matchMedia("(pointer: coarse)")?.matches) {
+                setHidden(true);
+                return;
+            }
         }
 
         const updateMousePosition = (e: MouseEvent) => {

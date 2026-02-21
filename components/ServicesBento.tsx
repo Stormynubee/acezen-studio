@@ -47,7 +47,9 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            setIsMobile(!!window.matchMedia("(pointer: coarse)")?.matches);
+        }
     }, []);
 
     const x = useMotionValue(0);

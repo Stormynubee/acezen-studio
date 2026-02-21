@@ -9,7 +9,9 @@ export default function Magnetic({ children, strength = 0.5 }: { children: React
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            setIsMobile(!!window.matchMedia("(pointer: coarse)")?.matches);
+        }
     }, []);
 
     const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
