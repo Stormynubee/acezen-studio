@@ -41,7 +41,7 @@ export default function Magnetic({ children, strength = 0.5 }: { children: React
             onMouseLeave={handleMouseLeave}
             animate={{ scale: isHovered && !isMobile ? 1.05 : 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            style={isMobile ? {} : { x, y }}
+            style={{ x, y }}
             className="flex items-center justify-center cursor-pointer"
         >
             {children}

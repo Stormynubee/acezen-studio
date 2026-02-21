@@ -107,7 +107,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            style={isMobile ? {} : {
+            style={{
                 rotateX,
                 rotateY,
                 transformStyle: "preserve-3d",
