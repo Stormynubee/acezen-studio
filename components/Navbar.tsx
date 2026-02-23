@@ -7,62 +7,67 @@ import Magnetic from './Magnetic';
 
 function useUISound() {
     const ctxRef = useRef<AudioContext | null>(null);
-    const unlockedRef = useRef(false);
+    const tickBufferRef = useRef<AudioBuffer | null>(null);
+    const readyRef = useRef(false);
 
-    // Eagerly create AudioContext on mount (doesn't need user gesture to create, only to play)
+    // 1. Eagerly create AudioContext + pre-render the tick sound into a reusable buffer
     useEffect(() => {
         try {
             const AC = window.AudioContext || (window as any).webkitAudioContext;
-            if (AC) ctxRef.current = new AC();
+            if (!AC) return;
+            const ctx = new AC();
+            ctxRef.current = ctx;
+
+            // Pre-render a tiny tick waveform (40ms) — this runs once, zero cost per hover
+            const sampleRate = ctx.sampleRate;
+            const duration = 0.04;
+            const length = Math.floor(sampleRate * duration);
+            const buffer = ctx.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const progress = t / duration;
+                // Frequency sweep: 900Hz → 200Hz (exponential)
+                const freq = 900 * Math.pow(200 / 900, progress);
+                // Amplitude envelope: quick fade out
+                const amp = 0.08 * Math.pow(1 - progress, 3);
+                data[i] = amp * Math.sin(2 * Math.PI * freq * t);
+            }
+            tickBufferRef.current = buffer;
         } catch (e) { /* silently fail */ }
     }, []);
 
-    // Unlock audio on the very first user interaction by playing a silent buffer
+    // 2. Unlock AudioContext on first REAL user gesture (click/touch/key — NOT mousemove)
     useEffect(() => {
-        const unlock = () => {
-            if (unlockedRef.current || !ctxRef.current) return;
+        const unlock = async () => {
             const ctx = ctxRef.current;
-            if (ctx.state === 'suspended') ctx.resume();
-
-            // Play a zero-length silent buffer to fully prime the audio pipeline
-            const buf = ctx.createBuffer(1, 1, ctx.sampleRate);
-            const src = ctx.createBufferSource();
-            src.buffer = buf;
-            src.connect(ctx.destination);
-            src.start(0);
-            unlockedRef.current = true;
+            if (!ctx || readyRef.current) return;
+            try {
+                if (ctx.state === 'suspended') await ctx.resume();
+                readyRef.current = true;
+            } catch (e) { /* silently fail */ }
         };
-        // Listen on multiple events for cross-browser coverage
-        const events = ['pointerdown', 'mousemove', 'touchstart', 'keydown'] as const;
+        // Only real gestures unlock audio in modern browsers
+        const events = ['click', 'pointerdown', 'touchstart', 'keydown'] as const;
         events.forEach(e => window.addEventListener(e, unlock, { once: true, passive: true }));
         return () => { events.forEach(e => window.removeEventListener(e, unlock)); };
     }, []);
 
+    // 3. Play = just stamp the pre-built buffer onto a source node (ultra cheap, ~0.1ms)
     const playClick = () => {
         try {
             const ctx = ctxRef.current;
-            if (!ctx) return;
-            if (ctx.state === 'suspended') ctx.resume();
+            const buffer = tickBufferRef.current;
+            if (!ctx || !buffer || ctx.state !== 'running') return;
 
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(900, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.04);
-
-            gain.gain.setValueAtTime(0.08, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-
-            osc.start();
-            osc.stop(ctx.currentTime + 0.04);
-        } catch (e) {
-            // Silently fail if audio context is blocked
-        }
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(ctx.destination);
+            source.start(0);
+        } catch (e) { /* silently fail */ }
     };
+
     return { playClick };
 }
 
