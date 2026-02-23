@@ -10,7 +10,7 @@ function useUISound() {
     const tickBufferRef = useRef<AudioBuffer | null>(null);
     const readyRef = useRef(false);
 
-    // Build the tick waveform buffer (runs once on mount)
+    // Build the tick waveform buffer (runs once)
     const buildTickBuffer = (ctx: AudioContext): AudioBuffer => {
         const sampleRate = ctx.sampleRate;
         const duration = 0.04;
@@ -27,7 +27,7 @@ function useUISound() {
         return buffer;
     };
 
-    // 1. Create AudioContext + pre-render tick buffer on mount
+    // 1. Create AudioContext + pre-render tick on mount
     useEffect(() => {
         try {
             const AC = window.AudioContext || (window as any).webkitAudioContext;
@@ -38,41 +38,42 @@ function useUISound() {
         } catch (e) { /* silently fail */ }
     }, []);
 
-    // 2. On first REAL gesture: resume context + play the REAL tick (not silence!) to wake up WASAPI
+    // 2. On first gesture: resume + start a PERSISTENT silent heartbeat to keep WASAPI alive
     useEffect(() => {
-        const wakeAndPlay = async () => {
+        const wakeAndKeepAlive = async () => {
             const ctx = ctxRef.current;
-            const buffer = tickBufferRef.current;
             if (!ctx || readyRef.current) return;
 
             try {
-                // Resume the AudioContext (browser policy)
                 if (ctx.state === 'suspended') await ctx.resume();
 
-                // Play the REAL tick sound immediately — this forces Windows Audio Service awake
-                if (buffer) {
-                    const src = ctx.createBufferSource();
-                    src.buffer = buffer;
-                    src.connect(ctx.destination);
-                    src.start(0);
-                }
-
-                // ALSO play a tiny WAV through HTMLAudioElement as a secondary hardware wake-up
-                // This goes through a different OS audio path and guarantees WASAPI activation
-                const audio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
-                audio.volume = 0.01;
-                audio.play().catch(() => { });
+                // === THE KEY FIX ===
+                // Start a continuous, inaudible oscillator that keeps the Windows audio
+                // hardware permanently awake. Without this, WASAPI sleeps between sounds
+                // and the next sound has a ~200ms delay while the hardware wakes up.
+                // 
+                // This is the standard technique used by web games, DAWs, and audio apps.
+                // - Frequency: 1 Hz (sub-bass, far below human hearing ~20Hz)
+                // - Amplitude: 0.001 (essentially zero — completely imperceptible)
+                // - Runs continuously until the page is closed
+                const heartbeat = ctx.createOscillator();
+                const heartbeatGain = ctx.createGain();
+                heartbeat.frequency.value = 1; // 1 Hz — inaudible
+                heartbeatGain.gain.value = 0.001; // Essentially silent
+                heartbeat.connect(heartbeatGain);
+                heartbeatGain.connect(ctx.destination);
+                heartbeat.start();
 
                 readyRef.current = true;
             } catch (e) { /* silently fail */ }
         };
 
         const events = ['click', 'pointerdown', 'touchstart', 'keydown'] as const;
-        events.forEach(e => window.addEventListener(e, wakeAndPlay, { once: true, passive: true }));
-        return () => { events.forEach(e => window.removeEventListener(e, wakeAndPlay)); };
+        events.forEach(e => window.addEventListener(e, wakeAndKeepAlive, { once: true, passive: true }));
+        return () => { events.forEach(e => window.removeEventListener(e, wakeAndKeepAlive)); };
     }, []);
 
-    // 3. Play pre-built buffer — ultra cheap (~0.1ms per hover)
+    // 3. Play pre-built buffer (ultra cheap, ~0.1ms)
     const playClick = () => {
         try {
             const ctx = ctxRef.current;
