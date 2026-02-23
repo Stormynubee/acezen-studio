@@ -7,35 +7,41 @@ import Magnetic from './Magnetic';
 
 function useUISound() {
     const ctxRef = useRef<AudioContext | null>(null);
+    const unlockedRef = useRef(false);
 
-    // Pre-warm the AudioContext on first user interaction
+    // Eagerly create AudioContext on mount (doesn't need user gesture to create, only to play)
     useEffect(() => {
-        const warmUp = () => {
-            try {
-                const AC = window.AudioContext || (window as any).webkitAudioContext;
-                if (AC && !ctxRef.current) {
-                    ctxRef.current = new AC();
-                }
-            } catch (e) { /* silently fail */ }
-            window.removeEventListener('pointerdown', warmUp);
-            window.removeEventListener('mousemove', warmUp);
+        try {
+            const AC = window.AudioContext || (window as any).webkitAudioContext;
+            if (AC) ctxRef.current = new AC();
+        } catch (e) { /* silently fail */ }
+    }, []);
+
+    // Unlock audio on the very first user interaction by playing a silent buffer
+    useEffect(() => {
+        const unlock = () => {
+            if (unlockedRef.current || !ctxRef.current) return;
+            const ctx = ctxRef.current;
+            if (ctx.state === 'suspended') ctx.resume();
+
+            // Play a zero-length silent buffer to fully prime the audio pipeline
+            const buf = ctx.createBuffer(1, 1, ctx.sampleRate);
+            const src = ctx.createBufferSource();
+            src.buffer = buf;
+            src.connect(ctx.destination);
+            src.start(0);
+            unlockedRef.current = true;
         };
-        window.addEventListener('pointerdown', warmUp, { once: true });
-        window.addEventListener('mousemove', warmUp, { once: true });
-        return () => {
-            window.removeEventListener('pointerdown', warmUp);
-            window.removeEventListener('mousemove', warmUp);
-        };
+        // Listen on multiple events for cross-browser coverage
+        const events = ['pointerdown', 'mousemove', 'touchstart', 'keydown'] as const;
+        events.forEach(e => window.addEventListener(e, unlock, { once: true, passive: true }));
+        return () => { events.forEach(e => window.removeEventListener(e, unlock)); };
     }, []);
 
     const playClick = () => {
         try {
-            if (!ctxRef.current) {
-                const AC = window.AudioContext || (window as any).webkitAudioContext;
-                if (!AC) return;
-                ctxRef.current = new AC();
-            }
             const ctx = ctxRef.current;
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
 
             const osc = ctx.createOscillator();
@@ -45,14 +51,14 @@ function useUISound() {
             gain.connect(ctx.destination);
 
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.05);
+            osc.frequency.setValueAtTime(900, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.04);
 
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
 
             osc.start();
-            osc.stop(ctx.currentTime + 0.05);
+            osc.stop(ctx.currentTime + 0.04);
         } catch (e) {
             // Silently fail if audio context is blocked
         }
