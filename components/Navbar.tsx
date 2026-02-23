@@ -10,51 +10,69 @@ function useUISound() {
     const tickBufferRef = useRef<AudioBuffer | null>(null);
     const readyRef = useRef(false);
 
-    // 1. Eagerly create AudioContext + pre-render the tick sound into a reusable buffer
+    // Build the tick waveform buffer (runs once on mount)
+    const buildTickBuffer = (ctx: AudioContext): AudioBuffer => {
+        const sampleRate = ctx.sampleRate;
+        const duration = 0.04;
+        const length = Math.floor(sampleRate * duration);
+        const buffer = ctx.createBuffer(1, length, sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < length; i++) {
+            const t = i / sampleRate;
+            const progress = t / duration;
+            const freq = 900 * Math.pow(200 / 900, progress);
+            const amp = 0.08 * Math.pow(1 - progress, 3);
+            data[i] = amp * Math.sin(2 * Math.PI * freq * t);
+        }
+        return buffer;
+    };
+
+    // 1. Create AudioContext + pre-render tick buffer on mount
     useEffect(() => {
         try {
             const AC = window.AudioContext || (window as any).webkitAudioContext;
             if (!AC) return;
             const ctx = new AC();
             ctxRef.current = ctx;
-
-            // Pre-render a tiny tick waveform (40ms) — this runs once, zero cost per hover
-            const sampleRate = ctx.sampleRate;
-            const duration = 0.04;
-            const length = Math.floor(sampleRate * duration);
-            const buffer = ctx.createBuffer(1, length, sampleRate);
-            const data = buffer.getChannelData(0);
-
-            for (let i = 0; i < length; i++) {
-                const t = i / sampleRate;
-                const progress = t / duration;
-                // Frequency sweep: 900Hz → 200Hz (exponential)
-                const freq = 900 * Math.pow(200 / 900, progress);
-                // Amplitude envelope: quick fade out
-                const amp = 0.08 * Math.pow(1 - progress, 3);
-                data[i] = amp * Math.sin(2 * Math.PI * freq * t);
-            }
-            tickBufferRef.current = buffer;
+            tickBufferRef.current = buildTickBuffer(ctx);
         } catch (e) { /* silently fail */ }
     }, []);
 
-    // 2. Unlock AudioContext on first REAL user gesture (click/touch/key — NOT mousemove)
+    // 2. On first REAL gesture: resume context + play the REAL tick (not silence!) to wake up WASAPI
     useEffect(() => {
-        const unlock = async () => {
+        const wakeAndPlay = async () => {
             const ctx = ctxRef.current;
+            const buffer = tickBufferRef.current;
             if (!ctx || readyRef.current) return;
+
             try {
+                // Resume the AudioContext (browser policy)
                 if (ctx.state === 'suspended') await ctx.resume();
+
+                // Play the REAL tick sound immediately — this forces Windows Audio Service awake
+                if (buffer) {
+                    const src = ctx.createBufferSource();
+                    src.buffer = buffer;
+                    src.connect(ctx.destination);
+                    src.start(0);
+                }
+
+                // ALSO play a tiny WAV through HTMLAudioElement as a secondary hardware wake-up
+                // This goes through a different OS audio path and guarantees WASAPI activation
+                const audio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+                audio.volume = 0.01;
+                audio.play().catch(() => { });
+
                 readyRef.current = true;
             } catch (e) { /* silently fail */ }
         };
-        // Only real gestures unlock audio in modern browsers
+
         const events = ['click', 'pointerdown', 'touchstart', 'keydown'] as const;
-        events.forEach(e => window.addEventListener(e, unlock, { once: true, passive: true }));
-        return () => { events.forEach(e => window.removeEventListener(e, unlock)); };
+        events.forEach(e => window.addEventListener(e, wakeAndPlay, { once: true, passive: true }));
+        return () => { events.forEach(e => window.removeEventListener(e, wakeAndPlay)); };
     }, []);
 
-    // 3. Play = just stamp the pre-built buffer onto a source node (ultra cheap, ~0.1ms)
+    // 3. Play pre-built buffer — ultra cheap (~0.1ms per hover)
     const playClick = () => {
         try {
             const ctx = ctxRef.current;
