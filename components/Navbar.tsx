@@ -7,86 +7,56 @@ import Magnetic from './Magnetic';
 
 function useUISound() {
     const ctxRef = useRef<AudioContext | null>(null);
-    const tickBufferRef = useRef<AudioBuffer | null>(null);
-    const readyRef = useRef(false);
 
-    // Build the tick waveform buffer (runs once)
-    const buildTickBuffer = (ctx: AudioContext): AudioBuffer => {
-        const sampleRate = ctx.sampleRate;
-        const duration = 0.04;
-        const length = Math.floor(sampleRate * duration);
-        const buffer = ctx.createBuffer(1, length, sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < length; i++) {
-            const t = i / sampleRate;
-            const progress = t / duration;
-            const freq = 900 * Math.pow(200 / 900, progress);
-            const amp = 0.08 * Math.pow(1 - progress, 3);
-            data[i] = amp * Math.sin(2 * Math.PI * freq * t);
-        }
-        return buffer;
-    };
-
-    // 1. Create AudioContext + pre-render tick on mount
+    // Pre-warm the AudioContext on first user interaction
     useEffect(() => {
-        try {
-            const AC = window.AudioContext || (window as any).webkitAudioContext;
-            if (!AC) return;
-            const ctx = new AC();
-            ctxRef.current = ctx;
-            tickBufferRef.current = buildTickBuffer(ctx);
-        } catch (e) { /* silently fail */ }
-    }, []);
-
-    // 2. On first gesture: resume + start a PERSISTENT silent heartbeat to keep WASAPI alive
-    useEffect(() => {
-        const wakeAndKeepAlive = async () => {
-            const ctx = ctxRef.current;
-            if (!ctx || readyRef.current) return;
-
+        const warmUp = () => {
             try {
-                if (ctx.state === 'suspended') await ctx.resume();
-
-                // === THE KEY FIX ===
-                // Start a continuous, inaudible oscillator that keeps the Windows audio
-                // hardware permanently awake. Without this, WASAPI sleeps between sounds
-                // and the next sound has a ~200ms delay while the hardware wakes up.
-                // 
-                // This is the standard technique used by web games, DAWs, and audio apps.
-                // - Frequency: 1 Hz (sub-bass, far below human hearing ~20Hz)
-                // - Amplitude: 0.001 (essentially zero — completely imperceptible)
-                // - Runs continuously until the page is closed
-                const heartbeat = ctx.createOscillator();
-                const heartbeatGain = ctx.createGain();
-                heartbeat.frequency.value = 1; // 1 Hz — inaudible
-                heartbeatGain.gain.value = 0.001; // Essentially silent
-                heartbeat.connect(heartbeatGain);
-                heartbeatGain.connect(ctx.destination);
-                heartbeat.start();
-
-                readyRef.current = true;
+                const AC = window.AudioContext || (window as any).webkitAudioContext;
+                if (AC && !ctxRef.current) {
+                    ctxRef.current = new AC();
+                }
             } catch (e) { /* silently fail */ }
+            window.removeEventListener('pointerdown', warmUp);
+            window.removeEventListener('mousemove', warmUp);
         };
-
-        const events = ['click', 'pointerdown', 'touchstart', 'keydown'] as const;
-        events.forEach(e => window.addEventListener(e, wakeAndKeepAlive, { once: true, passive: true }));
-        return () => { events.forEach(e => window.removeEventListener(e, wakeAndKeepAlive)); };
+        window.addEventListener('pointerdown', warmUp, { once: true });
+        window.addEventListener('mousemove', warmUp, { once: true });
+        return () => {
+            window.removeEventListener('pointerdown', warmUp);
+            window.removeEventListener('mousemove', warmUp);
+        };
     }, []);
 
-    // 3. Play pre-built buffer (ultra cheap, ~0.1ms)
     const playClick = () => {
         try {
+            if (!ctxRef.current) {
+                const AC = window.AudioContext || (window as any).webkitAudioContext;
+                if (!AC) return;
+                ctxRef.current = new AC();
+            }
             const ctx = ctxRef.current;
-            const buffer = tickBufferRef.current;
-            if (!ctx || !buffer || ctx.state !== 'running') return;
+            if (ctx.state === 'suspended') ctx.resume();
 
-            const source = ctx.createBufferSource();
-            source.buffer = buffer;
-            source.connect(ctx.destination);
-            source.start(0);
-        } catch (e) { /* silently fail */ }
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.05);
+
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.05);
+        } catch (e) {
+            // Silently fail if audio context is blocked
+        }
     };
-
     return { playClick };
 }
 
