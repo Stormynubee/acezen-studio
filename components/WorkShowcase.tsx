@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const works: { id: number; title: string; category: string; image: string; video?: string }[] = [
-    { id: 1, title: 'Sakura Promo', category: 'Video Editing', image: '', video: '/showcase/sakura-promo.mp4' },
+    { id: 1, title: 'Sakura Promo', category: 'Video Editing', image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&q=80&w=1000' },
     { id: 2, title: 'Xero', category: 'Concept Logo', image: '/showcase/design-1.png' },
     { id: 3, title: 'Apex Finance', category: 'Web Development', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000' },
     { id: 4, title: 'Pristine', category: 'Graphic Design', image: '/showcase/design-2.png' },

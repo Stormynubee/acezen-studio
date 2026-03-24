@@ -128,6 +128,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         muted
                         loop
                         playsInline
+                        preload="none"
                         className="w-full h-full object-cover"
                     />
                 ) : (

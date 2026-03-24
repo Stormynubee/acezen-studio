@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useLoading } from './LoadingContext';
 
-const TOTAL_FRAMES = 192;
+const TOTAL_FRAMES = 92;
 
 export default function MountainScroll() {
     const { incrementLoaded, setTotal, progress } = useLoading();
