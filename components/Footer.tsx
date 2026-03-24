@@ -83,7 +83,7 @@ export default function Footer() {
                                 name="email"
                                 required
                                 placeholder="Your Email Address"
-                                className="w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors peer rounded-none"
+                                className="block w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors peer rounded-none"
                             />
                             <motion.span
                                 className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 peer-focus:w-full"
@@ -97,7 +97,7 @@ export default function Footer() {
                                 required
                                 placeholder="Tell us about your vision..."
                                 rows={1}
-                                className="w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors resize-none overflow-hidden peer rounded-none"
+                                className="block w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors resize-none overflow-hidden peer rounded-none"
                                 onInput={(e) => {
                                     e.currentTarget.style.height = 'auto';
                                     e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
