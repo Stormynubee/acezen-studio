@@ -77,34 +77,40 @@ export default function Footer() {
                         <input type="checkbox" name="botcheck" className="hidden" />
 
                         {/* Email Input */}
-                        <div className="relative group">
+                        <div className="relative group pb-4">
                             <input
                                 type="email"
                                 name="email"
                                 required
                                 placeholder="Your Email Address"
-                                className="block w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors peer rounded-none"
+                                className="w-full bg-transparent text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors peer rounded-none"
                             />
+                            {/* Base Line */}
+                            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white/20" />
+                            {/* Animated Focus Line */}
                             <motion.span
-                                className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 peer-focus:w-full"
+                                className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 peer-focus:w-full z-10"
                             />
                         </div>
 
                         {/* Message Input */}
-                        <div className="relative group">
+                        <div className="relative group pb-4">
                             <textarea
                                 name="message"
                                 required
                                 placeholder="Tell us about your vision..."
                                 rows={1}
-                                className="block w-full bg-transparent border-b border-white/20 pb-4 text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors resize-none overflow-hidden peer rounded-none"
+                                className="w-full bg-transparent text-lg md:text-xl text-white placeholder-white/30 focus:outline-none transition-colors resize-none overflow-hidden peer rounded-none"
                                 onInput={(e) => {
                                     e.currentTarget.style.height = 'auto';
                                     e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
                                 }}
                             />
+                            {/* Base Line */}
+                            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white/20" />
+                            {/* Animated Focus Line */}
                             <motion.span
-                                className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 peer-focus:w-full"
+                                className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 peer-focus:w-full z-10"
                             />
                         </div>
 
