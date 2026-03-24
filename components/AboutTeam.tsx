@@ -106,7 +106,7 @@ export default function AboutTeam() {
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover/hansraj:animate-pulse" />
                         </p>
 
-                        <h2 className="text-6xl lg:text-[6rem] xl:text-[7rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left lg:origin-right">
+                        <h2 className="text-[clamp(2.5rem,4vw,5rem)] xl:text-[clamp(3rem,4.5vw,6rem)] font-bold text-white leading-[0.85] tracking-tighter group-hover/hansraj:scale-105 transition-transform duration-700 origin-left lg:origin-right">
                             <ScrambleText text="Hansraj" speed={60} /><br /><span className="text-zinc-600 group-hover/hansraj:text-white transition-colors duration-700">Tiwari</span>
                         </h2>
 
@@ -177,7 +177,7 @@ export default function AboutTeam() {
                             Visual Director
                         </p>
 
-                        <h2 className="text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left">
+                        <h2 className="text-[clamp(2.5rem,4vw,5rem)] xl:text-[clamp(3rem,4.5vw,6rem)] font-bold text-white leading-[0.85] tracking-tighter group-hover/sayli:scale-105 transition-transform duration-700 origin-left">
                             <ScrambleText text="Sayli" speed={60} /><br /><span className="text-zinc-600 group-hover/sayli:text-white transition-colors duration-700">Changan</span>
                         </h2>
 
