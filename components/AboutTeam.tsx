@@ -1,10 +1,229 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PussSideBar from './PussSideBar';
 import ScrambleText from './ScrambleText';
 
+/* ── Animated Counter ── */
+function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
+    const [count, setCount] = useState(0);
+    const ref = useRef<HTMLSpanElement>(null);
+    const hasAnimated = useRef(false);
+
+    useEffect(() => {
+        if (hasAnimated.current) return;
+        hasAnimated.current = true;
+
+        const duration = 1200;
+        const start = performance.now();
+
+        const step = (now: number) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }, [target]);
+
+    return <span ref={ref}>{count}{suffix}</span>;
+}
+
+/* ── Founder Modal ── */
+function FounderModal({ onClose }: { onClose: () => void }) {
+
+    // Close on ESC
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [onClose]);
+
+    // Lock body scroll
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = ''; };
+    }, []);
+
+    const stats = [
+        { value: 110, suffix: 'K+', label: 'Community' },
+        { value: 9, suffix: '+', label: 'Years' },
+        { value: 16, suffix: '+', label: 'Awards' },
+        { value: 4, suffix: '', label: 'Shipped Apps' },
+    ];
+
+    const techStack = [
+        'React', 'Next.js', 'TypeScript', 'Three.js', 'Rust',
+        'Python', 'C++', 'Arduino', 'DaVinci Resolve', 'Figma',
+    ];
+
+    const highlights = [
+        'SIH Grand Finale — Top 0.06% of 320K students',
+        '2× NCSC Nationals — India\'s top science olympiad',
+        'Harvard CS50x Certified',
+        'IEEE Young Engineer Award',
+        'IISc Bangalore & BITS Pilani Certified',
+    ];
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+        >
+            <motion.div
+                initial={{ opacity: 0, y: 60, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 40, scale: 0.96 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-zinc-950 border border-white/10 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
+            >
+                {/* Close */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-20 text-zinc-500 hover:text-white transition-colors text-xs font-mono uppercase tracking-widest"
+                >
+                    ESC ✕
+                </button>
+
+                <div className="p-8 md:p-12">
+
+                    {/* ── Header ── */}
+                    <div className="flex items-start gap-6 mb-10">
+                        {/* Monogram — flat, stark, no gradients */}
+                        <div className="w-16 h-16 md:w-20 md:h-20 border border-white/20 flex items-center justify-center shrink-0">
+                            <span className="text-3xl md:text-4xl font-black text-white tracking-tighter">H</span>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] mb-1">
+                                Founder & System Architect
+                            </p>
+                            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-none mb-3">
+                                Hansraj Tiwari
+                            </h2>
+                            <p className="text-sm text-zinc-500 italic font-light">
+                                &quot;I don&apos;t just build apps; I engineer experiences.&quot;
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* ── Divider ── */}
+                    <div className="w-full h-px bg-white/5 mb-8" />
+
+                    {/* ── Stats Grid ── */}
+                    <div className="grid grid-cols-4 gap-px bg-white/5 mb-8">
+                        {stats.map((stat) => (
+                            <div key={stat.label} className="bg-zinc-950 p-4 text-center">
+                                <p className="text-xl md:text-2xl font-bold text-white tabular-nums">
+                                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                                </p>
+                                <p className="text-[9px] text-zinc-600 uppercase tracking-[0.2em] mt-1 font-mono">
+                                    {stat.label}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* ── Tech Arsenal ── */}
+                    <div className="mb-8">
+                        <p className="text-[9px] text-zinc-600 uppercase tracking-[0.3em] font-mono mb-3">
+                            Tech Arsenal
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                            {techStack.map((tech, i) => (
+                                <motion.span
+                                    key={tech}
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 + i * 0.04 }}
+                                    className="text-[11px] font-mono text-zinc-400 border border-white/5 px-3 py-1.5 hover:text-white hover:border-white/20 transition-colors cursor-default"
+                                >
+                                    {tech}
+                                </motion.span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── Highlights ── */}
+                    <div className="mb-10">
+                        <p className="text-[9px] text-zinc-600 uppercase tracking-[0.3em] font-mono mb-3">
+                            Highlights
+                        </p>
+                        <div className="space-y-0">
+                            {highlights.map((item, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, x: -12 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.5 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                                    className="flex items-start gap-3 py-2.5 border-b border-white/[0.03] last:border-0"
+                                >
+                                    <span className="text-zinc-700 text-xs mt-0.5 shrink-0 font-mono">▸</span>
+                                    <p className="text-sm text-zinc-400 font-light">{item}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── CTAs ── */}
+                    <div className="space-y-3 mb-8">
+                        <motion.a
+                            href="https://hansraj-dev.vercel.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ x: 4 }}
+                            className="group flex items-center justify-between w-full bg-white text-black px-6 py-3.5 text-sm font-bold uppercase tracking-[0.15em] transition-colors hover:bg-zinc-200"
+                        >
+                            <span>View Full Portfolio</span>
+                            <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+                        </motion.a>
+
+                        <motion.button
+                            whileHover={{ x: 4 }}
+                            onClick={() => {
+                                onClose();
+                                setTimeout(() => {
+                                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                }, 300);
+                            }}
+                            className="group flex items-center justify-between w-full border border-white/10 text-white px-6 py-3.5 text-sm font-medium uppercase tracking-[0.15em] hover:border-white/30 transition-colors"
+                        >
+                            <span>Let&apos;s Work Together</span>
+                            <span className="text-lg transition-transform group-hover:translate-x-1">↗</span>
+                        </motion.button>
+                    </div>
+
+                    {/* ── Social Links ── */}
+                    <div className="flex items-center gap-6">
+                        <a href="https://github.com/Stormynubee" target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
+                            GitHub
+                        </a>
+                        <span className="text-zinc-800">•</span>
+                        <a href="https://www.linkedin.com/in/hansrajtiwari/" target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
+                            LinkedIn
+                        </a>
+                        <span className="text-zinc-800">•</span>
+                        <a href="https://hansraj-dev.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
+                            Portfolio
+                        </a>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+}
+
+/* ── Main Component ── */
 const TEAM = [
     {
         id: 'hansraj',
@@ -29,6 +248,7 @@ const TEAM = [
 export default function AboutTeam() {
     // Track hover state for smoother animations
     const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const [showFounderModal, setShowFounderModal] = useState(false);
 
     return (
         <section className="relative w-full min-h-[800px] lg:h-[800px] bg-zinc-950 flex flex-col lg:flex-row border-y border-white/5 overflow-hidden">
@@ -75,18 +295,30 @@ export default function AboutTeam() {
                     <span className="text-[200px] font-black italic text-zinc-800/50 leading-none">&</span>
                 </div>
 
-                {/* 2A. Hansraj (Left - Expansive) */}
+                {/* 2A. Hansraj (Left - Expansive) — CLICKABLE with entrance pulse */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    initial={{ opacity: 0, borderColor: 'rgba(255,255,255,0.02)' }}
+                    whileInView={{
+                        opacity: 1,
+                        borderColor: [
+                            'rgba(255,255,255,0.02)',
+                            'rgba(255,255,255,0.18)',
+                            'rgba(255,255,255,0.02)'
+                        ]
+                    }}
+                    transition={{
+                        opacity: { duration: 0.5, delay: 0.2 },
+                        borderColor: { duration: 2, delay: 1, ease: 'easeInOut' }
+                    }}
+                    viewport={{ once: true }}
                     onHoverStart={() => setHoveredId('hansraj')}
                     onHoverEnd={() => setHoveredId(null)}
+                    onClick={() => setShowFounderModal(true)}
                     animate={{
                         flex: hoveredId === 'hansraj' ? 2 : (hoveredId === 'sayli' ? 0.5 : 1),
                         backgroundColor: hoveredId === 'hansraj' ? '#18181b' : '#09090b'
                     }}
-                    className="relative group/hansraj border-b lg:border-b-0 lg:border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[280px]"
+                    className="relative group/hansraj cursor-pointer border-b lg:border-b-0 lg:border-r border-white/5 overflow-hidden flex flex-col justify-center p-8 lg:p-12 min-h-[280px]"
                 >
                     {/* Background Effect: Code Matrix (Subtle) */}
                     <div className="absolute inset-0 opacity-0 group-hover/hansraj:opacity-10 transition-opacity duration-700 pointer-events-none">
@@ -136,6 +368,8 @@ export default function AboutTeam() {
                                                 <li>Graphic Design •</li>
                                             </ul>
                                         </div>
+
+
                                     </div>
                                 </motion.div>
                             )}
@@ -145,6 +379,40 @@ export default function AboutTeam() {
                         <span className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 text-[5rem] lg:text-[10rem] leading-none font-black text-zinc-900 group-hover/hansraj:text-zinc-800 transition-colors duration-700 select-none -z-10 bg-clip-text text-transparent bg-gradient-to-br from-zinc-800 to-zinc-900 group-hover/hansraj:from-blue-900/10 group-hover/hansraj:to-transparent">
                             01
                         </span>
+                    </div>
+
+                    {/* Persistent CTA pill — Flashy but brutalist */}
+                    <div className="absolute bottom-4 right-4 lg:bottom-8 lg:right-8 z-10">
+                        <div className="relative group-hover/hansraj:scale-105 transition-transform duration-300">
+                            {/* Ping animation backdrop */}
+                            <motion.div
+                                className="absolute inset-0 border border-white/60 bg-white/10"
+                                animate={{ 
+                                    scaleX: [1, 1.15, 1],
+                                    scaleY: [1, 1.4, 1],
+                                    opacity: [1, 0, 0] 
+                                }}
+                                transition={{ 
+                                    duration: 2.5, 
+                                    repeat: Infinity,
+                                    ease: "easeOut"
+                                }}
+                            />
+                            
+                            {/* Main Button */}
+                            <div className="relative border border-white/40 bg-zinc-950 px-4 py-2 flex items-center gap-2 group-hover/hansraj:bg-white transition-colors duration-300">
+                                <span className="text-[10px] md:text-xs font-mono text-white group-hover/hansraj:text-black uppercase tracking-[0.2em] transition-colors">
+                                    View Profile
+                                </span>
+                                <motion.span
+                                    animate={{ x: [0, 4, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                                    className="text-white group-hover/hansraj:text-black transition-colors"
+                                >
+                                    →
+                                </motion.span>
+                            </div>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -219,6 +487,13 @@ export default function AboutTeam() {
                 </motion.div>
 
             </motion.div>
+
+            {/* ── Founder Modal ── */}
+            <AnimatePresence>
+                {showFounderModal && (
+                    <FounderModal onClose={() => setShowFounderModal(false)} />
+                )}
+            </AnimatePresence>
         </section>
     );
 }

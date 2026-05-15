@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingContact from "@/components/FloatingContact";
+import CustomCursor from "@/components/CustomCursor";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
@@ -80,6 +81,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Resource hints — eliminate DNS+TLS latency for critical external domains */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://api.web3forms.com" />
+      </head>
       <body className={`${geistSans.variable} antialiased`}>
         <script
           type="application/ld+json"
@@ -105,6 +112,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <CustomCursor />
         <FloatingContact />
         <SmoothScroll>
           {children}

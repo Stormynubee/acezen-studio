@@ -45,12 +45,33 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const [isHovered, setIsHovered] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
+    const [mediaLoaded, setMediaLoaded] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.matchMedia) {
             setIsMobile(!!window.matchMedia("(pointer: coarse)")?.matches);
         }
     }, []);
+
+    // Preload video when section approaches viewport (500px ahead)
+    useEffect(() => {
+        if (!service.video || !divRef.current) return;
+        const el = divRef.current;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && videoRef.current) {
+                    // Start buffering the video before user hovers
+                    videoRef.current.preload = 'auto';
+                    videoRef.current.load();
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '500px' }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [service.video]);
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -120,7 +141,11 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
             )}
         >
             {/* Cinematic Media Reveal (Background) */}
-            <div className="absolute inset-0 transition-opacity duration-700 ease-out opacity-0 group-hover:opacity-60">
+            <div className="absolute inset-0 transition-opacity duration-700 ease-out opacity-0 group-hover:opacity-80">
+                {/* Loading shimmer — shown while media is buffering on hover */}
+                {!mediaLoaded && (
+                    <div className="absolute inset-0 bg-zinc-800/50 animate-pulse" />
+                )}
                 {service.video ? (
                     <video
                         ref={videoRef}
@@ -129,6 +154,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         loop
                         playsInline
                         preload="none"
+                        onCanPlay={() => setMediaLoaded(true)}
                         className="w-full h-full object-cover"
                     />
                 ) : (
@@ -137,6 +163,8 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         alt={service.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="eager"
+                        onLoad={() => setMediaLoaded(true)}
                         className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     />
                 )}
@@ -301,7 +329,7 @@ function DesignShowcase() {
     return (
         <div>
             <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Graphic Design</h3>
-            <p className="text-gray-400 text-sm mb-8">Visual identities & creative direction.</p>
+            <p className="text-gray-400 text-sm mb-8">Visual identities &amp; creative direction.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="rounded-xl overflow-hidden border border-white/5 bg-black relative aspect-[4/3]">
@@ -369,7 +397,7 @@ function MarketingShowcase() {
 
             {/* Streamers */}
             <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4">Streamers & Creators</p>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4">Streamers &amp; Creators</p>
                 <div className="grid grid-cols-2 gap-3">
                     {streamers.map((s) => (
                         <div key={s.name} className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">

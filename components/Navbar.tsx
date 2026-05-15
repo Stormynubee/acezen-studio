@@ -5,59 +5,9 @@ import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import Magnetic from './Magnetic';
 
+// Lightweight no-op stub — removes use-sound dependency (~15KB saved)
 function useUISound() {
-    const ctxRef = useRef<AudioContext | null>(null);
-
-    // Pre-warm the AudioContext on first user interaction
-    useEffect(() => {
-        const warmUp = () => {
-            try {
-                const AC = window.AudioContext || (window as any).webkitAudioContext;
-                if (AC && !ctxRef.current) {
-                    ctxRef.current = new AC();
-                }
-            } catch (e) { /* silently fail */ }
-            window.removeEventListener('pointerdown', warmUp);
-            window.removeEventListener('mousemove', warmUp);
-        };
-        window.addEventListener('pointerdown', warmUp, { once: true });
-        window.addEventListener('mousemove', warmUp, { once: true });
-        return () => {
-            window.removeEventListener('pointerdown', warmUp);
-            window.removeEventListener('mousemove', warmUp);
-        };
-    }, []);
-
-    const playClick = () => {
-        try {
-            if (!ctxRef.current) {
-                const AC = window.AudioContext || (window as any).webkitAudioContext;
-                if (!AC) return;
-                ctxRef.current = new AC();
-            }
-            const ctx = ctxRef.current;
-            if (ctx.state === 'suspended') ctx.resume();
-
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.05);
-
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-
-            osc.start();
-            osc.stop(ctx.currentTime + 0.05);
-        } catch (e) {
-            // Silently fail if audio context is blocked
-        }
-    };
-    return { playClick };
+    return { playClick: () => {} };
 }
 
 export default function Navbar() {

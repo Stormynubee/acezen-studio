@@ -1,11 +1,9 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLoading } from './LoadingContext';
 import { useEffect, useState, useRef } from 'react';
 
 export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
-    const { isComplete } = useLoading();
     const [shouldExit, setShouldExit] = useState(false);
 
     const onCompleteRef = useRef(onComplete);
@@ -19,26 +17,16 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         // If we are already exiting, do nothing and do not reset timers.
         if (shouldExit) return;
 
-        // Safety: Force exit after 3 seconds max (reduced from 5s for peppier reloads)
-        const safetyTimeout = setTimeout(() => {
+        // PERFORMANCE FIX: Exit after 1.2s — don't wait for all assets.
+        // The mountain video loads progressively in the background;
+        // users should see the site quickly, not stare at a loading screen.
+        const exitTimer = setTimeout(() => {
             setShouldExit(true);
-            setTimeout(() => onCompleteRef.current(), 800);
-        }, 3000);
+            setTimeout(() => onCompleteRef.current(), 600);
+        }, 1200);
 
-        if (isComplete) {
-            const timeout = setTimeout(() => {
-                setShouldExit(true);
-                setTimeout(() => onCompleteRef.current(), 800);
-            }, 500); // Slight delay for smoothness (reduced from 800ms)
-
-            return () => {
-                clearTimeout(timeout);
-                clearTimeout(safetyTimeout);
-            };
-        }
-
-        return () => clearTimeout(safetyTimeout);
-    }, [isComplete, shouldExit]);
+        return () => clearTimeout(exitTimer);
+    }, [shouldExit]);
 
     return (
         <AnimatePresence>
@@ -46,14 +34,14 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
                 <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                    transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
                     className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
                 >
                     <motion.h1
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.1 }}
-                        transition={{ duration: 1, ease: 'easeOut' }}
+                        transition={{ duration: 0.8, ease: 'easeOut' }}
                         className="text-4xl md:text-6xl font-black tracking-tighter text-white"
                     >
                         ACEZEN
@@ -68,7 +56,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
                             className="h-full bg-white"
                             initial={{ x: '-100%' }}
                             animate={{ x: '100%' }}
-                            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                            transition={{ repeat: Infinity, duration: 1, ease: 'easeInOut' }}
                         />
                     </motion.div>
                 </motion.div>
