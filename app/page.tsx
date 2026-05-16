@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import SplashScreen from '@/components/SplashScreen';
+import CinematicHero from '@/components/CinematicHero';
 import MountainScroll from '@/components/MountainScroll';
-import HeroOverlay from '@/components/HeroOverlay';
 import ScrollIndicator from '@/components/ScrollIndicator';
+import EnginePill from '@/components/EnginePill';
 
 // Lazy load below-the-fold components
 const AboutTeam = dynamic(() => import('@/components/AboutTeam'), { ssr: false });
@@ -21,24 +22,31 @@ export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" style={{ background: 'var(--az-void)' }}>
+      <EnginePill />
       <TerminalEasterEgg />
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
 
       <ScrollIndicator />
-
       <Navbar />
+
+      {/* ── CINEMATIC HERO — full viewport, self-contained atmosphere ── */}
+      <CinematicHero />
+
+      {/*
+        MountainScroll sentinel — the lazy-loader only activates when this
+        element enters the viewport (200px root margin), so the sequence
+        images never load during the hero impression.
+      */}
+      <div id="mountain-sentinel" style={{ height: 1, marginTop: -1 }} aria-hidden />
       <MountainScroll />
 
-      {/* Hero text — fixed on mobile so it overlays the mountain on the first screen */}
-      <div className="fixed lg:relative inset-0 lg:inset-auto z-10 lg:z-0 h-screen w-full pointer-events-none">
-        <HeroOverlay />
-      </div>
-
-      <div className="h-[100vh]" />
-
-      <div className="relative z-10 bg-zinc-950 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-        <React.Suspense fallback={<div className="h-screen bg-zinc-950" />}>
+      {/* ── BELOW-FOLD CONTENT ── */}
+      <div
+        className="relative z-10"
+        style={{ background: 'var(--az-void)', boxShadow: '0 -32px 80px rgba(0,0,0,0.7)' }}
+      >
+        <React.Suspense fallback={<div className="h-screen" style={{ background: 'var(--az-void)' }} />}>
           <div id="about">
             <AboutTeam />
           </div>

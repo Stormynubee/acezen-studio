@@ -346,7 +346,7 @@ function ScrollCue() {
    MAIN CINEMATIC HERO
 ───────────────────────────────────────────────────────────────────────────── */
 export default function CinematicHero() {
-    const { motionFidelity } = useAtmosphere();
+    const { vfxDensity, motionFidelity } = useAtmosphere();
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
