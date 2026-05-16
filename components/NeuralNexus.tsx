@@ -5,9 +5,9 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useAtmosphere } from './AtmosphereContext';
 
 const PATHS = [
-  { id: 'artery-1', d: "M 20,0 Q 80,1000 30,2000 T 70,4000 T 20,6000 T 50,8000", color: 'blue' },
-  { id: 'artery-2', d: "M 80,0 Q 20,1500 70,3000 T 30,5000 T 80,7000 T 40,8000", color: 'gold' },
-  { id: 'ghost-1', d: "M 50,0 Q 90,1200 10,2500 T 90,4500 T 50,8000", color: 'blue', isGhost: true },
+  { id: 'artery-1', d: "M 20,0 Q 80,2000 30,4000 T 70,6000 T 50,8000", color: 'primary' },
+  { id: 'artery-2', d: "M 80,0 Q 20,2500 70,5000 T 30,7500 T 50,8000", color: 'primary' },
+  { id: 'ghost-1', d: "M 50,0 Q 10,1500 90,3000 T 10,4500 T 90,6000 T 50,8000", color: 'secondary', isGhost: true },
 ];
 
 export default function NeuralNexus() {
@@ -15,6 +15,14 @@ export default function NeuralNexus() {
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+
+  // Create a motion value for mood to enable interpolation
+  const moodMV = useMotionValue(mood);
+  useEffect(() => { moodMV.set(mood) }, [mood]);
+
+  // Interpolate the primary nexus color between Logic Blue and Art Gold
+  const primaryColor = useTransform(moodMV, [0, 1], ["#4a7fd4", "#c8a97e"]);
+  const secondaryColor = useTransform(moodMV, [0, 1], ["#0ea5e9", "#f59e0b"]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -35,21 +43,20 @@ export default function NeuralNexus() {
   const mX = useSpring(mouseX, springConfig);
 
   // Calculate a subtle horizontal shift based on mouse position relative to center
-  // Map screen width [0, 2000] to a small shift [-10, 10]
   const nexusShift = useTransform(mX, [0, 2000], [-10, 10]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden">
       <svg className="w-full h-[8000px] opacity-40" viewBox="0 0 100 8000" preserveAspectRatio="none">
         <defs>
-          <linearGradient id="nexus-grad-blue" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="nexus-grad-primary" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="transparent" />
-            <stop offset="50%" stopColor="#4a7fd4" />
+            <motion.stop offset="50%" stopColor={primaryColor} />
             <stop offset="100%" stopColor="transparent" />
           </linearGradient>
-          <linearGradient id="nexus-grad-gold" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="nexus-grad-secondary" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="transparent" />
-            <stop offset="50%" stopColor="#c8a97e" />
+            <motion.stop offset="50%" stopColor={secondaryColor} />
             <stop offset="100%" stopColor="transparent" />
           </linearGradient>
         </defs>
@@ -60,7 +67,7 @@ export default function NeuralNexus() {
               <motion.path
                 key={`${path.id}-glow`}
                 d={path.d}
-                stroke={path.color === 'blue' ? '#4a7fd4' : '#c8a97e'}
+                stroke={path.color === 'primary' ? primaryColor : secondaryColor}
                 strokeWidth={path.isGhost ? 4 : 8}
                 fill="transparent"
                 strokeLinecap="round"
@@ -73,13 +80,13 @@ export default function NeuralNexus() {
             )}
             <motion.path
               d={path.d}
-              stroke={path.color === 'blue' ? "url(#nexus-grad-blue)" : "url(#nexus-grad-gold)"}
+              stroke={path.color === 'primary' ? "url(#nexus-grad-primary)" : "url(#nexus-grad-secondary)"}
               strokeWidth={path.isGhost ? 0.3 : 0.8}
               fill="transparent"
               strokeLinecap="round"
               style={{ 
                 x: nexusShift,
-                opacity: path.isGhost ? vfxDensity * 0.3 : vfxDensity * 0.8,
+                opacity: path.isGhost ? vfxDensity * 0.2 : vfxDensity * 0.7,
                 filter: 'drop-shadow(0 0 8px rgba(74, 127, 212, 0.2))' 
               }}
             />
