@@ -3,10 +3,12 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingContact from "@/components/FloatingContact";
 import CustomCursor from "@/components/CustomCursor";
+import NeuralNexus from "@/components/NeuralNexus";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AtmosphereProvider } from "@/components/AtmosphereContext";
 
 export const metadata: Metadata = {
+
   title: {
     default: "AceZen Digital Studio | Creative Engineering & Visual Design",
     template: "%s | AceZen"
@@ -90,6 +92,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased cinematic-grain bg-black text-white selection:bg-white/10 selection:text-white">
         <AtmosphereProvider>
+          <NeuralNexus />
           {/* Cinematic Atmosphere — extremely subtle global light leaks */}
           <div className="fixed inset-0 pointer-events-none z-[1]" aria-hidden>
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full" />
