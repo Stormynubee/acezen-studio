@@ -2,43 +2,106 @@
 @source "../components";
 @source "../app";
 
+
 @theme {
-  --color-foreground: #1a1a1a;
-  --color-background-start: #E6E6E6;
-  --color-background-end: #0a0a0a;
-  --color-accent-glow: #007aff;
+  --color-foreground: #f0ede8;
+  --color-background-start: #020204;
+  --color-background-end: #0a0a0f;
+  --color-accent-glow: #c8a97e;
+  /* Cinematic gold accent */
+  --color-accent-cold: #4a7fd4;
+  /* Deep blue cold light */
+}
+
+/* ── Design System Tokens ── */
+:root {
+  /* Colors */
+  --az-void: #020204;
+  --az-deep: #07070d;
+  --az-surface: #0d0d15;
+  --az-border: rgba(255, 255, 255, 0.08);
+  --az-border-bright: rgba(255, 255, 255, 0.15);
+  --az-text: #f0ede8;
+  --az-muted: rgba(240, 237, 232, 0.45);
+  --az-accent: #c8a97e;
+  --az-accent-muted: rgba(200, 169, 126, 0.2);
+  --az-cold: #4a7fd4;
+
+  /* Fonts */
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* Dynamic Atmosphere */
+  --grain-opacity: calc(var(--vfx-density, 0.4) * 0.1);
+  --motion-stiffness: calc(var(--motion-fidelity, 0.6) * 200 + 50);
+  --motion-damping: calc(30 - var(--motion-fidelity, 0.6) * 10);
 }
 
 /* Custom Utilities */
 @utility glass-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--az-border);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 @utility text-gradient {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, #000, #444);
+  background-image: linear-gradient(135deg, #f0ede8 0%, #c8a97e 50%, #f0ede8 100%);
 }
 
-:root {
-  --foreground-rgb: 26, 26, 26;
-  --background-start-rgb: 230, 230, 230;
-  --background-end-rgb: 10, 10, 10;
+@utility text-editorial {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
 }
 
 /* Smooth Scrolling Managed by Lenis via layout.tsx */
 html {
-  /* Removed strict overflow to prevent Lenis calculate-height freeze */
+  background: var(--az-void);
+  scrollbar-width: thin;
+  scrollbar-color: var(--az-accent-muted) transparent;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: var(--az-text);
   background: transparent;
-  /* Changed to transparent to let MountainScroll show */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Global Animated Noise ── */
+.cinematic-grain::before {
+  content: "";
+  position: fixed;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+  z-index: 9999;
+  animation: noise 8s steps(10) infinite;
+}
+
+@keyframes noise {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+  100% { transform: translate(5%, 0); }
 }
 
 /* Mandatory Lenis Scroll Engine Classes */
@@ -61,6 +124,12 @@ html.lenis body {
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+/* Custom Selection */
+::selection {
+  background: var(--az-accent);
+  color: var(--az-void);
 }
 
 /* End Cursor Overrides */
