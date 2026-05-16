@@ -1,15 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import FloatingContact from "@/components/FloatingContact";
 import CustomCursor from "@/components/CustomCursor";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { AtmosphereProvider } from "@/components/AtmosphereContext";
 
 export const metadata: Metadata = {
   title: {
@@ -82,42 +77,58 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Resource hints — eliminate DNS+TLS latency for critical external domains */}
+        {/* Resource hints */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
+          rel="stylesheet"
+        />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://api.web3forms.com" />
       </head>
-      <body className={`${geistSans.variable} antialiased`}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "AceZen Digital Studio",
-              "url": "https://acezen.in",
-              "logo": "https://acezen.in/logo.png",
-              "sameAs": [
-                "https://www.linkedin.com/in/hansrajtiwari/",
-                "https://github.com/Stormynubee",
-                "https://twitter.com/acezen_studio"
-              ],
-              "founder": {
-                "@type": "Person",
-                "name": "Hansraj Tiwari",
-                "jobTitle": "System Architect & Founder",
-                "url": "https://hansraj-dev.vercel.app/"
-              },
-              "description": "AceZen architects cinematic digital realities, from system kernels to brand films. Specializing in Next.js, 3D WebGL, and High-Fidelity Motion."
-            }),
-          }}
-        />
-        <CustomCursor />
-        <FloatingContact />
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
-        <SpeedInsights />
+      <body className="antialiased cinematic-grain bg-black text-white selection:bg-white/10 selection:text-white">
+        <AtmosphereProvider>
+          {/* Cinematic Atmosphere — extremely subtle global light leaks */}
+          <div className="fixed inset-0 pointer-events-none z-[1]" aria-hidden>
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-amber-500/5 blur-[120px] rounded-full" />
+          </div>
+          
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "AceZen Digital Studio",
+                "url": "https://acezen.in",
+                "logo": "https://acezen.in/logo.png",
+                "sameAs": [
+                  "https://www.linkedin.com/in/hansrajtiwari/",
+                  "https://github.com/Stormynubee",
+                  "https://twitter.com/acezen_studio"
+                ],
+                "founder": {
+                  "@type": "Person",
+                  "name": "Hansraj Tiwari",
+                  "jobTitle": "System Architect & Founder",
+                  "url": "https://hansraj-dev.vercel.app/"
+                },
+                "description": "AceZen architects cinematic digital realities, from system kernels to brand films. Specializing in Next.js, 3D WebGL, and High-Fidelity Motion."
+              }),
+            }}
+          />
+          <CustomCursor />
+          <FloatingContact />
+          <SmoothScroll>
+            <div className="relative z-[2]">
+              {children}
+            </div>
+          </SmoothScroll>
+          <SpeedInsights />
+        </AtmosphereProvider>
       </body>
     </html>
   );
