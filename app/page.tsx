@@ -8,6 +8,7 @@ import CinematicHero from '@/components/CinematicHero';
 import MountainScroll from '@/components/MountainScroll';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import EnginePill from '@/components/EnginePill';
+import OverrideOverlay from '@/components/OverrideOverlay';
 
 // Lazy load below-the-fold components
 const AboutTeam = dynamic(() => import('@/components/AboutTeam'), { ssr: false });
@@ -23,6 +24,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--az-void)' }}>
+      <OverrideOverlay />
       <EnginePill />
       <TerminalEasterEgg />
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
