@@ -13,6 +13,31 @@ const PATHS = [
 export default function NeuralNexus() {
   const { vfxDensity, mood, motionFidelity } = useAtmosphere();
   
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      // Only track if not mobile
+      if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+          mouseX.set(e.clientX);
+          mouseY.set(e.clientY);
+      }
+    };
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
+  }, [mouseX, mouseY]);
+
+  const springConfig = { 
+    stiffness: motionFidelity * 50 + 10, 
+    damping: 30 
+  };
+  const mX = useSpring(mouseX, springConfig);
+
+  // Calculate a subtle horizontal shift based on mouse position relative to center
+  // Map screen width [0, 2000] to a small shift [-10, 10]
+  const nexusShift = useTransform(mX, [0, 2000], [-10, 10]);
+
   return (
     <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden">
       <svg className="w-full h-[8000px] opacity-40" viewBox="0 0 100 8000" preserveAspectRatio="none">
@@ -30,18 +55,35 @@ export default function NeuralNexus() {
         </defs>
         
         {PATHS.map((path) => (
-           <motion.path
-             key={path.id}
-             d={path.d}
-             stroke={path.color === 'blue' ? "url(#nexus-grad-blue)" : "url(#nexus-grad-gold)"}
-             strokeWidth={path.isGhost ? 0.3 : 0.8}
-             fill="transparent"
-             strokeLinecap="round"
-             style={{ 
-               opacity: path.isGhost ? vfxDensity * 0.3 : vfxDensity * 0.8,
-               filter: 'drop-shadow(0 0 8px rgba(74, 127, 212, 0.2))' 
-             }}
-           />
+          <React.Fragment key={path.id}>
+            {!path.isGhost && (
+              <motion.path
+                key={`${path.id}-glow`}
+                d={path.d}
+                stroke={path.color === 'blue' ? '#4a7fd4' : '#c8a97e'}
+                strokeWidth={path.isGhost ? 4 : 8}
+                fill="transparent"
+                strokeLinecap="round"
+                style={{ 
+                  x: nexusShift,
+                  opacity: vfxDensity * 0.4,
+                  filter: 'blur(16px)',
+                }}
+              />
+            )}
+            <motion.path
+              d={path.d}
+              stroke={path.color === 'blue' ? "url(#nexus-grad-blue)" : "url(#nexus-grad-gold)"}
+              strokeWidth={path.isGhost ? 0.3 : 0.8}
+              fill="transparent"
+              strokeLinecap="round"
+              style={{ 
+                x: nexusShift,
+                opacity: path.isGhost ? vfxDensity * 0.3 : vfxDensity * 0.8,
+                filter: 'drop-shadow(0 0 8px rgba(74, 127, 212, 0.2))' 
+              }}
+            />
+          </React.Fragment>
         ))}
       </svg>
     </div>
