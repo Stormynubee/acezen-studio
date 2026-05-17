@@ -26,28 +26,30 @@ export default function NeuralNexus() {
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
-      // Only track if not mobile
-      if (typeof window !== 'undefined' && window.innerWidth >= 768) {
-          mouseX.set(e.clientX);
-          mouseY.set(e.clientY);
-      }
+      // Throttle mouse updates for smoother performance
+      requestAnimationFrame(() => {
+        if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        }
+      });
     };
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
   }, [mouseX, mouseY]);
 
   const springConfig = { 
-    stiffness: motionFidelity * 50 + 10, 
-    damping: 30 
+    stiffness: motionFidelity * 40 + 5, 
+    damping: 40 
   };
   const mX = useSpring(mouseX, springConfig);
 
-  // Calculate a subtle horizontal shift based on mouse position relative to center
-  const nexusShift = useTransform(mX, [0, 2000], [-10, 10]);
+  // Calculate a subtle horizontal shift based on mouse position
+  const nexusShift = useTransform(mX, [0, 2000], [-15, 15]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden">
-      <svg className="w-full h-[8000px] opacity-40" viewBox="0 0 100 8000" preserveAspectRatio="none">
+    <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden hidden md:block">
+      <svg className="w-full h-[8000px] opacity-30" viewBox="0 0 100 8000" preserveAspectRatio="none">
         <defs>
           <linearGradient id="nexus-grad-primary" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="transparent" />

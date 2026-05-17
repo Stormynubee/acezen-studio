@@ -79,8 +79,8 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
     const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (isMobile || !divRef.current) return;
@@ -122,10 +122,10 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     return (
         <motion.div
             ref={divRef}
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             onClick={onClick}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
@@ -136,15 +136,14 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                 transformStyle: "preserve-3d",
             }}
             className={clsx(
-                'group relative overflow-hidden rounded-xl p-6 md:p-8 bg-zinc-950 cursor-pointer border border-white/5 transition-colors duration-700',
+                'group relative overflow-hidden rounded-2xl p-6 md:p-8 bg-zinc-950 cursor-pointer border border-white/5 transition-all duration-700 hover:border-white/20',
                 service.className
             )}
         >
             {/* Cinematic Media Reveal (Background) */}
-            <div className="absolute inset-0 transition-opacity duration-700 ease-out opacity-0 group-hover:opacity-80">
-                {/* Loading shimmer — shown while media is buffering on hover */}
+            <div className="absolute inset-0 transition-opacity duration-1000 ease-out opacity-0 group-hover:opacity-60 overflow-hidden">
                 {!mediaLoaded && (
-                    <div className="absolute inset-0 bg-zinc-800/50 animate-pulse" />
+                    <div className="absolute inset-0 bg-zinc-900/50 animate-pulse" />
                 )}
                 {service.video ? (
                     <video
@@ -155,7 +154,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         playsInline
                         preload="none"
                         onCanPlay={() => setMediaLoaded(true)}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000"
                     />
                 ) : (
                     <Image
@@ -165,41 +164,48 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         sizes="(max-width: 768px) 100vw, 50vw"
                         loading="eager"
                         onLoad={() => setMediaLoaded(true)}
-                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                        className="object-cover transition-transform duration-1000 group-hover:scale-100 scale-110"
                     />
                 )}
             </div>
 
-            {/* Dark Gradient Overlay for Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-70" />
+            {/* Inner Rim Light / Glow */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{
+                    boxShadow: 'inset 0 0 40px rgba(255,255,255,0.02), inset 0 0 100px rgba(200,169,126,0.03)',
+                }}
+            />
+
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-100 transition-opacity duration-700" />
 
             {/* Spotlight Glare */}
             <div
-                className="pointer-events-none absolute -inset-px opacity-0 transition duration-700 group-hover:opacity-100 mix-blend-screen"
+                className="pointer-events-none absolute -inset-px opacity-0 transition duration-700 group-hover:opacity-100 mix-blend-overlay"
                 style={{
-                    background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, rgba(255,255,255,0.06), transparent 40%)`,
+                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,0.08), transparent 40%)`,
                 }}
             />
 
             {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-end">
-                {/* Arrow Icon */}
-                <div className="absolute top-0 right-0 transition-transform duration-500 group-hover:-translate-y-2 group-hover:translate-x-2">
-                    <div className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/20 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-white/50 group-hover:text-white transition-colors">
+            <div className="relative z-10 h-full flex flex-col justify-end translate-z-20">
+                <div className="absolute top-0 right-0 transition-all duration-700 group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:opacity-100 opacity-40">
+                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md group-hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-white">
                             <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
 
                 <motion.h3
-                    className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-2 transform transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:-translate-y-4 group-hover:scale-[1.02] origin-left"
+                    className="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-3 transform transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:-translate-y-2 origin-left"
+                    style={{ fontFamily: 'var(--font-display)' }}
                 >
                     {service.title}
                 </motion.h3>
 
                 <motion.p
-                    className="text-zinc-500 text-sm md:text-base font-light max-w-[85%] group-hover:text-zinc-300 transition-all duration-700 transform group-hover:-translate-y-4"
+                    className="text-zinc-500 text-sm md:text-base font-light max-w-[90%] group-hover:text-zinc-300 transition-all duration-700 transform group-hover:-translate-y-2 leading-relaxed"
                 >
                     {service.description}
                 </motion.p>
@@ -212,23 +218,26 @@ export default function ServicesBento() {
     const [activeModal, setActiveModal] = useState<ServiceKey>(null);
 
     return (
-        <section className="py-24 md:py-32 px-5 md:px-12 max-w-screen-2xl mx-auto block">
+        <section className="py-24 md:py-48 px-5 md:px-12 max-w-screen-2xl mx-auto block">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="mb-16 md:mb-32 flex justify-between items-end"
+                className="mb-16 md:mb-40 flex flex-col md:flex-row md:justify-between md:items-end gap-8"
             >
-                <h2 className="text-5xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter leading-none text-white">
+                <h2 className="text-[clamp(3.5rem,8vw,12rem)] font-bold tracking-tighter leading-none text-white text-editorial">
                     <ScrambleText text="Expertise" /><span className="text-zinc-800">.</span>
                 </h2>
-                <p className="hidden md:block text-[10px] text-zinc-500 uppercase tracking-[0.4em] font-mono pb-4">
-                    Four Pillars
-                </p>
+                <div className="flex flex-col items-start md:items-end gap-4 pb-4">
+                  <p className="text-[9px] md:text-[10px] text-zinc-500 uppercase tracking-[0.5em] font-mono">
+                      Engineering Cinematic Realities
+                  </p>
+                  <div className="w-16 h-[1px] bg-white/10" />
+                </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[300px] gap-3 md:gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[220px] md:auto-rows-[300px] gap-3 md:gap-4">
                 {services.map((service, index) => (
                     <SpotlightCard
                         key={service.title}

@@ -7,11 +7,11 @@ import Image from 'next/image';
 const works: { id: number; title: string; category: string; image: string; video?: string }[] = [
     { id: 1, title: 'Sakura Promo', category: 'Video Editing', image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&q=80&w=1000' },
     { id: 2, title: 'Xero', category: 'Concept Logo', image: '/showcase/design-1.png' },
-    { id: 3, title: 'Apex Finance', category: 'Web Development', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000' },
+    { id: 3, title: 'Apex Finance', category: 'Web Development', image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000' },
     { id: 4, title: 'Pristine', category: 'Graphic Design', image: '/showcase/design-2.png' },
     { id: 5, title: 'Umang OS', category: 'Hardware / IoT', image: '/showcase/umang-os.jpg' },
     { id: 6, title: 'Sign Language Gloves', category: 'Assistive Tech', image: '/showcase/sign-gloves.jpg' },
-    { id: 7, title: 'Elevate', category: 'Marketing', image: 'https://images.unsplash.com/photo-1492551557933-34265f7af79e?auto=format&fit=crop&q=80&w=1000' },
+    { id: 7, title: 'Elevate', category: 'Marketing', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000' },
 ];
 
 export default function WorkShowcase() {
@@ -40,14 +40,20 @@ function DesktopWorkShowcase() {
     const x3 = useTransform(scrollYProgress, [0, 1], ['0%', '-15%']);
 
     return (
-        <section ref={targetRef} className="relative h-[150vh] bg-transparent text-white">
-            <div className="sticky top-0 flex h-screen flex-col justify-center px-4 gap-3 overflow-hidden">
+        <section ref={targetRef} className="relative h-[170vh] bg-transparent text-white">
+            <div className="sticky top-0 flex h-screen flex-col justify-center px-4 gap-4 overflow-hidden">
 
                 {/* Header Section */}
-                <div className="flex-none pl-4 md:pl-12 z-10 mb-8 md:mb-16">
-                    <h2 className="text-5xl md:text-[8rem] font-bold leading-[0.85] mb-2 tracking-tighter text-white">Selected Works<span className="text-zinc-700">.</span></h2>
-                    <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-500 ml-2">A curation of digital empires</p>
+                <div className="flex-none pl-4 md:pl-16 z-10 mb-4 md:mb-12">
+                    <h2 className="text-[clamp(3.5rem,8vw,10rem)] font-bold leading-[0.85] mb-4 md:mb-6 tracking-tighter text-white text-editorial">
+                      Selected Works<span className="text-zinc-800">.</span>
+                    </h2>
+                    <div className="flex items-center gap-4 ml-2">
+                      <div className="w-12 h-[1px] bg-white/20" />
+                      <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.45em] text-zinc-500">Curation of Digital Empires</p>
+                    </div>
                 </div>
+
 
                 {/* Row 1 - 2 items */}
                 <div className="w-full overflow-hidden">
@@ -60,7 +66,7 @@ function DesktopWorkShowcase() {
 
                 {/* Row 2 - 3 items */}
                 <div className="w-full overflow-hidden">
-                    <motion.div style={{ x: x2 }} className="flex gap-6 pl-24 w-max">
+                    <motion.div style={{ x: x2 }} className="flex gap-6 pl-32 w-max">
                         {works.slice(2, 5).map((work) => (
                             <WorkCard key={work.id} work={work} />
                         ))}
@@ -69,7 +75,7 @@ function DesktopWorkShowcase() {
 
                 {/* Row 3 - 2 items */}
                 <div className="w-full overflow-hidden">
-                    <motion.div style={{ x: x3 }} className="flex gap-6 pl-12 w-max">
+                    <motion.div style={{ x: x3 }} className="flex gap-6 pl-16 w-max">
                         {works.slice(5).map((work) => (
                             <WorkCard key={work.id} work={work} />
                         ))}
@@ -82,16 +88,24 @@ function DesktopWorkShowcase() {
 }
 
 function WorkCard({ work }: { work: typeof works[0] }) {
-    // Specifically handle logos to prevent cutting
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const isLogo = work.category === 'Concept Logo';
 
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    };
+
     return (
-        <div className="relative h-[27vh] w-[45vw] min-w-[500px] overflow-hidden bg-zinc-950 group cursor-pointer flex-none border border-white/5 shadow-2xl rounded-sm">
-            <div className="absolute inset-0 flex items-center justify-center bg-black">
+        <div 
+            onMouseMove={handleMouseMove}
+            className="relative h-[22vh] w-[40vw] min-w-[400px] overflow-hidden bg-zinc-950 group cursor-pointer flex-none border border-white/5 shadow-2xl rounded-xl transition-all duration-700 hover:border-white/20 hover:shadow-[0_0_80px_rgba(0,0,0,0.5)]"
+        >
+            <div className="absolute inset-0 flex items-center justify-center bg-black overflow-hidden">
                 {work.video ? (
                     <video
                         src={work.video}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
                         autoPlay
                         loop
                         muted
@@ -103,17 +117,36 @@ function WorkCard({ work }: { work: typeof works[0] }) {
                         alt={work.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className={`transition-all duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100 ${isLogo ? 'object-contain p-12' : 'object-cover'}`}
+                        className={`transition-all duration-1000 scale-110 group-hover:scale-100 opacity-60 group-hover:opacity-90 ${isLogo ? 'object-contain p-10' : 'object-cover'}`}
                     />
                 )}
             </div>
-            {/* Minimal Gradient Overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-opacity duration-700 pointer-events-none" />
+
+            {/* Follow Light Gradient */}
+            <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10 mix-blend-overlay"
+                style={{
+                    background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.12), transparent 80%)`,
+                }}
+            />
+
+            {/* Inner Shimmer Rim Light */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none z-20"
+                style={{
+                    boxShadow: 'inset 0 0 60px rgba(255,255,255,0.03), inset 0 0 0 1px rgba(255,255,255,0.05)',
+                }}
+            />
+
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-700 pointer-events-none z-10" />
 
             {/* Text Content */}
-            <div className="absolute bottom-0 left-0 p-8 w-full z-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1]">
-                <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-blue-400 mb-2 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">{work.category}</p>
-                <h3 className="text-4xl lg:text-5xl font-bold tracking-tighter text-white/90 group-hover:text-white transition-colors duration-700">{work.title}</h3>
+            <div className="absolute bottom-0 left-0 p-6 lg:p-8 w-full z-30 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+                <div className="flex items-center gap-3 mb-2 lg:mb-3 opacity-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                    <span className="w-6 h-[1px] bg-blue-500" />
+                    <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-blue-400 font-medium">{work.category}</p>
+                </div>
+                <h3 className="text-3xl lg:text-4xl font-bold tracking-tighter text-white/90 group-hover:text-white transition-colors duration-700" style={{ fontFamily: 'var(--font-display)' }}>{work.title}</h3>
             </div>
         </div>
     );

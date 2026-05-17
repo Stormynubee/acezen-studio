@@ -23,34 +23,40 @@ const steps = [
 const ProcessContent = ({ isRevealed = false }: { isRevealed?: boolean }) => {
     return (
         <div className="max-w-screen-2xl mx-auto w-full">
-            <div className="flex justify-between items-end mb-16 md:mb-32">
-                <h2 className={`text-5xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter leading-none ${isRevealed ? 'text-white' : 'text-zinc-900'}`}>
+            <div className="flex flex-col md:flex-row justify-between md:items-end mb-16 md:mb-40 gap-8">
+                <h2 className={`text-6xl md:text-9xl lg:text-[11rem] font-bold tracking-tighter leading-none text-editorial ${isRevealed ? 'text-white' : 'text-zinc-900'}`}>
                     Process<span className={isRevealed ? 'text-blue-500' : 'text-zinc-950'}>.</span>
                 </h2>
-                <p className={`hidden md:block text-[10px] uppercase tracking-[0.4em] font-mono pb-4 ${isRevealed ? 'text-zinc-300' : 'text-zinc-900'}`}>
-                    Systematic Excellence
-                </p>
+                <div className="flex flex-col items-start md:items-end gap-4 pb-6">
+                  <p className={`text-[10px] uppercase tracking-[0.5em] font-mono ${isRevealed ? 'text-zinc-400' : 'text-zinc-900'}`}>
+                      Systematic Excellence
+                  </p>
+                  <div className={`w-16 h-[1px] ${isRevealed ? 'bg-white/10' : 'bg-zinc-900'}`} />
+                </div>
             </div>
 
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-x-12 lg:gap-x-24 border-t pt-16 ${isRevealed ? 'border-white/20' : 'border-zinc-900'}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 border-t pt-20 ${isRevealed ? 'border-white/10' : 'border-zinc-900'}`}>
                 {steps.map((step, i) => (
                     <div key={i} className="relative group flex flex-col">
-                        <span className={`text-[6rem] md:text-[10rem] font-bold leading-none absolute -top-12 md:-top-16 -left-4 md:-left-12 -z-10 select-none ${isRevealed ? 'text-zinc-800' : 'text-zinc-950'}`}>
+                        <span className={`text-[8rem] md:text-[12rem] font-bold leading-none absolute -top-16 md:-top-24 -left-4 md:-left-16 -z-10 select-none transition-colors duration-700 ${isRevealed ? 'text-zinc-900/50 group-hover:text-blue-500/10' : 'text-zinc-950'}`}>
                             {step.num}
                         </span>
 
-                        <h3 className={`text-2xl md:text-3xl font-bold mb-6 tracking-tight ${isRevealed ? 'text-white' : 'text-zinc-800'}`}>
-                            {step.title}
-                        </h3>
+                        <div className="flex items-center gap-4 mb-8">
+                          <div className={`w-2 h-2 rounded-full transition-colors duration-700 ${isRevealed ? 'bg-blue-500' : 'bg-zinc-900'}`} />
+                          <h3 className={`text-3xl md:text-4xl font-bold tracking-tighter ${isRevealed ? 'text-white' : 'text-zinc-800'}`}>
+                              {step.title}
+                          </h3>
+                        </div>
 
-                        <p className={`leading-relaxed text-sm lg:text-base max-w-sm ${isRevealed ? 'text-zinc-400' : 'text-zinc-800'}`}>
+                        <p className={`leading-relaxed text-base lg:text-lg max-w-sm font-light transition-colors duration-700 ${isRevealed ? 'text-zinc-400 group-hover:text-zinc-200' : 'text-zinc-800'}`}>
                             {step.desc}
                         </p>
 
-                        <div className="mt-8 overflow-hidden h-10 flex items-center">
-                            <div className={`w-full h-[1px] relative ${isRevealed ? 'bg-white/10' : 'bg-zinc-900'}`}>
+                        <div className="mt-12 overflow-hidden h-px flex items-center w-full relative">
+                            <div className={`w-full h-full relative ${isRevealed ? 'bg-white/5' : 'bg-zinc-900'}`}>
                                 {isRevealed && (
-                                    <div className="absolute top-0 left-0 h-full bg-blue-500 w-full origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-[0.16,1,0.3,1]" />
+                                    <div className="absolute top-0 left-0 h-full bg-blue-500 w-full origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 ease-[0.16,1,0.3,1]" />
                                 )}
                             </div>
                         </div>
@@ -67,8 +73,7 @@ export default function Process() {
     const [isHovering, setIsHovering] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
-    // FIX: Framework hook must remain at the top level, never conditionally nested!
-    const maskImageTemplate = useMotionTemplate`radial-gradient(${isHovering ? '450px' : '0px'} circle at ${mouseX}px ${mouseY}px, black 20%, transparent 100%)`;
+    const maskImageTemplate = useMotionTemplate`radial-gradient(${isHovering ? '550px' : '0px'} circle at ${mouseX}px ${mouseY}px, black 25%, transparent 100%)`;
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.matchMedia) {
@@ -85,24 +90,39 @@ export default function Process() {
 
     return (
         <section
-            className="relative py-32 px-5 md:px-12 bg-black z-10 overflow-hidden cursor-crosshair min-h-screen flex items-center"
+            className="relative py-48 px-5 md:px-12 bg-black z-10 overflow-hidden cursor-none min-h-screen flex items-center"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
         >
-            {/* The Dark Base Layer (Visible constantly but extremely dim) */}
+            {/* Custom Process Cursor */}
+            <motion.div 
+              className="fixed w-4 h-4 bg-blue-500 rounded-full z-[100] pointer-events-none mix-blend-difference lg:block hidden"
+              style={{
+                left: mouseX,
+                top: mouseY,
+                x: "-50%",
+                y: "-50%",
+              }}
+              animate={{
+                scale: isHovering ? 1 : 0,
+                opacity: isHovering ? 1 : 0
+              }}
+            />
+
+            {/* The Dark Base Layer */}
             <div className="w-full relative z-10 transition-opacity duration-500">
                 <ProcessContent isRevealed={isMobile} />
             </div>
 
-            {/* The Bright "X-Ray" Overlay Layer (Masked by the mouse) */}
+            {/* The Bright "X-Ray" Overlay Layer */}
             {!isMobile && (
                 <motion.div
-                    className="absolute inset-0 z-20 pointer-events-none py-32 px-5 md:px-12 bg-zinc-950 flex items-center"
+                    className="absolute inset-0 z-20 pointer-events-none py-48 px-5 md:px-12 bg-zinc-950 flex items-center"
                     style={{
                         maskImage: maskImageTemplate,
                         WebkitMaskImage: maskImageTemplate,
-                        transition: 'mask-image 0.2s ease-out, -webkit-mask-image 0.2s ease-out',
+                        transition: 'mask-image 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                 >
                     <ProcessContent isRevealed={true} />

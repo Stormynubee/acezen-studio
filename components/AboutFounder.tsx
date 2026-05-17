@@ -121,31 +121,33 @@ export default function AboutFounder() {
     }, [startedLoading, renderFrame]);
 
     return (
-        <section ref={sectionRef} className="py-16 md:py-32 px-5 md:px-6 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-8 md:gap-16">
+        <section ref={sectionRef} className="py-12 md:py-20 flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="flex-1"
+                className="flex-1 space-y-12"
             >
-                <h2 className="text-3xl md:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight">
-                    System Architect & <br /> <span className="font-light italic text-white/70">Creative Visionary</span>
-                </h2>
-                <div className="space-y-4 md:space-y-6 text-lg md:text-xl text-gray-400 leading-loose mb-10 md:mb-12">
+                <div>
+                    <h2 className="text-4xl md:text-7xl font-bold text-white mb-6 leading-[0.9] tracking-tighter text-editorial">
+                        System Architect & <br /> 
+                        <span className="text-blue-500/80">Creative Visionary</span>
+                    </h2>
+                    <div className="w-20 h-[1px] bg-blue-500/40" />
+                </div>
+
+                <div className="space-y-8 text-lg md:text-xl text-zinc-400 leading-relaxed font-light">
                     <p>
-                        Founded by <span className="text-white font-semibold">Hansraj Tiwari</span>, a polymath with over <span className="text-white">9+ years</span> of experience bridging the gap between raw code and cinematic storytelling.
+                        Founded by <span className="text-white font-medium">Hansraj Tiwari</span>, a polymath with over <span className="text-white">9+ years</span> of experience bridging the gap between raw code and cinematic storytelling.
                     </p>
                     <p>
-                        Beyond the stack, I am a <span className="text-white">Video Editor &amp; Motion Graphic Artist</span>. My work isn&apos;t just about function, it&apos;s about feeling. From complex React/Node.js ecosystems to Hardware Prototyping (Arduino/IoT) and High-Fidelity Video Production, I architect complete digital realities.
-                    </p>
-                    <p className="italic text-gray-500 text-sm border-l-2 border-white/20 pl-4">
-                        &ldquo;I don&apos;t just build apps; I engineer experiences. Whether it&apos;s the kernel of a custom OS or the final cut of a brand film.&rdquo;
+                        Beyond the stack, I am a <span className="text-white">Video Editor &amp; Motion Graphic Artist</span>. My work isn&apos;t just about function, it&apos;s about feeling. From complex React/Node.js ecosystems to Hardware Prototyping and High-Fidelity Video Production.
                     </p>
                 </div>
 
-                <div className="flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-8">
+                <div className="flex flex-wrap gap-3">
                     {['System Architecture', 'Full Stack Dev', 'Video Editing', 'Motion Graphics', 'IoT & Hardware', 'React & Node.js'].map((skill) => (
-                        <span key={skill} className="px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-white/10 bg-white/5 text-[11px] md:text-sm text-gray-300 backdrop-blur-sm">
+                        <span key={skill} className="px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] text-xs font-mono text-zinc-500 tracking-wider backdrop-blur-md">
                             {skill}
                         </span>
                     ))}
@@ -153,14 +155,33 @@ export default function AboutFounder() {
             </motion.div>
 
             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="w-full md:flex-1 relative aspect-video md:aspect-square max-w-full md:max-w-md"
+                className="w-full lg:w-[45%] relative aspect-[4/5]"
             >
-                <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-black">
-                    <canvas ref={canvasRef} className="block w-full h-full" />
+                <div className="absolute inset-0 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+                
+                <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl group">
+                    <img 
+                        src="/hansraj.jpg" 
+                        alt="Hansraj Tiwari" 
+                        className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000"
+                    />
+                    
+                    {/* Glass Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 border-[20px] border-black/20 pointer-events-none" />
+                    
+                    {/* Technical Decals */}
+                    <div className="absolute bottom-6 left-6 font-mono text-[8px] text-white/30 uppercase tracking-[0.5em] vertical-rl">
+                        Kernel_Access_v4.0
+                    </div>
                 </div>
+                
+                {/* Corner Accents */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 border-t-2 border-r-2 border-blue-500/20 rounded-tr-3xl pointer-events-none" />
+                <div className="absolute -bottom-4 -left-4 w-20 h-20 border-b-2 border-l-2 border-blue-500/20 rounded-bl-3xl pointer-events-none" />
             </motion.div>
         </section>
     );

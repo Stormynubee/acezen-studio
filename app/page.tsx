@@ -7,7 +7,7 @@ import SplashScreen from '@/components/SplashScreen';
 import CinematicHero from '@/components/CinematicHero';
 import MountainScroll from '@/components/MountainScroll';
 import ScrollIndicator from '@/components/ScrollIndicator';
-import EnginePill from '@/components/EnginePill';
+import ArchitectSidebar from '@/components/ArchitectSidebar';
 import OverrideOverlay from '@/components/OverrideOverlay';
 
 // Lazy load below-the-fold components
@@ -23,11 +23,12 @@ export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
 
   return (
-    <main className="min-h-screen" style={{ background: 'var(--az-void)' }}>
-      <OverrideOverlay />
-      <EnginePill />
+    <main className="min-h-screen selection:bg-blue-500/30" style={{ background: 'var(--az-void)' }}>
       <TerminalEasterEgg />
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+
+      <ArchitectSidebar />
+      <OverrideOverlay />
 
       <ScrollIndicator />
       <Navbar />
@@ -46,21 +47,27 @@ export default function Home() {
       {/* ── BELOW-FOLD CONTENT ── */}
       <div
         className="relative z-10"
-        style={{ background: 'var(--az-void)', boxShadow: '0 -32px 80px rgba(0,0,0,0.7)' }}
+        style={{ background: 'var(--az-void)', boxShadow: '0 -64px 100px rgba(0,0,0,0.8)' }}
       >
         <React.Suspense fallback={<div className="h-screen" style={{ background: 'var(--az-void)' }} />}>
-          <div id="about">
+          <section id="about" className="relative">
             <AboutTeam />
-          </div>
-          <div id="services">
+          </section>
+
+          <section id="services" className="relative bg-[#050508]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,127,212,0.03),transparent_70%)] pointer-events-none" />
             <ServicesBento />
-          </div>
-          <div id="work">
+          </section>
+
+          <section id="work" className="relative">
             <WorkShowcase />
-          </div>
+          </section>
+
           <Ticker />
+
           <Process />
-          <div id="contact">
+
+          <div id="contact" className="relative">
             <Footer />
           </div>
         </React.Suspense>

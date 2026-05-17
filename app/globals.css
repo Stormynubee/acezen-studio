@@ -2,68 +2,64 @@
 @source "../components";
 @source "../app";
 
-
 @theme {
   --color-foreground: #f0ede8;
   --color-background-start: #020204;
   --color-background-end: #0a0a0f;
   --color-accent-glow: #c8a97e;
-  /* Cinematic gold accent */
   --color-accent-cold: #4a7fd4;
-  /* Deep blue cold light */
 }
 
 /* ── Design System Tokens ── */
 :root {
   /* Colors */
   --az-void: #020204;
-  --az-deep: #07070d;
-  --az-surface: #0d0d15;
-  --az-border: rgba(255, 255, 255, 0.08);
-  --az-border-bright: rgba(255, 255, 255, 0.15);
+  --az-deep: #050508;
+  --az-surface: #0a0a0f;
+  --az-border: rgba(255, 255, 255, 0.05);
+  --az-border-bright: rgba(255, 255, 255, 0.12);
   --az-text: #f0ede8;
-  --az-muted: rgba(240, 237, 232, 0.45);
+  --az-muted: rgba(240, 237, 232, 0.4);
   --az-accent: #c8a97e;
-  --az-accent-muted: rgba(200, 169, 126, 0.2);
   --az-cold: #4a7fd4;
 
-  /* Fonts */
+  /* Fonts - High Fidelity Pairing */
   --font-display: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'DM Mono', 'Courier New', monospace;
+  --font-mono: 'DM Mono', monospace;
   --font-body: 'DM Sans', system-ui, sans-serif;
 
   /* Dynamic Atmosphere */
-  --grain-opacity: calc(var(--vfx-density, 0.4) * 0.1);
-  --motion-stiffness: calc(var(--motion-fidelity, 0.6) * 200 + 50);
-  --motion-damping: calc(30 - var(--motion-fidelity, 0.6) * 10);
+  --grain-opacity: calc(var(--vfx-density, 0.4) * 0.08);
 }
 
 /* Custom Utilities */
 @utility glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(40px);
   border: 1px solid var(--az-border);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-@utility text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #f0ede8 0%, #c8a97e 50%, #f0ede8 100%);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.2);
 }
 
 @utility text-editorial {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
-  line-height: 0.9;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  font-weight: 400;
+  font-style: italic;
 }
 
-/* Smooth Scrolling Managed by Lenis via layout.tsx */
+@utility text-technical {
+  font-family: var(--font-mono);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  font-size: 9px;
+  color: var(--az-muted);
+}
+
+/* Smooth Scrolling */
 html {
   background: var(--az-void);
-  scrollbar-width: thin;
-  scrollbar-color: var(--az-accent-muted) transparent;
+  scrollbar-width: none;
 }
 
 body {
@@ -71,7 +67,7 @@ body {
   background: transparent;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
   overflow-x: hidden;
 }
 
@@ -104,12 +100,6 @@ body {
   100% { transform: translate(5%, 0); }
 }
 
-/* Mandatory Lenis Scroll Engine Classes */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
@@ -128,8 +118,6 @@ html.lenis body {
 
 /* Custom Selection */
 ::selection {
-  background: var(--az-accent);
-  color: var(--az-void);
+  background: var(--az-cold);
+  color: white;
 }
-
-/* End Cursor Overrides */

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function Ticker() {
     return (
-        <section className="py-12 bg-zinc-950 overflow-hidden relative z-20 border-t border-white/5 -mt-[10vh]">
+        <section className="py-24 bg-zinc-950 overflow-hidden relative z-10 border-t border-white/5">
             <div className="flex whitespace-nowrap">
                 <TickerLine />
                 <TickerLine />

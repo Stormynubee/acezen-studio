@@ -30,11 +30,11 @@ export default function Navbar() {
             setActiveTab('');
             setIsScrolled(false);
         } else if (latest < height * 1.5) {
-            setActiveText('The Journey');
+            setActiveText('Atmosphere');
             setActiveTab('');
             setIsScrolled(true);
         } else if (latest < height * 2.5) {
-            setActiveText('The Founder');
+            setActiveText('The Team');
             setActiveTab('about');
             setIsScrolled(true);
         } else if (latest < height * 3.5) {
@@ -42,11 +42,11 @@ export default function Navbar() {
             setActiveTab('services');
             setIsScrolled(true);
         } else if (latest < height * 5.5) {
-            setActiveText('Selected Works');
+            setActiveText('Portfolio');
             setActiveTab('work');
             setIsScrolled(true);
         } else {
-            setActiveText('Get in Touch');
+            setActiveText('Contact');
             setActiveTab('portfolio');
             setIsScrolled(true);
         }
@@ -70,15 +70,25 @@ export default function Navbar() {
             >
                 {/* Dynamic Context Label — desktop only */}
                 <motion.div
-                    className="hidden lg:flex items-center justify-center bg-zinc-900/90 border border-white/10 rounded-full px-5 py-2 shadow-2xl min-w-[140px]"
+                    className="hidden lg:flex items-center gap-4 bg-zinc-900/90 border border-white/10 rounded-full px-5 py-2 shadow-2xl min-w-[240px]"
                 >
+                    <div className="flex flex-col">
+                        <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest leading-none mb-1">Status</span>
+                        <div className="flex items-center gap-1.5">
+                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[8px] font-mono text-emerald-500/80 uppercase tracking-tighter">Optimized</span>
+                        </div>
+                    </div>
+
+                    <div className="w-px h-6 bg-white/10" />
+
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={activeText}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            className="text-white font-medium text-xs tracking-[0.2em] uppercase whitespace-nowrap"
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            className="text-white font-medium text-[10px] tracking-[0.2em] uppercase whitespace-nowrap"
                         >
                             {activeText}
                         </motion.span>

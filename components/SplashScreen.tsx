@@ -37,28 +37,44 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
                     transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
                     className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
                 >
-                    <motion.h1
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.1 }}
-                        transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="text-4xl md:text-6xl font-black tracking-tighter text-white"
-                    >
-                        ACEZEN
-                    </motion.h1>
-
-                    <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: 100 }}
-                        className="h-[2px] bg-white/20 mt-4 rounded-full overflow-hidden"
-                    >
+                    <div className="relative flex flex-col items-center">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 1.05 }}
+                            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                            className="text-4xl md:text-7xl font-black tracking-[-0.08em] text-white text-editorial"
+                        >
+                            AceZen
+                        </motion.h1>
+                        
                         <motion.div
-                            className="h-full bg-white"
-                            initial={{ x: '-100%' }}
-                            animate={{ x: '100%' }}
-                            transition={{ repeat: Infinity, duration: 1, ease: 'easeInOut' }}
-                        />
-                    </motion.div>
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="absolute -bottom-8 whitespace-nowrap"
+                        >
+                            <span className="text-[8px] font-mono uppercase tracking-[0.6em] text-blue-500/50">
+                                Architecting_Digital_Reality
+                            </span>
+                        </motion.div>
+                    </div>
+
+                    <div className="absolute bottom-12 flex flex-col items-center gap-4">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: 140 }}
+                            className="h-[1px] bg-white/10 relative overflow-hidden"
+                        >
+                            <motion.div
+                                className="h-full bg-blue-500/40"
+                                initial={{ x: '-100%' }}
+                                animate={{ x: '100%' }}
+                                transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                            />
+                        </motion.div>
+                        <span className="text-[8px] font-mono text-zinc-700 tracking-widest uppercase">System Initialization</span>
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue } from 'framer-motion';
 import { useAtmosphere } from '@/components/AtmosphereContext';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -342,6 +342,44 @@ function ScrollCue() {
     );
 }
 
+/* ─── BLUEPRINT MESH ─── */
+function BlueprintMesh({ scrollProgress }: { scrollProgress: any }) {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const gridOpacity = useTransform(scrollProgress, [0, 0.4], [0.1, 0]);
+    
+    useEffect(() => {
+        const onMove = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+        window.addEventListener('mousemove', onMove);
+        return () => window.removeEventListener('mousemove', onMove);
+    }, [mouseX, mouseY]);
+
+    return (
+        <motion.div 
+            className="absolute inset-0 pointer-events-none z-[5]"
+            style={{ opacity: gridOpacity }}
+        >
+            <div 
+                className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px]"
+                style={{
+                  maskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
+                  WebkitMaskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
+                } as any}
+            />
+            {/* Using a motion div to hold the dynamic values for the mask */}
+            <motion.div 
+                style={{ 
+                    '--mouse-x': useSpring(mouseX, { stiffness: 100, damping: 20 }) as any,
+                    '--mouse-y': useSpring(mouseY, { stiffness: 100, damping: 20 }) as any
+                } as any}
+            />
+        </motion.div>
+    );
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    MAIN CINEMATIC HERO
 ───────────────────────────────────────────────────────────────────────────── */
@@ -358,8 +396,8 @@ export default function CinematicHero() {
     });
 
     const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-    const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
-    const textY = useTransform(scrollYProgress, [0, 0.65], ['0%', '-15%']);
+    const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+    const textY = useTransform(scrollYProgress, [0, 0.65], ['0%', '-20%']);
 
     return (
         <section
@@ -374,21 +412,22 @@ export default function CinematicHero() {
                     className="absolute inset-0"
                     style={{
                         background:
-                            'radial-gradient(ellipse 100% 80% at 60% -10%, #0a0f1e 0%, #04040a 50%, #020204 100%)',
+                            'radial-gradient(ellipse 100% 80% at 60% -10%, #0a1330 0%, #04040a 50%, #020204 100%)',
                     }}
                 />
                 {/* Cold blue top light */}
                 <div
                     className="absolute"
                     style={{
-                        top: '-20%', left: '30%',
-                        width: '80%', height: '70%',
+                        top: '-15%', left: '20%',
+                        width: '90%', height: '80%',
                         borderRadius: '50%',
-                        background: 'radial-gradient(ellipse, rgba(74,127,212,0.08) 0%, transparent 65%)',
-                        filter: 'blur(80px)',
+                        background: 'radial-gradient(ellipse, rgba(74,127,212,0.12) 0%, transparent 70%)',
+                        filter: 'blur(120px)',
                     }}
                 />
                 <StarField />
+                <BlueprintMesh scrollProgress={smoothProgress} />
                 <MountainLayers scrollProgress={smoothProgress} />
                 <GrainOverlay />
             </motion.div>
@@ -451,7 +490,7 @@ export default function CinematicHero() {
                             {/* Size token using clamp and editorial style */}
                             <style>{`
                                 h1 { 
-                                  font-size: clamp(5rem, 18vw, 16rem); 
+                                  font-size: clamp(3.5rem, 15vw, 16rem); 
                                   line-height: 0.85;
                                   letter-spacing: -0.04em;
                                 }
