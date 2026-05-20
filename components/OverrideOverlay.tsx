@@ -53,7 +53,15 @@ export default function OverrideOverlay() {
   );
 }
 
-function Slider({ label, value, onChange, minLabel, maxLabel }: any) {
+interface SliderProps {
+  label: string;
+  value: number;
+  onChange: (val: number) => void;
+  minLabel?: string;
+  maxLabel?: string;
+}
+
+function Slider({ label, value, onChange, minLabel, maxLabel }: SliderProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-end">

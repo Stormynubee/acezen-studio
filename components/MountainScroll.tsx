@@ -33,6 +33,7 @@ export default function MountainScroll() {
     const loadedSetRef = useRef<Set<number>>(new Set());
     const targetFrameRef = useRef(0);
     const activeRef = useRef(false);
+    const animationLoopRef = useRef<() => void>(() => {});
 
     const drawImage = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) => {
         const scaleX = w / img.width;
@@ -102,8 +103,12 @@ export default function MountainScroll() {
         const frame = Math.round(progress * (TOTAL_FRAMES - 1));
         targetFrameRef.current = frame;
         renderFrame(frame);
-        rafRef.current = requestAnimationFrame(animationLoop);
+        rafRef.current = requestAnimationFrame(animationLoopRef.current);
     }, [renderFrame]);
+
+    useEffect(() => {
+        animationLoopRef.current = animationLoop;
+    }, [animationLoop]);
 
     useEffect(() => {
         const resize = () => {
@@ -125,7 +130,7 @@ export default function MountainScroll() {
                     // Minimal initial load: frames 0-4
                     for (let i = 0; i <= 4; i++) loadFrame(i);
                     resize();
-                    rafRef.current = requestAnimationFrame(animationLoop);
+                    rafRef.current = requestAnimationFrame(animationLoopRef.current);
                     window.addEventListener('scroll', checkScrollAndLoad, { passive: true });
                 }
             },

@@ -43,6 +43,10 @@ All visual components should ideally respect or contribute to the `AtmosphereCon
 - `docs/superpowers/`: Detailed specs and logic plans.
 - `scripts/`: Asset optimization and generation tools.
 
+## 👤 Identity & Outreach
+- **Founder LinkedIn:** [https://www.linkedin.com/in/hansrajtiwari/](https://www.linkedin.com/in/hansrajtiwari/)
+- **Objective:** Maintain a "Digital Reality Architect" brand voice in all technical and social assets.
+
 ## 🚀 Workflows
 - **Research First:** Always check `docs/superpowers/` before modifying Atmosphere Engine logic.
 - **Build Verification:** Always run `npm run build` or `next build` after major UI changes to ensure CSS/Type integrity.

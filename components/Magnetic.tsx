@@ -10,7 +10,8 @@ export default function Magnetic({ children, strength = 0.5 }: { children: React
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.matchMedia) {
-            setIsMobile(!!window.matchMedia("(pointer: coarse)")?.matches);
+            const isCoarse = !!window.matchMedia("(pointer: coarse)")?.matches;
+            setTimeout(() => setIsMobile(isCoarse), 0);
         }
     }, []);
 

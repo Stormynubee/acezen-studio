@@ -41,7 +41,7 @@ export default function AboutCoFounder() {
                             transition={{ delay: 0.7, duration: 0.8 }}
                             className="text-white font-serif italic text-xl tracking-wide"
                         >
-                            "The topology determines the soul."
+                            &ldquo;The topology determines the soul.&rdquo;
                         </motion.p>
                     </div>
                 </div>

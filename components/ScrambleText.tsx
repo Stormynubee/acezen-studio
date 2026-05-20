@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, ElementType } from 'react';
 import { useInView } from 'framer-motion';
 
-const CHARS = '!<>-_\\\\/[]{}—=+*^?#________';
+const CHARS = '!<>-_\\/[]{}—=+*^?#________';
 
-export default function ScrambleText({ text, as: Component = 'span', className = '', speed = 50 }: { text: string, as?: any, className?: string, speed?: number }) {
+export default function ScrambleText({ text, as: Component = 'span', className = '', speed = 50 }: { text: string, as?: ElementType, className?: string, speed?: number }) {
     const [displayText, setDisplayText] = useState(text);
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-10%" });

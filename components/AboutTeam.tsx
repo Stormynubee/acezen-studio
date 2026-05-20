@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import PussSideBar, { PussSideBarHandle } from './PussSideBar';
 import ScrambleText from './ScrambleText';
 import AboutFounder from './AboutFounder';
+import AboutCoFounder from './AboutCoFounder';
 
 /* ─── TEAM DATA ─── */
 const TEAM = [
@@ -25,7 +26,7 @@ const TEAM = [
 ];
 
 /* ─── FOUNDER MODAL COMPONENT ─── */
-function FounderModal({ onClose }: { onClose: () => void }) {
+function FounderModal({ type, onClose }: { type: 'hansraj' | 'sayli'; onClose: () => void }) {
     // Scroll Lock
     useEffect(() => {
         const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -59,7 +60,7 @@ function FounderModal({ onClose }: { onClose: () => void }) {
                 </button>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 lg:p-20">
-                    <AboutFounder />
+                    {type === 'hansraj' ? <AboutFounder /> : <AboutCoFounder />}
                 </div>
             </motion.div>
         </motion.div>
@@ -109,7 +110,7 @@ function ProfileButton({ color = 'blue', label = 'Initialize Access' }: { color?
 ───────────────────────────────────────────────────────────────────────────── */
 export default function AboutTeam() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
-    const [showFounderModal, setShowFounderModal] = useState(false);
+    const [activeModal, setActiveModal] = useState<'hansraj' | 'sayli' | null>(null);
     const [isPussHovered, setIsPussHovered] = useState(false);
     const pussRef = useRef<PussSideBarHandle>(null);
     const expandedVideoRef = useRef<HTMLVideoElement>(null);
@@ -243,7 +244,7 @@ export default function AboutTeam() {
                     viewport={{ once: true }}
                     onHoverStart={() => setHoveredId('hansraj')}
                     onHoverEnd={() => setHoveredId(null)}
-                    onClick={() => setShowFounderModal(true)}
+                    onClick={() => setActiveModal('hansraj')}
                     animate={{
                         flex: hoveredId === 'hansraj' ? 1.6 : (hoveredId === 'sayli' ? 0.6 : 1),
                         backgroundColor: hoveredId === 'hansraj' ? '#0d0d12' : '#050508'
@@ -320,7 +321,7 @@ export default function AboutTeam() {
                     transition={{ delay: 0.4 }}
                     onHoverStart={() => setHoveredId('sayli')}
                     onHoverEnd={() => setHoveredId(null)}
-                    onClick={() => setShowFounderModal(true)} // Assuming same modal for now or similar
+                    onClick={() => setActiveModal('sayli')}
                     animate={{
                         flex: hoveredId === 'sayli' ? 1.6 : (hoveredId === 'hansraj' ? 0.6 : 1),
                         backgroundColor: hoveredId === 'sayli' ? '#120d12' : '#050508'
@@ -369,8 +370,8 @@ export default function AboutTeam() {
 
             {/* ── Founder Modal ── */}
             <AnimatePresence>
-                {showFounderModal && (
-                    <FounderModal onClose={() => setShowFounderModal(false)} />
+                {activeModal && (
+                    <FounderModal type={activeModal} onClose={() => setActiveModal(null)} />
                 )}
             </AnimatePresence>
         </section>

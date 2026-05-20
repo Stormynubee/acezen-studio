@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "mobile-crash-test.js",
+    "cache-check.js",
+    "scripts/**",
   ]),
 ]);
 

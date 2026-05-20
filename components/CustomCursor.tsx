@@ -17,7 +17,7 @@ export default function CustomCursor() {
         // Detect touch devices to disable custom cursor safely (bypasses extreme browser privacy blocks)
         if (typeof window !== 'undefined' && window.matchMedia) {
             if (window.matchMedia("(pointer: coarse)")?.matches) {
-                setHidden(true);
+                setTimeout(() => setHidden(true), 0);
                 return;
             }
         }

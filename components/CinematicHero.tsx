@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, MotionValue } from 'framer-motion';
 import { useAtmosphere } from '@/components/AtmosphereContext';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -98,7 +98,7 @@ function GrainOverlay() {
 }
 
 /* ─── SVG MOUNTAIN SILHOUETTES — 3-layer parallax ─── */
-function MountainLayers({ scrollProgress }: { scrollProgress: any }) {
+function MountainLayers({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const y1 = useTransform(scrollProgress, [0, 1], ['0%', '22%']);
     const y2 = useTransform(scrollProgress, [0, 1], ['0%', '13%']);
     const y3 = useTransform(scrollProgress, [0, 1], ['0%', '6%']);
@@ -193,7 +193,7 @@ function StarField() {
 }
 
 /* ─── DIAGONAL SLASH (the differentiation anchor) ─── */
-function DiagonalSlash({ scrollProgress }: { scrollProgress: any }) {
+function DiagonalSlash({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const x = useTransform(scrollProgress, [0, 0.8], ['0%', '8%']);
     const opacity = useTransform(scrollProgress, [0, 0.5], [1, 0]);
 
@@ -343,7 +343,7 @@ function ScrollCue() {
 }
 
 /* ─── BLUEPRINT MESH ─── */
-function BlueprintMesh({ scrollProgress }: { scrollProgress: any }) {
+function BlueprintMesh({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
     const gridOpacity = useTransform(scrollProgress, [0, 0.4], [0.1, 0]);
@@ -367,14 +367,14 @@ function BlueprintMesh({ scrollProgress }: { scrollProgress: any }) {
                 style={{
                   maskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
                   WebkitMaskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
-                } as any}
+                } as React.CSSProperties}
             />
             {/* Using a motion div to hold the dynamic values for the mask */}
             <motion.div 
                 style={{ 
-                    '--mouse-x': useSpring(mouseX, { stiffness: 100, damping: 20 }) as any,
-                    '--mouse-y': useSpring(mouseY, { stiffness: 100, damping: 20 }) as any
-                } as any}
+                    '--mouse-x': useSpring(mouseX, { stiffness: 100, damping: 20 }),
+                    '--mouse-y': useSpring(mouseY, { stiffness: 100, damping: 20 })
+                } as React.CSSProperties}
             />
         </motion.div>
     );
