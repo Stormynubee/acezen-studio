@@ -14,17 +14,17 @@ export default function AboutFounder() {
                 <div>
                     <h2 className="text-4xl md:text-7xl font-bold text-white mb-6 leading-[0.9] tracking-tighter text-editorial">
                         System Architect & <br /> 
-                        <span className="text-blue-500/80">Creative Visionary</span>
+                        <span className="text-blue-500/80">Creative Engineer</span>
                     </h2>
                     <div className="w-20 h-[1px] bg-blue-500/40" />
                 </div>
 
                 <div className="space-y-8 text-lg md:text-xl text-zinc-400 leading-relaxed font-light">
                     <p>
-                        Founded by <span className="text-white font-medium">Hansraj Tiwari</span>, a polymath with over <span className="text-white">9+ years</span> of experience bridging the gap between raw code and cinematic storytelling.
+                        Founded by <span className="text-white font-medium">Hansraj Tiwari</span>, a developer with over <span className="text-white">9+ years</span> of experience building custom software and high-impact visual media.
                     </p>
                     <p>
-                        Beyond the stack, I am a <span className="text-white">Video Editor &amp; Motion Graphic Artist</span>. My work isn&apos;t just about function, it&apos;s about feeling. From complex React/Node.js ecosystems to Hardware Prototyping and High-Fidelity Video Production.
+                        Dual background in full-stack code and video production. Working across React, Node.js, IoT hardware prototyping, and motion design.
                     </p>
                 </div>
 

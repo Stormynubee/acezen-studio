@@ -65,15 +65,15 @@ export default function AboutCoFounder() {
                     }}
                     className="text-4xl md:text-7xl font-bold text-white mb-6 md:mb-8 leading-[0.9] text-right md:text-left tracking-tight"
                 >
-                    Visual Director <span className="text-zinc-600">&</span> <br />
+                    Visual Director <span className="text-zinc-600">&amp;</span> <br />
                     <span className="font-light italic text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">
-                        Frontend Artisan
+                        Frontend Engineer
                     </span>
                 </motion.h2>
 
                 <div className="space-y-6 md:space-y-8 text-lg md:text-xl text-zinc-400 leading-relaxed mb-10 md:mb-14 text-right md:text-left font-light">
                     <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}>
-                        <span className="text-white font-medium">Sayli Changan</span> is a Partner and Co-Founder at AceZen. She brings a dual mastery of high-end 3D artistry and frontend engineering, enabling the creation of immersive digital experiences that maintain visual fidelity without compromising performance.
+                        <span className="text-white font-medium">Sayli Changan</span> is Co-Founder and Visual Director at AceZen. She leads 3D design and frontend UI development, building clean, responsive applications that look great and load fast.
                     </motion.p>
                     <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}>
                         Her workflow integrates specialized <span className="text-zinc-200">ZBrush Sculpting</span>, complex <span className="text-zinc-200">Retopology</span> for real-time engines, and precision <span className="text-zinc-200">UV Unwrapping</span>. She combines these asset creation skills with React-based development to build scalable, interactive web architectures.
