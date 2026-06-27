@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import PussSideBar, { PussSideBarHandle } from './PussSideBar';
 import ScrambleText from './ScrambleText';
@@ -268,9 +269,12 @@ export default function AboutTeam() {
                         transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                     >
                         <div className="relative w-full h-full rounded-[40px] overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
-                            <img 
+                            <Image 
                                 src="/hansraj.jpg" 
                                 alt="Hansraj Tiwari" 
+                                fill
+                                sizes="400px"
+                                loading="lazy"
                                 className="w-full h-full object-cover"
                             />
                             {/* Glass overlay */}
