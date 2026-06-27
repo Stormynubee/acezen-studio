@@ -112,23 +112,13 @@ export default function AboutTeam() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [activeModal, setActiveModal] = useState<'hansraj' | 'sayli' | null>(null);
     const [isPussHovered, setIsPussHovered] = useState(false);
+    const [activeFrame, setActiveFrame] = useState(1);
     const pussRef = useRef<PussSideBarHandle>(null);
-    const expandedVideoRef = useRef<HTMLVideoElement>(null);
-
-    // Sync expanded video playback time with the narrow preview
-    useEffect(() => {
-        if (isPussHovered && expandedVideoRef.current && pussRef.current) {
-            expandedVideoRef.current.currentTime = pussRef.current.getCurrentTime();
-            expandedVideoRef.current.play().catch(() => {});
-        } else if (!isPussHovered && expandedVideoRef.current) {
-            expandedVideoRef.current.pause();
-        }
-    }, [isPussHovered]);
 
     return (
-        <section className="relative w-full min-h-[800px] lg:h-[800px] bg-zinc-950 flex flex-col lg:flex-row border-y border-white/5 overflow-hidden">
+        <section id="about" className="relative w-full min-h-[800px] lg:h-[800px] bg-zinc-950 flex flex-col lg:flex-row border-y border-white/5 overflow-hidden">
 
-            {/* 1. Left Sidebar: Puss in Boots (28% Width on Desktop) */}
+            {/* 1. Left Sidebar: Scroll-driven Mascot (28% Width on Desktop) */}
             <motion.div
                 initial={{ x: '-100%' }}
                 whileInView={{ x: 0 }}
@@ -138,7 +128,7 @@ export default function AboutTeam() {
                 onMouseLeave={() => setIsPussHovered(false)}
                 className="w-full lg:w-[28%] h-[200px] lg:h-full relative border-b lg:border-b-0 lg:border-r border-white/10 z-10 shrink-0 bg-black overflow-hidden cursor-pointer group"
             >
-                <PussSideBar ref={pussRef} hovered={isPussHovered} />
+                <PussSideBar ref={pussRef} hovered={isPussHovered} onFrameChange={(f) => setActiveFrame(f)} />
                 <motion.div
                     animate={{ opacity: isPussHovered ? 0 : 1, y: isPussHovered ? 8 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -150,7 +140,7 @@ export default function AboutTeam() {
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-2"
                     >
-                        Mascot &amp; Guide
+                        Mascot &amp; Interactive Guide
                     </motion.p>
                     <motion.h3
                         initial={{ opacity: 0, y: 20 }}
@@ -158,7 +148,7 @@ export default function AboutTeam() {
                         transition={{ delay: 0.6, duration: 0.8 }}
                         className="text-white font-bold text-xl tracking-tighter"
                     >
-                        Puss × Bongo Cat
+                        Studio Mascot
                     </motion.h3>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -166,16 +156,16 @@ export default function AboutTeam() {
                         transition={{ delay: 0.7, duration: 0.8 }}
                         className="text-[10px] font-mono text-zinc-400 italic mt-1"
                     >
-                        "We take the work seriously. Not ourselves."
+                        "Scroll or wheel to animate frame-by-frame."
                     </motion.p>
                 </motion.div>
             </motion.div>
 
-            {/* Expanded Puss Video Overlay — slides in from right on hover */}
+            {/* Expanded Mascot Frame Overlay — slides in from right on hover */}
             <AnimatePresence>
                 {isPussHovered && (
                     <motion.div
-                        key="puss-expanded"
+                        key="mascot-expanded"
                         initial={{ x: '100%', opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: '100%', opacity: 0 }}
@@ -196,20 +186,15 @@ export default function AboutTeam() {
 
                         {/* Label */}
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-                            <span className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">Full View</span>
+                            <span className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em]">Full Frame View (Frame {activeFrame}/40)</span>
                         </div>
 
-                        {/* Full-aspect video */}
-                        <video
-                            ref={expandedVideoRef}
-                            loop
-                            muted
-                            playsInline
-                            preload="none"
+                        {/* Full-aspect frame image */}
+                        <img
+                            src={`/animation/bongo-cat/ezgif-frame-${String(activeFrame).padStart(3, '0')}.jpg`}
+                            alt="Mascot Animation Frame"
                             className="w-full h-full object-cover object-center relative z-0"
-                        >
-                            <source src="/images/puss-bongo-v2.mp4" type="video/mp4" />
-                        </video>
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>
