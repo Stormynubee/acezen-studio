@@ -19,7 +19,7 @@ const TEAM = [
     {
         id: 'sayli',
         name: 'Sayli Changan',
-        role: 'Visual Director & Co-Founder',
+        role: 'Co-Founder & Visual Director',
         bio: 'Merging high-end 3D artistry with precision frontend engineering.',
         skills: ['3D Art', 'React', 'Motion', 'Design'],
     }
@@ -160,6 +160,14 @@ export default function AboutTeam() {
                     >
                         Puss × Bongo Cat
                     </motion.h3>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7, duration: 0.8 }}
+                        className="text-[10px] font-mono text-zinc-400 italic mt-1"
+                    >
+                        "We take the work seriously. Not ourselves."
+                    </motion.p>
                 </motion.div>
             </motion.div>
 
@@ -341,7 +349,7 @@ export default function AboutTeam() {
                     <div className="relative z-10 space-y-10">
                         <div className="space-y-4">
                           <p className="text-[10px] font-mono text-purple-500 uppercase tracking-[0.5em] group-hover:translate-x-[8px] transition-transform duration-700">
-                              Visual Director
+                              Co-Founder &amp; Visual Director
                           </p>
                           <div className="w-12 h-[1px] bg-purple-500/30" />
                         </div>

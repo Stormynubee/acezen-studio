@@ -403,7 +403,7 @@ export default function CinematicHero() {
         <section
             ref={containerRef}
             className="relative w-full h-screen overflow-hidden"
-            aria-label="AceZen Studio — Digital Reality Architects"
+            aria-label="AceZen Digital Studio — Creative Engineering Studio"
         >
             {/* ── ATMOSPHERE BACKGROUND ── */}
             <motion.div className="absolute inset-0" style={{ scale: heroScale }}>
@@ -517,33 +517,50 @@ export default function CinematicHero() {
                                 }}
                             >
                                 <p
-                                    className="leading-relaxed"
-                                    style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(240,237,232,0.6)', fontWeight: 300 }}
+                                    className="leading-relaxed mb-3"
+                                    style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(240,237,232,0.7)', fontWeight: 300 }}
                                 >
-                                    We transcend conventional development — engineering cinematic digital
-                                    realities from system kernels to immersive brand experiences.
+                                    From silicon to screen — a founder-led studio of 6 that ships IoT hardware,
+                                    full-stack products, and visual brands. One team. One roof. No outsourcing.
                                 </p>
 
-                                {/* CTA */}
-                                <motion.a
-                                    href="#work"
-                                    className="inline-flex items-center gap-4 mt-8 group"
-                                    whileHover={{ x: 4 }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                    style={{
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: '11px',
-                                        letterSpacing: '0.3em',
-                                        textTransform: 'uppercase',
-                                        color: 'var(--az-accent)',
-                                    }}
-                                >
-                                    Explore Work
-                                    <span
-                                        className="inline-block transition-transform group-hover:translate-x-1"
-                                        style={{ width: 32, height: 1, background: 'var(--az-accent)' }}
-                                    />
-                                </motion.a>
+                                {/* CTAs */}
+                                <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                                    <motion.a
+                                        href="#work"
+                                        className="inline-flex items-center gap-4 group"
+                                        whileHover={{ x: 4 }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                        style={{
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '11px',
+                                            letterSpacing: '0.3em',
+                                            textTransform: 'uppercase',
+                                            color: 'var(--az-accent)',
+                                        }}
+                                    >
+                                        View Work
+                                        <span
+                                            className="inline-block transition-transform group-hover:translate-x-1"
+                                            style={{ width: 32, height: 1, background: 'var(--az-accent)' }}
+                                        />
+                                    </motion.a>
+                                    <motion.a
+                                        href="#contact"
+                                        className="inline-flex items-center gap-2 group"
+                                        whileHover={{ x: 4 }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                        style={{
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '11px',
+                                            letterSpacing: '0.3em',
+                                            textTransform: 'uppercase',
+                                            color: 'rgba(240,237,232,0.35)',
+                                        }}
+                                    >
+                                        Start a Project →
+                                    </motion.a>
+                                </div>
                             </div>
 
                             {/* Stats row */}
@@ -552,7 +569,7 @@ export default function CinematicHero() {
                                 style={{ borderTop: '1px solid var(--az-border)' }}
                             >
                                 <StatItem value="60+" label="Projects" delay={2.4} />
-                                <StatItem value="5★" label="Rating" delay={2.55} />
+                                <StatItem value="SIH" label="Finalist '25" delay={2.55} />
                                 <StatItem value="Est." label="2022" delay={2.7} />
                             </div>
                         </motion.div>

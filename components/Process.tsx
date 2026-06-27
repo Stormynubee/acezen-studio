@@ -5,18 +5,23 @@ import { MouseEvent, useEffect, useState } from 'react';
 const steps = [
     {
         num: '01',
-        title: 'Strategy',
-        desc: 'Backed by 4 years of shipping products. We dig deep into your business to find the most effective path forward.'
+        title: 'Discover',
+        desc: 'We align fast — goals, audience, constraints. No bloated discovery sprints. Backed by 4 years of shipping real products.'
     },
     {
         num: '02',
-        title: 'Execution',
-        desc: 'A team of 20 designers, devs, and editors. We don\'t outsource. We build custom platforms, stunning visuals, and video content under one roof.'
+        title: 'Design',
+        desc: 'Visual direction and a working prototype before heavy engineering begins. You see it before we build it.'
     },
     {
         num: '03',
-        title: 'Delivery',
-        desc: 'We launch fast and flawless. Your project goes live optimized for speed, SEO, and user experience on every device.'
+        title: 'Build',
+        desc: 'Founder-led execution — a dedicated studio of 6 across engineering, content, and design. No outsourcing. No handoffs.'
+    },
+    {
+        num: '04',
+        title: 'Launch',
+        desc: 'We deploy, measure, and refine. Optimized for speed, SEO, and every device. We don\'t disappear at handoff.'
     },
 ];
 
@@ -35,7 +40,7 @@ const ProcessContent = ({ isRevealed = false }: { isRevealed?: boolean }) => {
                 </div>
             </div>
 
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 border-t pt-20 ${isRevealed ? 'border-white/10' : 'border-zinc-900'}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-24 md:gap-x-10 lg:gap-x-16 border-t pt-20 ${isRevealed ? 'border-white/10' : 'border-zinc-900'}`}>
                 {steps.map((step, i) => (
                     <div key={i} className="relative group flex flex-col">
                         <span className={`text-[8rem] md:text-[12rem] font-bold leading-none absolute -top-16 md:-top-24 -left-4 md:-left-16 -z-10 select-none transition-all duration-700 ${isRevealed ? 'text-zinc-900/50 group-hover:text-[var(--az-accent)] group-hover:opacity-15' : 'text-zinc-950'}`}>

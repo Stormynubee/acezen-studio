@@ -42,7 +42,7 @@ export default function Footer() {
     };
 
     return (
-        <footer className="bg-black text-white pt-40 pb-12 px-5 md:px-12 rounded-t-[4rem] border-t border-white/10 relative z-50 -mt-[15vh] shadow-[0_-40px_100px_rgba(0,0,0,0.8)]">
+        <footer id="contact" className="bg-black text-white pt-40 pb-12 px-5 md:px-12 rounded-t-[4rem] border-t border-white/10 relative z-50 -mt-[15vh] shadow-[0_-40px_100px_rgba(0,0,0,0.8)]">
             <div className="max-w-screen-2xl mx-auto">
 
                 {/* Minimal Aesthetic Contact Section */}
@@ -87,7 +87,7 @@ export default function Footer() {
                                 type="email"
                                 name="email"
                                 required
-                                placeholder="hello@yourbrand.com"
+                                placeholder="your@email.com"
                                 className="w-full bg-transparent text-xl md:text-2xl text-white placeholder-white/10 focus:outline-none transition-all peer rounded-none pb-4"
                             />
                             {/* Base Line */}
@@ -210,7 +210,7 @@ export default function Footer() {
                     <div className="flex items-center gap-6">
                       <p className="text-[9px] font-mono text-white/10 uppercase tracking-[0.3em]">AceZen Digital Studio</p>
                       <div className="w-8 h-[1px] bg-white/5" />
-                      <p className="text-[9px] font-mono text-white/10 uppercase tracking-[0.3em]">Built for the Void</p>
+                      <p className="text-[9px] font-mono text-white/10 uppercase tracking-[0.3em]">hello@acezen.in</p>
                     </div>
                     <p className="text-[9px] font-mono text-white/10 tracking-widest uppercase">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
                 </div>

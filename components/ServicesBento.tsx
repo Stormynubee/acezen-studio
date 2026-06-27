@@ -11,31 +11,31 @@ type ServiceKey = 'video' | 'marketing' | 'design' | 'designing' | 'building' | 
 const services = [
     {
         key: 'video' as const,
-        title: 'Video Editing',
-        description: 'Cinematic storytelling that captivates using industry-leading cuts.',
+        title: 'Interactive & Hardware',
+        description: 'IoT prototypes, flex-sensor wearables, and firmware pipelines. From bench setup to working hardware.',
         className: 'col-span-1 md:col-span-2 row-span-1 md:row-span-2',
         video: '/showcase/sakura-promo.mp4',
     },
     {
         key: 'marketing' as const,
-        title: 'Marketing',
-        description: 'Data-driven strategies to amplify your brand voice.',
+        title: 'Product Engineering',
+        description: 'Full-stack Web & Mobile apps, production dashboards, and AI integrations.',
         className: 'col-span-1 md:col-span-1 row-span-1',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000', // Teal Data
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
     },
     {
         key: 'design' as const,
-        title: 'Product Design',
-        description: 'User-centric interfaces that convert.',
+        title: 'Visual Systems',
+        description: 'Brand identities, UI/UX systems, and 3D visual direction built to convert.',
         className: 'col-span-1 md:col-span-1 row-span-1',
-        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=1000', // Clean UI
+        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=1000',
     },
     {
         key: 'designing' as const,
-        title: 'Designing',
-        description: 'Visual identities that stand the test of time.',
+        title: 'Motion & Content',
+        description: 'Cinematic video edits, 3D assets, and creator branding systems.',
         className: 'col-span-1 md:col-span-2 row-span-1',
-        image: '/showcase/design-1.png', // Local asset if available, else usage will use this path
+        image: '/showcase/design-1.png',
     },
 ];
 
@@ -219,7 +219,7 @@ export default function ServicesBento() {
     const [activeModal, setActiveModal] = useState<ServiceKey>(null);
 
     return (
-        <section className="py-24 md:py-48 px-5 md:px-12 max-w-screen-2xl mx-auto block">
+        <section id="services" className="py-24 md:py-48 px-5 md:px-12 max-w-screen-2xl mx-auto block">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
