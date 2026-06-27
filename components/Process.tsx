@@ -5,23 +5,23 @@ import { MouseEvent, useEffect, useState } from 'react';
 const steps = [
     {
         num: '01',
-        title: 'Discover',
-        desc: 'We align fast — goals, audience, constraints. No bloated discovery sprints. Backed by 4 years of shipping real products.'
+        title: 'Scope fast',
+        desc: 'We figure out what you actually need, skip the 40-page slide deck, and get straight to building.'
     },
     {
         num: '02',
-        title: 'Design',
-        desc: 'Visual direction and a working prototype before heavy engineering begins. You see it before we build it.'
+        title: 'Show early',
+        desc: 'Working interactive prototypes early. You test the experience before production code gets written.'
     },
     {
         num: '03',
-        title: 'Build',
-        desc: 'Founder-led execution — a dedicated studio of 6 across engineering, content, and design. No outsourcing. No handoffs.'
+        title: 'Build right',
+        desc: 'Hardware, clean code, and motion graphics under one roof. We write every line ourselves.'
     },
     {
         num: '04',
-        title: 'Launch',
-        desc: 'We deploy, measure, and refine. Optimized for speed, SEO, and every device. We don\'t disappear at handoff.'
+        title: 'Ship & stay',
+        desc: 'We launch fast, optimize performance across devices, and stick around so nothing breaks.'
     },
 ];
 
@@ -34,7 +34,7 @@ const ProcessContent = ({ isRevealed = false }: { isRevealed?: boolean }) => {
                 </h2>
                 <div className="flex flex-col items-start md:items-end gap-4 pb-6">
                   <p className={`text-[10px] uppercase tracking-[0.5em] font-mono ${isRevealed ? 'text-zinc-400' : 'text-zinc-900'}`}>
-                      Systematic Excellence
+                      How we get things done
                   </p>
                   <div className={`w-16 h-[1px] ${isRevealed ? 'bg-white/10' : 'bg-zinc-900'}`} />
                 </div>

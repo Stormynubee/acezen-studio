@@ -309,11 +309,11 @@ export default function AboutTeam() {
                         {/* Description */}
                         <div className="max-w-md ml-auto">
                             <p className="text-sm md:text-base lg:text-lg text-zinc-500 font-light leading-relaxed transition-colors duration-700 group-hover:text-zinc-200">
-                                Engineering cinematic digital realities from system kernels to high-fidelity narratives. Precision in logic, emotion in pixels.
+                                Hardware hacks, AI systems, and clean web builds. Likes fast code, dark modes, and shipping products.
                             </p>
                         </div>
 
-                        <ProfileButton color="blue" label="Initialize Access" />
+                        <ProfileButton color="blue" label="View Profile" />
                     </div>
 
                     {/* Architectural Counter */}
@@ -362,11 +362,11 @@ export default function AboutTeam() {
                         {/* Description */}
                         <div className="max-w-md">
                             <p className="text-base lg:text-lg text-zinc-500 font-light leading-relaxed transition-colors duration-700 group-hover:text-zinc-200">
-                                Translating complex code into canvas. Dual mastery of high-end 3D artistry and precision frontend engineering.
+                                Turning complex ideas into 3D art and responsive frontend interfaces. Obsessed with clean layouts and motion.
                             </p>
                         </div>
 
-                        <ProfileButton color="purple" label="Request Dossier" />
+                        <ProfileButton color="purple" label="View Profile" />
                     </div>
 
                     {/* Architectural Counter */}

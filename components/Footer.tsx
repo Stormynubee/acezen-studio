@@ -54,7 +54,7 @@ export default function Footer() {
                         className="mb-12"
                     >
                       <p className="text-[10px] md:text-xs uppercase tracking-[0.6em] text-zinc-500 font-mono">
-                          Start a Conversation
+                          Got a project in mind?
                       </p>
                     </motion.div>
 
@@ -81,7 +81,7 @@ export default function Footer() {
                         {/* Email Input */}
                         <div className="relative group">
                             <label className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest absolute -top-6 left-0 transition-colors group-focus-within:text-blue-500">
-                                Email Address
+                                Your Email
                             </label>
                             <input
                                 type="email"
@@ -101,12 +101,12 @@ export default function Footer() {
                         {/* Message Input */}
                         <div className="relative group">
                             <label className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest absolute -top-6 left-0 transition-colors group-focus-within:text-blue-500">
-                                Your Vision
+                                What are we building?
                             </label>
                             <textarea
                                 name="message"
                                 required
-                                placeholder="What digital empire are we building?"
+                                placeholder="Tell us about your project or idea..."
                                 rows={1}
                                 className="w-full bg-transparent text-xl md:text-2xl text-white placeholder-white/10 focus:outline-none transition-all resize-none overflow-hidden peer rounded-none pb-4"
                                 onInput={(e) => {
@@ -138,7 +138,7 @@ export default function Footer() {
                                             exit={{ y: -20, opacity: 0 }}
                                             className="block relative z-10"
                                         >
-                                            Initiate Transmission
+                                            Send message →
                                         </motion.span>
                                     )}
                                     {status === 'submitting' && (
@@ -149,7 +149,7 @@ export default function Footer() {
                                             exit={{ y: -20, opacity: 0 }}
                                             className="block relative z-10"
                                         >
-                                            Transmitting...
+                                            Sending...
                                         </motion.span>
                                     )}
                                     {status === 'success' && (
@@ -160,7 +160,7 @@ export default function Footer() {
                                             exit={{ y: -20, opacity: 0 }}
                                             className="block relative z-10 text-emerald-600"
                                         >
-                                            Transmission Success
+                                            Sent! We'll reply soon
                                         </motion.span>
                                     )}
                                     {status === 'error' && (
@@ -171,7 +171,7 @@ export default function Footer() {
                                             exit={{ y: -20, opacity: 0 }}
                                             className="block relative z-10 text-rose-600"
                                         >
-                                            Transmission Failed
+                                            Error. Email hello@acezen.in
                                         </motion.span>
                                     )}
                                 </AnimatePresence>

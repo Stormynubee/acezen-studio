@@ -11,29 +11,29 @@ type ServiceKey = 'video' | 'marketing' | 'design' | 'designing' | 'building' | 
 const services = [
     {
         key: 'video' as const,
-        title: 'Interactive & Hardware',
-        description: 'IoT prototypes, flex-sensor wearables, and firmware pipelines. From bench setup to working hardware.',
+        title: 'Hardware & IoT',
+        description: 'Smart wearables, custom sensors, and actual physical prototypes that plug in and work.',
         className: 'col-span-1 md:col-span-2 row-span-1 md:row-span-2',
         video: '/showcase/sakura-promo.mp4',
     },
     {
         key: 'marketing' as const,
-        title: 'Product Engineering',
-        description: 'Full-stack Web & Mobile apps, production dashboards, and AI integrations.',
+        title: 'Web & App Dev',
+        description: 'Fast Next.js web apps, mobile builds, and custom AI tools designed for real users.',
         className: 'col-span-1 md:col-span-1 row-span-1',
         image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
     },
     {
         key: 'design' as const,
-        title: 'Visual Systems',
-        description: 'Brand identities, UI/UX systems, and 3D visual direction built to convert.',
+        title: 'Brand & Design',
+        description: 'Logos, UI/UX systems, and brand directions that actually make people stop scrolling.',
         className: 'col-span-1 md:col-span-1 row-span-1',
         image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=1000',
     },
     {
         key: 'designing' as const,
-        title: 'Motion & Content',
-        description: 'Cinematic video edits, 3D assets, and creator branding systems.',
+        title: 'Motion & Edits',
+        description: 'High-octane video editing, 3D renders, and content assets for creators and brands.',
         className: 'col-span-1 md:col-span-2 row-span-1',
         image: '/showcase/design-1.png',
     },
@@ -54,108 +54,56 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
         }
     }, []);
 
-    // Preload video when section approaches viewport (500px ahead)
-    useEffect(() => {
-        if (!service.video || !divRef.current) return;
-        const el = divRef.current;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting && videoRef.current) {
-                    // Start buffering the video before user hovers
-                    videoRef.current.preload = 'auto';
-                    videoRef.current.load();
-                    observer.disconnect();
-                }
-            },
-            { rootMargin: '500px' }
-        );
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, [service.video]);
-
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
     const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
     const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (isMobile || !divRef.current) return;
-        const rect = divRef.current.getBoundingClientRect();
-
-        // For the static radial glare
-        setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-
-        // 3D Tilt calculation
-        const width = rect.width;
-        const height = rect.height;
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const xPct = mouseX / width - 0.5;
-        const yPct = mouseY / height - 0.5;
-        x.set(xPct);
-        y.set(yPct);
-    };
-
-    const handleMouseEnter = () => {
+    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent<HTMLDivElement>) {
         if (isMobile) return;
-        setIsHovered(true);
-        if (videoRef.current) {
-            videoRef.current.play().catch(() => { });
-        }
-    };
-
-    const handleMouseLeave = () => {
-        if (isMobile) return;
-        setIsHovered(false);
-        x.set(0);
-        y.set(0);
-        if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-        }
-    };
+        const { left, top } = currentTarget.getBoundingClientRect();
+        x.set(clientX - left);
+        y.set(clientY - top);
+        setPosition({ x: clientX - left, y: clientY - top });
+    }
 
     return (
         <motion.div
             ref={divRef}
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            onClick={onClick}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
             onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={onClick}
             className={clsx(
-                'group relative overflow-hidden rounded-2xl p-6 md:p-8 bg-zinc-950 cursor-pointer border border-white/5 transition-all duration-700 hover:border-white/20',
+                'group relative rounded-3xl p-8 md:p-10 overflow-hidden bg-zinc-950/80 border border-white/5 cursor-pointer flex flex-col justify-between transition-all duration-700 hover:border-white/20 hover:shadow-[0_0_50px_rgba(0,0,0,0.8)]',
                 service.className
             )}
         >
-            {/* Cinematic Media Reveal (Background) */}
-            <div className="absolute inset-0 transition-opacity duration-1000 ease-out opacity-0 group-hover:opacity-60 overflow-hidden">
-                {!mediaLoaded && (
-                    <div className="absolute inset-0 bg-zinc-900/50 animate-pulse" />
-                )}
+            {/* Background Media */}
+            <div className="absolute inset-0 z-0 overflow-hidden bg-black">
                 {service.video ? (
                     <video
                         ref={videoRef}
                         src={service.video}
-                        muted
                         loop
+                        muted
                         playsInline
                         preload="none"
                         onCanPlay={() => setMediaLoaded(true)}
-                        className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000"
+                        className={clsx(
+                            "w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-40 group-hover:opacity-80",
+                            !mediaLoaded && "scale-105 blur-sm"
+                        )}
+                        onMouseEnter={(e) => e.currentTarget.play()}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.pause();
+                            e.currentTarget.currentTime = 0;
+                        }}
                     />
                 ) : (
                     <Image
@@ -165,7 +113,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         sizes="(max-width: 768px) 100vw, 50vw"
                         loading="eager"
                         onLoad={() => setMediaLoaded(true)}
-                        className="object-cover transition-transform duration-1000 group-hover:scale-100 scale-110"
+                        className="object-cover transition-transform duration-1000 group-hover:scale-100 scale-110 opacity-40 group-hover:opacity-80"
                     />
                 )}
             </div>
@@ -206,7 +154,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                 </motion.h3>
 
                 <motion.p
-                    className="text-zinc-500 text-sm md:text-base font-light max-w-[90%] group-hover:text-zinc-300 transition-all duration-700 transform group-hover:-translate-y-2 leading-relaxed"
+                    className="text-zinc-400 text-sm md:text-base font-light max-w-[90%] group-hover:text-zinc-200 transition-all duration-700 transform group-hover:-translate-y-2 leading-relaxed"
                 >
                     {service.description}
                 </motion.p>
@@ -232,7 +180,7 @@ export default function ServicesBento() {
                 </h2>
                 <div className="flex flex-col items-start md:items-end gap-4 pb-4">
                   <p className="text-[9px] md:text-[10px] text-zinc-500 uppercase tracking-[0.5em] font-mono">
-                      Engineering Cinematic Realities
+                      What we bring to the table
                   </p>
                   <div className="w-16 h-[1px] bg-white/10" />
                 </div>

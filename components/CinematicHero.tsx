@@ -457,7 +457,7 @@ export default function CinematicHero() {
                                     background: 'linear-gradient(to right, transparent, var(--az-accent))',
                                 }}
                             />
-                            Digital Reality Architects
+                            Creative Engineering Studio
                             <span
                                 style={{
                                     display: 'inline-block', width: 6, height: 6,
@@ -520,8 +520,7 @@ export default function CinematicHero() {
                                     className="leading-relaxed mb-3"
                                     style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(240,237,232,0.7)', fontWeight: 300 }}
                                 >
-                                    From silicon to screen — a founder-led studio of 6 that ships IoT hardware,
-                                    full-stack products, and visual brands. One team. One roof. No outsourcing.
+                                    We build custom hardware, clean web apps, and visual brands that actually stand out. 6 real human beings, zero corporate fluff.
                                 </p>
 
                                 {/* CTAs */}
@@ -539,7 +538,7 @@ export default function CinematicHero() {
                                             color: 'var(--az-accent)',
                                         }}
                                     >
-                                        View Work
+                                        See the work
                                         <span
                                             className="inline-block transition-transform group-hover:translate-x-1"
                                             style={{ width: 32, height: 1, background: 'var(--az-accent)' }}
@@ -558,7 +557,7 @@ export default function CinematicHero() {
                                             color: 'rgba(240,237,232,0.35)',
                                         }}
                                     >
-                                        Start a Project →
+                                        Let's talk →
                                     </motion.a>
                                 </div>
                             </div>
