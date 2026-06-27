@@ -228,13 +228,10 @@ export default function ServicesBento() {
                             </div>
 
                             <div className="px-6 md:px-10 pb-10 -mt-4">
-                                {activeModal === 'video' && <VideoShowcase />}
-                                {activeModal === 'designing' && <DesignShowcase />}
-                                {activeModal === 'marketing' && <MarketingShowcase />}
-                                {activeModal === 'building' && <BuildingShowcase />}
-                                {activeModal === 'design' && (
-                                    <GenericShowcase title="Product Design" />
-                                )}
+                                {activeModal === 'video' && <BuildingShowcase />}
+                                {activeModal === 'marketing' && <WebAppShowcase />}
+                                {activeModal === 'design' && <DesignShowcase />}
+                                {activeModal === 'designing' && <VideoShowcase />}
                             </div>
                         </motion.div>
                     </motion.div>
@@ -248,12 +245,12 @@ export default function ServicesBento() {
 function VideoShowcase() {
     return (
         <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Video Editing</h3>
-            <p className="text-gray-400 text-sm mb-8">Cinematic projects crafted with precision.</p>
+            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Motion &amp; Edits</h3>
+            <p className="text-zinc-400 text-sm mb-8">High-octane promo edits, motion graphics, and 3D visual cuts.</p>
 
             <div className="space-y-8">
                 <div>
-                    <h4 className="text-white font-semibold text-lg mb-3">Sakura Project — Promo</h4>
+                    <h4 className="text-white font-semibold text-lg mb-3">Sakura Promo — Commercial Motion Cut</h4>
                     <div className="rounded-xl overflow-hidden bg-black border border-white/5">
                         <video
                             src="/showcase/sakura-promo.mp4"
@@ -266,7 +263,7 @@ function VideoShowcase() {
                 </div>
 
                 <div>
-                    <h4 className="text-white font-semibold text-lg mb-3">Nexus Project</h4>
+                    <h4 className="text-white font-semibold text-lg mb-3">Nexus Motion Reel</h4>
                     <div className="rounded-xl overflow-hidden bg-black border border-white/5">
                         <video
                             src="/showcase/neues-projekt.mp4"
@@ -282,18 +279,17 @@ function VideoShowcase() {
     );
 }
 
-/* ── Designing Showcase (Behance pieces) ── */
 function DesignShowcase() {
     return (
         <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Graphic Design</h3>
-            <p className="text-gray-400 text-sm mb-8">Visual identities &amp; creative direction.</p>
+            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Brand &amp; Design</h3>
+            <p className="text-zinc-400 text-sm mb-8">Logos, visual identity systems, and UI/UX directions.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="rounded-xl overflow-hidden border border-white/5 bg-black relative aspect-[4/3]">
                     <Image
                         src="/showcase/design-1.png"
-                        alt="Design showcase 1"
+                        alt="DianaStreams Brand System"
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover"
@@ -302,7 +298,7 @@ function DesignShowcase() {
                 <div className="rounded-xl overflow-hidden border border-white/5 bg-black relative aspect-[4/3]">
                     <Image
                         src="/showcase/design-2.png"
-                        alt="Design showcase 2"
+                        alt="Pristine Visual Identity"
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover"
@@ -313,116 +309,77 @@ function DesignShowcase() {
     );
 }
 
-/* ── Marketing Showcase (Client list) ── */
-function MarketingShowcase() {
-    const clients = [
-        { name: 'Doodles NFT', tag: 'NFT Project', desc: 'Marketing strategy and community growth for one of the top NFT collections.' },
-        { name: 'Legends of Asian', tag: 'Gaming Project', desc: 'Brand positioning and campaign execution for the gaming community.' },
-    ];
-
-    const streamers = [
-        { name: 'GTX Preet', handle: '@gtxpreet' },
-        { name: 'Lebrangston', handle: '@lebrangston' },
-        { name: 'BigBBoiChief', handle: '@bigbboichief' },
-        { name: 'Rise Angle', handle: '@riseangle' },
-    ];
-
-    return (
-        <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Marketing</h3>
-            <p className="text-gray-400 text-sm mb-8">Brands and creators we&apos;ve worked with.</p>
-
-            {/* Projects */}
-            <div className="mb-10">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4">Projects</p>
-                <div className="space-y-3">
-                    {clients.map((client) => (
-                        <div key={client.name} className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-white font-bold text-sm shrink-0">
-                                {client.name[0]}
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2 mb-1">
-                                    <h4 className="text-white font-semibold text-sm">{client.name}</h4>
-                                    <span className="text-[10px] text-gray-500 uppercase tracking-wider">{client.tag}</span>
-                                </div>
-                                <p className="text-gray-400 text-xs">{client.desc}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Streamers */}
-            <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4">Streamers &amp; Creators</p>
-                <div className="grid grid-cols-2 gap-3">
-                    {streamers.map((s) => (
-                        <div key={s.name} className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
-                            <p className="text-white font-semibold text-sm">{s.name}</p>
-                            <p className="text-gray-500 text-xs">{s.handle}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-/* ── Building Showcase (Hardware projects) ── */
-function BuildingShowcase() {
+function WebAppShowcase() {
     const projects = [
-        {
-            title: 'Umang OS',
-            tag: 'Desk Assistant',
-            desc: 'A custom-built desk assistant prototype with sensors, dashboard interface, and IoT connectivity. Hardware prototyping from scratch.',
-            image: '/showcase/umang-os.jpg',
-        },
-        {
-            title: 'Sign Language Gloves',
-            tag: 'Assistive Tech',
-            desc: 'Low-cost gloves for mute individuals that translate hand gestures into text via flex sensors and an LCD display. Built with Arduino.',
-            image: '/showcase/sign-gloves.jpg',
-        },
+        { name: 'BizCatcher', tag: 'Lead Generation SaaS', desc: 'High-performance discovery engine with Next.js 16 and OpenStreetMap.', link: 'https://github.com/Stormynubee/BizCatcher' },
+        { name: 'RetainIQ', tag: 'Causal ML Engine', desc: 'Cost-aware retention model for IIT Kharagpur reducing customer churn costs by 68.8%.', link: 'https://github.com/Stormynubee/retainiq-churnzero-26' },
+        { name: 'AceBoard Sync', tag: 'Micro-SaaS', desc: 'Next.js application letting video editors share timestamped review links with clients.', link: 'https://github.com/Stormynubee/aceboard-client-sync' },
+        { name: 'MineHealth OS', tag: 'Gamified AI Dashboard', desc: 'Minecraft-inspired Life OS with AI integration and habit tracking.', link: 'https://github.com/Stormynubee/MineHealthftw' },
     ];
 
     return (
         <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Building</h3>
-            <p className="text-gray-400 text-sm mb-8">Hardware prototypes and IoT systems.</p>
+            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Web &amp; App Dev</h3>
+            <p className="text-zinc-400 text-sm mb-8">Full-stack Web &amp; Mobile applications built with modern frameworks.</p>
 
-            <div className="space-y-8">
-                {projects.map((project) => (
-                    <div key={project.title} className="rounded-xl overflow-hidden border border-white/5 bg-white/[0.02]">
-                        <div className="aspect-[4/3] overflow-hidden relative">
-                            <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                sizes="(max-width: 768px) 100vw, 33vw"
-                                className="object-cover"
-                            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {projects.map((p) => (
+                    <a key={p.name} href={p.link} target="_blank" rel="noopener noreferrer" className="p-5 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/20 transition-all group block">
+                        <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-white font-semibold text-base group-hover:text-blue-400 transition-colors">{p.name}</h4>
+                            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">{p.tag}</span>
                         </div>
-                        <div className="p-5">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h4 className="text-white font-semibold text-lg">{project.title}</h4>
-                                <span className="text-[10px] text-white/30 uppercase tracking-wider">{project.tag}</span>
-                            </div>
-                            <p className="text-gray-400 text-sm">{project.desc}</p>
-                        </div>
-                    </div>
+                        <p className="text-zinc-400 text-xs leading-relaxed">{p.desc}</p>
+                    </a>
                 ))}
             </div>
         </div>
     );
 }
 
-/* ── Generic placeholder for other services ── */
-function GenericShowcase({ title }: { title: string }) {
+function BuildingShowcase() {
+    const projects = [
+        {
+            title: 'Sign Language Gloves',
+            tag: 'Assistive Wearable',
+            desc: 'ESP32 wearable gloves for mute individuals translating hand flex gestures into speech in real time.',
+            image: '/showcase/sign-gloves.jpg',
+        },
+        {
+            title: 'Umang OS',
+            tag: 'Affective Computing',
+            desc: 'Custom desk assistant prototype with hardware sensors, dashboard interface, and IoT connectivity.',
+            image: '/showcase/umang-os.jpg',
+        },
+    ];
+
     return (
         <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">{title}</h3>
-            <p className="text-gray-400 text-sm">More work coming soon.</p>
+            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Hardware &amp; IoT</h3>
+            <p className="text-zinc-400 text-sm mb-8">Smart wearables, custom sensors, and physical hardware prototypes.</p>
+
+            <div className="space-y-6">
+                {projects.map((project) => (
+                    <div key={project.title} className="rounded-xl overflow-hidden border border-white/5 bg-white/[0.02]">
+                        <div className="aspect-[16/9] max-h-[240px] overflow-hidden relative">
+                            <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                className="object-cover"
+                            />
+                        </div>
+                        <div className="p-5">
+                            <div className="flex items-center gap-3 mb-2">
+                                <h4 className="text-white font-semibold text-lg">{project.title}</h4>
+                                <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">{project.tag}</span>
+                            </div>
+                            <p className="text-zinc-400 text-sm">{project.desc}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
