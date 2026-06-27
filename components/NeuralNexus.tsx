@@ -34,7 +34,7 @@ export default function NeuralNexus() {
         }
       });
     };
-    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mousemove', handleMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMove);
   }, [mouseX, mouseY]);
 
