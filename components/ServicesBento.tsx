@@ -11,8 +11,8 @@ type ServiceKey = 'video' | 'marketing' | 'design' | 'designing' | 'building' | 
 const services = [
     {
         key: 'video' as const,
-        title: 'Hardware & IoT',
-        description: 'Smart wearables, custom sensors, and actual physical prototypes that plug in and work.',
+        title: 'Digital Marketing',
+        description: 'Growth campaigns, brand positioning, and content strategies designed to reach real audiences.',
         className: 'col-span-1 md:col-span-2 row-span-1 md:row-span-2',
         video: '/showcase/sakura-promo.mp4',
     },
@@ -228,7 +228,7 @@ export default function ServicesBento() {
                             </div>
 
                             <div className="px-6 md:px-10 pb-10 -mt-4">
-                                {activeModal === 'video' && <BuildingShowcase />}
+                                {activeModal === 'video' && <MarketingShowcase />}
                                 {activeModal === 'marketing' && <WebAppShowcase />}
                                 {activeModal === 'design' && <DesignShowcase />}
                                 {activeModal === 'designing' && <VideoShowcase />}
@@ -337,48 +337,54 @@ function WebAppShowcase() {
     );
 }
 
-function BuildingShowcase() {
-    const projects = [
-        {
-            title: 'Sign Language Gloves',
-            tag: 'Assistive Wearable',
-            desc: 'ESP32 wearable gloves for mute individuals translating hand flex gestures into speech in real time.',
-            image: '/showcase/sign-gloves.jpg',
-        },
-        {
-            title: 'Umang OS',
-            tag: 'Affective Computing',
-            desc: 'Custom desk assistant prototype with hardware sensors, dashboard interface, and IoT connectivity.',
-            image: '/showcase/umang-os.jpg',
-        },
+function MarketingShowcase() {
+    const clients = [
+        { name: 'Doodles NFT', tag: 'Community Growth', desc: 'Marketing strategy and community growth campaign.' },
+        { name: 'Legends of Asian', tag: 'Gaming Campaign', desc: 'Brand positioning and gaming community launch.' },
+    ];
+
+    const streamers = [
+        { name: 'GTX Preet', handle: '@gtxpreet' },
+        { name: 'Lebrangston', handle: '@lebrangston' },
+        { name: 'BigBBoiChief', handle: '@bigbboichief' },
+        { name: 'Rise Angle', handle: '@riseangle' },
     ];
 
     return (
         <div>
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Hardware &amp; IoT</h3>
-            <p className="text-zinc-400 text-sm mb-8">Smart wearables, custom sensors, and physical hardware prototypes.</p>
+            <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">Digital Marketing</h3>
+            <p className="text-zinc-400 text-sm mb-8">Campaign strategies, community growth, and creator partnerships.</p>
 
-            <div className="space-y-6">
-                {projects.map((project) => (
-                    <div key={project.title} className="rounded-xl overflow-hidden border border-white/5 bg-white/[0.02]">
-                        <div className="aspect-[16/9] max-h-[240px] overflow-hidden relative">
-                            <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="p-5">
-                            <div className="flex items-center gap-3 mb-2">
-                                <h4 className="text-white font-semibold text-lg">{project.title}</h4>
-                                <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">{project.tag}</span>
+            <div className="mb-8">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4 font-mono">Brand Campaigns</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {clients.map((client) => (
+                        <div key={client.name} className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                                {client.name[0]}
                             </div>
-                            <p className="text-zinc-400 text-sm">{project.desc}</p>
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h4 className="text-white font-semibold text-sm">{client.name}</h4>
+                                    <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">{client.tag}</span>
+                                </div>
+                                <p className="text-zinc-400 text-xs">{client.desc}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-4 font-mono">Streamers &amp; Creators</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {streamers.map((s) => (
+                        <div key={s.name} className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center">
+                            <p className="text-white font-semibold text-sm">{s.name}</p>
+                            <p className="text-zinc-500 text-xs font-mono mt-1">{s.handle}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
