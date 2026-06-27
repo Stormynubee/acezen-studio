@@ -73,10 +73,10 @@ export default function Navbar() {
                     className="hidden lg:flex items-center gap-4 bg-zinc-900/90 border border-white/10 rounded-full px-5 py-2 shadow-2xl min-w-[240px]"
                 >
                     <div className="flex flex-col">
-                        <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest leading-none mb-1">Status</span>
+                        <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest leading-none mb-1">Studio</span>
                         <div className="flex items-center gap-1.5">
-                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-[8px] font-mono text-emerald-500/80 uppercase tracking-tighter">Optimized</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                            <span className="text-[8px] font-mono text-emerald-400 font-medium uppercase tracking-wider">Available Q3</span>
                         </div>
                     </div>
 
