@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { MODES, type ConsoleMode } from "./consoleData";
 import CodeTerminal from "./CodeTerminal";
 import EditTimeline from "./EditTimeline";
@@ -8,8 +9,12 @@ import MarketingDeck from "./MarketingDeck";
 const Console = () => {
 const [mode, setMode] = useState<ConsoleMode>("code");
 const active = MODES.find((m) => m.id === mode)!;
+const containerRef = useRef<HTMLDivElement>(null);
+const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+
 return (
   <div
+    ref={containerRef}
     className="relative w-full overflow-hidden rounded-2xl border border-[var(--az-border-bright-console)]"
     style={{
       background: "linear-gradient(180deg, #07070c 0%, var(--az-void) 100%)",
@@ -27,18 +32,41 @@ return (
         <span style={{ color: active.tint }}>{active.tagline}</span>
       </div>
       <div className="ml-auto flex items-center gap-1 rounded-lg border border-[var(--az-border-console)] bg-black/40 p-1">
-        {MODES.map((m) => {
+        {MODES.map((m, i) => {
           const isActive = m.id === mode;
           return (
-            <button
+            <motion.button
               key={m.id}
               onClick={() => setMode(m.id)}
-              className="relative flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono-az text-[11px] transition-colors sm:px-3"
+              initial={{ opacity: 0, y: -10 }}
+              animate={
+                isInView 
+                  ? { 
+                      opacity: 1, 
+                      y: [0, -3, 0],
+                      boxShadow: [
+                        "0px 0px 0px 0px rgba(255,255,255,0)", 
+                        isActive ? `0px 4px 12px -2px ${m.tint}80` : "0px 4px 10px -2px rgba(255,255,255,0.15)", 
+                        "0px 0px 0px 0px rgba(255,255,255,0)"
+                      ]
+                    } 
+                  : {}
+              }
+              transition={
+                isInView 
+                  ? {
+                      y: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 },
+                      boxShadow: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 },
+                      opacity: { duration: 0.4 }
+                    }
+                  : {}
+              }
+              className="relative overflow-hidden flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono-az text-[11px] transition-colors sm:px-3"
               style={{ color: isActive ? "var(--az-void)" : "var(--az-muted-console)", background: isActive ? m.tint : "transparent", fontWeight: isActive ? 600 : 400 }}
             >
               <span aria-hidden>{m.glyph}</span>
               <span>{m.label}</span>
-            </button>
+            </motion.button>
           );
         })}
       </div>
