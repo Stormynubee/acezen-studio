@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AceZen Digital Studio",
-    description: "Six-person studio. Websites, brands, motion. Next.js and React. Based in India, shipping worldwide.",
+    description: "We build custom hardware, clean web apps, and visual brands that actually stand out. 6 real human beings, zero corporate fluff. Based in India, shipping worldwide.",
     url: "https://acezen.in",
     siteName: "AceZen",
     locale: "en_US",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AceZen Digital Studio",
-    description: "Websites, brands, and motion design. Six-person studio, zero fluff.",
+    description: "We build custom hardware, clean web apps, and visual brands that actually stand out. 6 real human beings, zero corporate fluff.",
     creator: "@acezen_studio",
     images: ["/og-image.png"],
   },
