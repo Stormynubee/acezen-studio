@@ -48,7 +48,7 @@ export default function AboutFounder() {
                 
                 <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl group">
                     <Image 
-                        src="/hansraj.jpg" 
+                        src="/hansraj-v2.jpg" 
                         alt="Hansraj Tiwari" 
                         fill
                         sizes="(max-width: 1024px) 100vw, 45vw"

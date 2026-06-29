@@ -270,7 +270,7 @@ export default function AboutTeam() {
                     >
                         <div className="relative w-full h-full rounded-[40px] overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                             <Image 
-                                src="/hansraj.jpg" 
+                                src="/hansraj-v2.jpg" 
                                 alt="Hansraj Tiwari" 
                                 fill
                                 sizes="400px"
