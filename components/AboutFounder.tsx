@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function AboutFounder() {
     return (
@@ -46,9 +47,12 @@ export default function AboutFounder() {
                 <div className="absolute inset-0 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
                 
                 <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl group">
-                    <img 
+                    <Image 
                         src="/hansraj.jpg" 
                         alt="Hansraj Tiwari" 
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 45vw"
+                        priority
                         className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000"
                     />
                     
