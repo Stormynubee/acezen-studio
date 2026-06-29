@@ -10,10 +10,10 @@ import { AtmosphereProvider } from "@/components/AtmosphereContext";
 export const metadata: Metadata = {
 
   title: {
-    default: "AceZen Digital Studio | Creative Engineering & Visual Design",
+    default: "AceZen Digital Studio — Web, Brand & Motion Design",
     template: "%s | AceZen"
   },
-  description: "AceZen transcends traditional development. We architect cinematic digital realities, from system kernels to brand films. Specializing in Next.js, 3D WebGL, and High-Fidelity Motion.",
+  description: "Six-person creative engineering studio. We design and build websites, brands, and motion for teams who care how their product looks. Next.js, React, video production.",
   keywords: ["Digital Studio", "Web Design", "Next.js Developer", "3D WebGL", "Creative Agency", "Video Editing", "Motion Graphics", "React Developer", "System Architecture", "AceZen"],
   authors: [{ name: "Hansraj Tiwari", url: "https://acezen.in" }, { name: "Sayli Changan" }],
   creator: "Hansraj Tiwari",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AceZen Digital Studio",
-    description: "Creative engineering for the digital age. We build digital empires.",
+    description: "Six-person studio. Websites, brands, motion. Next.js and React. Based in India, shipping worldwide.",
     url: "https://acezen.in",
     siteName: "AceZen",
     locale: "en_US",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AceZen Digital Studio",
-    description: "Creative engineering for the digital age.",
+    description: "Websites, brands, and motion design. Six-person studio, zero fluff.",
     creator: "@acezen_studio",
     images: ["/og-image.png"],
   },
@@ -119,7 +119,7 @@ export default function RootLayout({
                   "jobTitle": "System Architect & Founder",
                   "url": "https://hansraj-dev.vercel.app/"
                 },
-                "description": "AceZen architects cinematic digital realities, from system kernels to brand films. Specializing in Next.js, 3D WebGL, and High-Fidelity Motion."
+                "description": "AceZen is a six-person creative engineering studio specializing in web development, brand design, and video production. Built with Next.js, React, and Framer Motion."
               }),
             }}
           />

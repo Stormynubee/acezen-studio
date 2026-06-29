@@ -1,9 +1,15 @@
-# AceZen: Digital Reality Architects
+# AceZen Digital Studio
 
 This file defines the foundational mandates and engineering standards for the AceZen Digital Studio project. All agent actions must adhere to these principles.
 
 ## 🌌 Brand Identity: Cinematic Dark Luxury
-AceZen is not a traditional agency; we are architects of digital reality. The aesthetic is "Observatory at Midnight"—deep space, cinematic motion, and high-fidelity technical precision.
+AceZen is a six-person creative engineering studio. The aesthetic is "Observatory at Midnight"—deep space, cinematic motion, and high-fidelity technical precision.
+
+### Brand Voice
+- **Tone:** Confident, specific, first-person-plural ("we").
+- **Banned words:** architecting, transcending, realities, empires, cinematic digital, next-gen, cutting-edge, seamless, leverage, utilize.
+- **Good:** "We build websites and brands for teams who care how their product looks."
+- **Bad:** "We architect cinematic digital realities that transcend traditional development."
 
 ### Design Tokens
 - **Palette:** 
@@ -45,7 +51,7 @@ All visual components should ideally respect or contribute to the `AtmosphereCon
 
 ## 👤 Identity & Outreach
 - **Founder LinkedIn:** [https://www.linkedin.com/in/hansrajtiwari/](https://www.linkedin.com/in/hansrajtiwari/)
-- **Objective:** Maintain a "Digital Reality Architect" brand voice in all technical and social assets.
+- **Objective:** Maintain a confident, human, first-person-plural brand voice in all technical and social assets. Say what we actually build.
 
 ## 🚀 Workflows
 - **Research First:** Always check `docs/superpowers/` before modifying Atmosphere Engine logic.

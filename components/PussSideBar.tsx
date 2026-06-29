@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 interface PussSideBarProps {
@@ -24,6 +24,9 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
     const [currentFrame, setCurrentFrame] = useState(1);
     const imagesRef = useRef<HTMLImageElement[]>([]);
     const [imagesLoaded, setImagesLoaded] = useState(false);
+    
+    const [isCelebrating, setIsCelebrating] = useState(false);
+    const celebratingRef = useRef(false);
 
     useImperativeHandle(ref, () => ({
         getCurrentFrame: () => currentFrame,
@@ -104,10 +107,35 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
         }
     }, [imagesLoaded]);
 
+    // Celebration Event Listener
+    useEffect(() => {
+        const handleCelebrate = () => {
+            if (celebratingRef.current) return;
+            
+            setIsCelebrating(true);
+            celebratingRef.current = true;
+            
+            let frame = 1;
+            const interval = setInterval(() => {
+                frame = (frame % TOTAL_FRAMES) + 1;
+                updateFrame(frame);
+            }, 60);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                setIsCelebrating(false);
+                celebratingRef.current = false;
+            }, 3000);
+        };
+
+        window.addEventListener('acezen:form-sent', handleCelebrate);
+        return () => window.removeEventListener('acezen:form-sent', handleCelebrate);
+    }, []);
+
     // Scroll-based animation & mouse wheel scrubbing
     useEffect(() => {
         const handleScroll = () => {
-            if (!containerRef.current) return;
+            if (!containerRef.current || celebratingRef.current) return;
             const rect = containerRef.current.getBoundingClientRect();
             const windowHeight = window.innerHeight;
             
@@ -127,6 +155,7 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
 
     // Direct wheel scrubbing over container
     const handleWheel = (e: React.WheelEvent) => {
+        if (celebratingRef.current) return;
         const delta = e.deltaY > 0 ? 1 : -1;
         updateFrame(currentFrame + delta);
     };
@@ -166,6 +195,22 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
                         Scroll / Wheel
                     </span>
                 </motion.div>
+
+                {/* Celebration Overlay */}
+                <AnimatePresence>
+                    {isCelebrating && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="absolute bottom-6 left-0 right-0 flex justify-center pointer-events-none"
+                        >
+                            <span className="text-[10px] font-mono font-bold text-white uppercase tracking-widest bg-blue-500/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                                Incoming!
+                            </span>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </motion.div>
         </div>
     );

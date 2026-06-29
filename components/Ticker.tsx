@@ -20,7 +20,7 @@ function TickerLine() {
             transition={{ repeat: Infinity, ease: 'linear', duration: 25 }}
             className="flex gap-8 md:gap-16 pr-8 md:pr-16 items-center"
         >
-            {['Digital Excellence', '•', 'AceZen Agency', '•', 'Future Ready', '•', 'Concept to Creation', '•'].map((text, i) => (
+            {['Next.js & React', '•', 'Brand Identity', '•', 'Motion Design', '•', 'We reply same day', '•'].map((text, i) => (
                 <span
                     key={i}
                     className="text-8xl md:text-[10rem] font-bold text-transparent tracking-tighter"

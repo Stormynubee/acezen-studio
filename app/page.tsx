@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import SplashScreen from '@/components/SplashScreen';
@@ -9,23 +7,21 @@ import MountainScroll from '@/components/MountainScroll';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import ArchitectSidebar from '@/components/ArchitectSidebar';
 import OverrideOverlay from '@/components/OverrideOverlay';
+import TerminalEasterEgg from '@/components/TerminalEasterEgg';
 
-// Lazy load below-the-fold components
-const AboutTeam = dynamic(() => import('@/components/AboutTeam'), { ssr: false });
-const ServicesBento = dynamic(() => import('@/components/ServicesBento'), { ssr: false });
-const WorkShowcase = dynamic(() => import('@/components/WorkShowcase'), { ssr: false });
-const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
-const Ticker = dynamic(() => import('@/components/Ticker'), { ssr: false });
-const Process = dynamic(() => import('@/components/Process'), { ssr: false });
-const TerminalEasterEgg = dynamic(() => import('@/components/TerminalEasterEgg'), { ssr: false });
+// Allow Next.js to SSR these client components so their content is visible to search engines
+const AboutTeam = dynamic(() => import('@/components/AboutTeam'));
+const ServicesBento = dynamic(() => import('@/components/ServicesBento'));
+const WorkShowcase = dynamic(() => import('@/components/WorkShowcase'));
+const Footer = dynamic(() => import('@/components/Footer'));
+const Ticker = dynamic(() => import('@/components/Ticker'));
+const Process = dynamic(() => import('@/components/Process'));
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-
   return (
     <main className="min-h-screen selection:bg-blue-500/30" style={{ background: 'var(--az-void)' }}>
       <TerminalEasterEgg />
-      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+      <SplashScreen />
 
       <ArchitectSidebar />
       <OverrideOverlay />
@@ -67,7 +63,7 @@ export default function Home() {
 
           <Process />
 
-          <div id="contact" className="relative">
+          <div className="relative">
             <Footer />
           </div>
         </React.Suspense>

@@ -314,6 +314,33 @@ function StatItem({ value, label, delay }: { value: string; label: string; delay
     );
 }
 
+/* ─── BADGE COUNTER ─── */
+function BadgeItem({ value, label, delay }: { value: string; label: string; delay: number }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col justify-center items-start gap-1"
+        >
+            <div className="px-3 py-1 border border-[var(--az-accent)]/30 rounded-md bg-[var(--az-accent)]/5">
+                <span
+                    className="text-sm font-semibold tracking-tight"
+                    style={{ color: 'var(--az-accent)', fontFamily: 'var(--font-mono)' }}
+                >
+                    {value}
+                </span>
+            </div>
+            <span
+                className="text-[10px] uppercase tracking-[0.3em] mt-1"
+                style={{ color: 'var(--az-muted)', fontFamily: 'var(--font-mono)' }}
+            >
+                {label}
+            </span>
+        </motion.div>
+    );
+}
+
 /* ─── SCROLL CUE ─── */
 function ScrollCue() {
     return (
@@ -568,8 +595,8 @@ export default function CinematicHero() {
                                 style={{ borderTop: '1px solid var(--az-border)' }}
                             >
                                 <StatItem value="60+" label="Projects" delay={2.4} />
-                                <StatItem value="SIH" label="Finalist '25" delay={2.55} />
-                                <StatItem value="Est." label="2022" delay={2.7} />
+                                <BadgeItem value="SIH '25" label="Finalist" delay={2.55} />
+                                <BadgeItem value="Since" label="2022" delay={2.7} />
                             </div>
                         </motion.div>
                     </div>

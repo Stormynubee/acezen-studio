@@ -30,7 +30,12 @@ export default function Footer() {
             if (res.ok) {
                 setStatus('success');
                 (e.target as HTMLFormElement).reset();
-                setTimeout(() => setStatus('idle'), 5000); // Reset after 5s
+                window.dispatchEvent(new Event('acezen:form-sent'));
+                // @ts-ignore
+                if (typeof window !== 'undefined' && window.gtag) {
+                    // @ts-ignore
+                    window.gtag('event', 'form_submit', { event_category: 'contact' });
+                }
             } else {
                 setStatus('error');
                 setTimeout(() => setStatus('idle'), 3000);
@@ -63,10 +68,20 @@ export default function Footer() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter mb-24 text-white text-editorial"
+                        className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-bold tracking-tighter mb-8 text-white text-editorial"
                     >
                         Let&apos;s build<br />together<span className="text-blue-500">.</span>
                     </motion.h2>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.15 }}
+                        className="mb-24 text-zinc-400 text-sm md:text-base max-w-lg"
+                    >
+                        Skip the forms and red tape. Tell us what you're building, and we'll get back to you today with a plan.
+                    </motion.div>
 
                     <motion.form
                         onSubmit={handleSubmit}
@@ -178,6 +193,12 @@ export default function Footer() {
                                 <div className="absolute inset-0 bg-blue-50 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-700 ease-out" />
                             </button>
                         </div>
+                        
+                        <div className="text-center md:text-right mt-4">
+                            <a href="mailto:hello@acezen.in" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+                                Or email us directly at hello@acezen.in
+                            </a>
+                        </div>
                     </motion.form>
                 </div>
 
@@ -197,7 +218,7 @@ export default function Footer() {
                             onMouseLeave={() => setHoveredIdx(null)}
                             className="relative group"
                         >
-                            <span className={`text-base md:text-xl font-medium tracking-tight transition-all duration-500 ${hoveredIdx !== null && hoveredIdx !== i ? 'text-white/10' : 'text-white/40 group-hover:text-white'}`}>
+                            <span className={`text-base md:text-xl font-medium tracking-tight transition-all duration-500 ${hoveredIdx !== null && hoveredIdx !== i ? 'text-white/20' : 'text-white/60 group-hover:text-white'}`}>
                                 {link.label}
                             </span>
                             <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-blue-500 transition-all duration-500 group-hover:w-full" />
@@ -206,13 +227,13 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-white/[0.04] pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="border-t border-white/[0.08] pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-6">
-                      <p className="text-[9px] font-mono text-white/10 uppercase tracking-[0.3em]">AceZen Digital Studio</p>
-                      <div className="w-8 h-[1px] bg-white/5" />
-                      <p className="text-[9px] font-mono text-white/10 uppercase tracking-[0.3em]">hello@acezen.in</p>
+                      <p className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em]">AceZen Digital Studio</p>
+                      <div className="w-8 h-[1px] bg-white/10" />
+                      <p className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em]">hello@acezen.in</p>
                     </div>
-                    <p className="text-[9px] font-mono text-white/10 tracking-widest uppercase">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
+                    <p className="text-[9px] font-mono text-white/30 tracking-widest uppercase">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
                 </div>
             </div>
         </footer>

@@ -3,15 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 
-export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
+export default function SplashScreen() {
     const [shouldExit, setShouldExit] = useState(false);
-
-    const onCompleteRef = useRef(onComplete);
-
-    // Always keep the ref updated to the latest callback without triggering a full effect teardown
-    useEffect(() => {
-        onCompleteRef.current = onComplete;
-    }, [onComplete]);
 
     useEffect(() => {
         // If we are already exiting, do nothing and do not reset timers.
@@ -22,7 +15,6 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         // users should see the site quickly, not stare at a loading screen.
         const exitTimer = setTimeout(() => {
             setShouldExit(true);
-            setTimeout(() => onCompleteRef.current(), 600);
         }, 1200);
 
         return () => clearTimeout(exitTimer);

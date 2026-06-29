@@ -76,7 +76,7 @@ export default function Navbar() {
                         <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest leading-none mb-1">Studio</span>
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                            <span className="text-[8px] font-mono text-emerald-400 font-medium uppercase tracking-wider">Available Q3</span>
+                            <span className="text-[8px] font-mono text-emerald-400 font-medium uppercase tracking-wider">Available Q3 '26</span>
                         </div>
                     </div>
 
@@ -120,35 +120,12 @@ export default function Navbar() {
                         ))}
                     </div>
                     <Magnetic strength={0.3}>
-                        <motion.a
-                            href="https://hansraj-dev.vercel.app/"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
+                            onClick={() => scrollToSection('contact')}
                             onMouseEnter={playClick}
-                            animate={isScrolled ? {
-                                scale: [1, 1.02, 1],
-                                boxShadow: [
-                                    "0px 0px 0px rgba(255, 255, 255, 0)",
-                                    "0px 0px 20px rgba(255, 255, 255, 0.5)",
-                                    "0px 0px 0px rgba(255, 255, 255, 0)"
-                                ],
-                                backgroundColor: ["#ffffff", "#f4f4f5", "#ffffff"],
-                                color: "#000000"
-                            } : {
-                                scale: 1,
-                                boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
-                                backgroundColor: "#ffffff",
-                                color: "#000000"
-                            }}
-                            transition={isScrolled ? {
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            } : { duration: 0.3 }}
-                            whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.8)" }}
-                            className="relative bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors group"
+                            className="relative bg-white text-black px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-colors group mr-2"
                         >
-                            <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Portfolio</span>
+                            <span className="relative z-10 group-hover:opacity-80 transition-opacity whitespace-nowrap">Start a project</span>
 
                             {/* Inner wrapper for shimmer clipping to bypass Safari artifacts */}
                             <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
@@ -166,6 +143,18 @@ export default function Navbar() {
                                     />
                                 )}
                             </div>
+                        </button>
+                    </Magnetic>
+                    <Magnetic strength={0.3}>
+                        <motion.a
+                            href="https://hansraj-dev.vercel.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onMouseEnter={playClick}
+                            whileHover={{ scale: 1.05 }}
+                            className="border border-white/20 text-white/60 bg-transparent px-5 py-2 rounded-full text-[10px] font-medium uppercase tracking-[0.2em] hover:text-white hover:border-white/40 transition-colors"
+                        >
+                            Portfolio
                         </motion.a>
                     </Magnetic>
                 </div>
@@ -230,15 +219,25 @@ export default function Navbar() {
                                 {tab}
                             </motion.button>
                         ))}
-                        <motion.a
+                        <motion.button
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 20 }}
                             transition={{ delay: 0.3 }}
+                            onClick={() => scrollToSection('contact')}
+                            className="mt-4 bg-white text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide"
+                        >
+                            Start a project
+                        </motion.button>
+                        <motion.a
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            transition={{ delay: 0.4 }}
                             href="https://hansraj-dev.vercel.app/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-4 bg-white text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wide"
+                            className="border border-white/20 text-white/60 bg-transparent px-8 py-3 rounded-full text-sm font-medium uppercase tracking-wide"
                         >
                             Portfolio
                         </motion.a>
