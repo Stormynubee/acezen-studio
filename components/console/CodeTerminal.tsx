@@ -59,7 +59,7 @@ return (
         <form onSubmit={onSubmit} className="flex items-center gap-2 pt-1">
           <span style={{ color: "var(--az-blue)" }}>{PROMPT}</span>
           <span style={{ color: "var(--az-muted-console)" }}>$</span>
-          <input ref={inputRef} value={input} autoFocus spellCheck={false} onChange={(e) => setInput(e.target.value)}
+          <input ref={inputRef} value={input} spellCheck={false} onChange={(e) => setInput(e.target.value)}
             className="flex-1 bg-transparent text-[var(--az-text)] caret-transparent outline-none" aria-label="terminal input" />
           {input.length === 0 && <span className="az-caret -ml-1" />}
         </form>
