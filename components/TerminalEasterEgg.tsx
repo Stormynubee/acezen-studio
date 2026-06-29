@@ -53,7 +53,7 @@ export default function TerminalEasterEgg() {
             "We like that.",
             " ",
             "> We are always looking for elite engineers and artists.",
-            "> Drop us a packet: hello@acezen.in",
+            "> Drop us a packet: priyanktiwarif434@gmail.com",
             " ",
             "Press ESC to exit the mainframe."
         ];

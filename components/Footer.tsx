@@ -184,9 +184,12 @@ export default function Footer() {
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
                                             exit={{ y: -20, opacity: 0 }}
-                                            className="block relative z-10 text-rose-600"
+                                            className="block relative z-10"
                                         >
-                                            Error. Email hello@acezen.in
+                                            <span className="text-red-500 flex items-center gap-2">
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            Error. Email priyanktiwarif434@gmail.com
+                                        </span>
                                         </motion.span>
                                     )}
                                 </AnimatePresence>
@@ -194,9 +197,9 @@ export default function Footer() {
                             </button>
                         </div>
                         
-                        <div className="text-center md:text-right mt-4">
-                            <a href="mailto:hello@acezen.in" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-                                Or email us directly at hello@acezen.in
+                        <div className="mt-8 text-center md:text-left">
+                            <a href="mailto:priyanktiwarif434@gmail.com" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+                                Or email us directly at priyanktiwarif434@gmail.com
                             </a>
                         </div>
                     </motion.form>
@@ -230,8 +233,9 @@ export default function Footer() {
                 <div className="border-t border-white/[0.08] pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-6">
                       <p className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em]">AceZen Digital Studio</p>
-                      <div className="w-8 h-[1px] bg-white/10" />
-                      <p className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em]">hello@acezen.in</p>
+                      <div className="flex flex-col md:flex-row items-center gap-4">
+                      <p className="text-[9px] font-mono text-white/30 uppercase tracking-[0.3em]">acezen.in</p>
+                      </div>
                     </div>
                     <p className="text-[9px] font-mono text-white/30 tracking-widest uppercase">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
                 </div>

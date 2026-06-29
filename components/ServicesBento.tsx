@@ -54,6 +54,17 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
         }
     }, []);
 
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isHovered) {
+                videoRef.current.play().catch(() => {});
+            } else {
+                videoRef.current.pause();
+                videoRef.current.currentTime = 0;
+            }
+        }
+    }, [isHovered]);
+
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
@@ -93,17 +104,12 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         loop
                         muted
                         playsInline
-                        preload="none"
-                        onCanPlay={() => setMediaLoaded(true)}
+                        preload="metadata"
+                        onLoadedData={() => setMediaLoaded(true)}
                         className={clsx(
                             "w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-40 group-hover:opacity-80",
                             !mediaLoaded && "scale-105 blur-sm"
                         )}
-                        onMouseEnter={(e) => e.currentTarget.play()}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.pause();
-                            e.currentTarget.currentTime = 0;
-                        }}
                     />
                 ) : (
                     <Image
