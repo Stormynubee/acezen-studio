@@ -12,6 +12,7 @@ import TerminalEasterEgg from '@/components/TerminalEasterEgg';
 // Allow Next.js to SSR these client components so their content is visible to search engines
 const AboutTeam = dynamic(() => import('@/components/AboutTeam'));
 const ServicesBento = dynamic(() => import('@/components/ServicesBento'));
+const Console = dynamic(() => import('@/components/console/Console'));
 const WorkShowcase = dynamic(() => import('@/components/WorkShowcase'));
 const Footer = dynamic(() => import('@/components/Footer'));
 const Ticker = dynamic(() => import('@/components/Ticker'));
@@ -53,6 +54,17 @@ export default function Home() {
           <section id="services" className="relative bg-[#050508]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,127,212,0.03),transparent_70%)] pointer-events-none" />
             <ServicesBento />
+          </section>
+
+          <section className="relative z-10 mx-auto mt-14 max-w-5xl px-4 md:mt-20 md:px-8">
+            <div className="mb-4 flex items-end justify-between px-1">
+              <span className="text-technical-console">// live console — poke at it</span>
+              <span className="font-mono-az text-[10px] text-[var(--az-muted-console)]">switch tabs ↗</span>
+            </div>
+            <Console />
+            <p className="mt-4 text-center font-mono-az text-[11px] text-[var(--az-muted-console)]">
+              this isn't a screenshot. type, scrub, watch it move.
+            </p>
           </section>
 
           <section id="work" className="relative">

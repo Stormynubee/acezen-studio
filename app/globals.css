@@ -23,6 +23,15 @@
   --az-accent: #c8a97e;
   --az-cold: #4a7fd4;
 
+  /* Console Specific Tokens (Adapted to avoid conflict) */
+  --az-border-console: rgba(255, 255, 255, 0.06);
+  --az-border-bright-console: rgba(255, 255, 255, 0.14);
+  --az-muted-console: rgba(240, 237, 232, 0.42);
+  --az-gold: var(--az-accent);
+  --az-blue: var(--az-cold);
+  --az-green: #6ee7a8;
+  --az-pink: #e7708f;
+
   /* Fonts - High Fidelity Pairing */
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-mono: 'DM Mono', monospace;
@@ -54,6 +63,54 @@
   text-transform: uppercase;
   font-size: 9px;
   color: var(--az-muted);
+}
+
+/* Console Specific Utilities */
+@utility font-mono-az {
+  font-family: var(--font-mono);
+}
+
+@utility text-editorial-console {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@utility text-technical-console {
+  font-family: var(--font-mono);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-size: 9px;
+  color: var(--az-muted-console);
+}
+
+/* CRT scanlines */
+.az-scanlines {
+  background-image: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.18) 50%);
+  background-size: 100% 4px;
+}
+
+/* blinking caret */
+.az-caret {
+  display: inline-block;
+  width: 9px; height: 1.05em;
+  vertical-align: text-bottom;
+  background: var(--az-green);
+  animation: az-blink 1s steps(2) infinite;
+  box-shadow: 0 0 8px var(--az-green);
+}
+@keyframes az-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* audio waveform pulse */
+@keyframes az-wave { 0%,100%{transform:scaleY(0.35)} 50%{transform:scaleY(1)} }
+
+/* reveal up */
+@keyframes az-rise { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
 }
 
 /* Smooth Scrolling */
