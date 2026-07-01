@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
@@ -43,7 +43,6 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
     const divRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isHovered, setIsHovered] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
     const [mediaLoaded, setMediaLoaded] = useState(false);
 
@@ -67,16 +66,14 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
-
-    const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
-    const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
+    // Spotlight gradient driven directly by motion values — no per-move React re-render
+    const spotlight = useMotionTemplate`radial-gradient(600px circle at ${x}px ${y}px, rgba(255,255,255,0.08), transparent 40%)`;
 
     function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent<HTMLDivElement>) {
         if (isMobile) return;
         const { left, top } = currentTarget.getBoundingClientRect();
         x.set(clientX - left);
         y.set(clientY - top);
-        setPosition({ x: clientX - left, y: clientY - top });
     }
 
     return (
@@ -117,7 +114,7 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
                         alt={service.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        loading="eager"
+                        loading="lazy"
                         onLoad={() => setMediaLoaded(true)}
                         className="object-cover transition-transform duration-1000 group-hover:scale-100 scale-110 opacity-40 group-hover:opacity-80"
                     />
@@ -135,11 +132,9 @@ function SpotlightCard({ service, index, onClick }: { service: typeof services[0
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-100 transition-opacity duration-700" />
 
             {/* Spotlight Glare */}
-            <div
+            <motion.div
                 className="pointer-events-none absolute -inset-px opacity-0 transition duration-700 group-hover:opacity-100 mix-blend-overlay"
-                style={{
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,0.08), transparent 40%)`,
-                }}
+                style={{ background: spotlight }}
             />
 
             {/* Content */}

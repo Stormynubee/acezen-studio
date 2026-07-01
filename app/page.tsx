@@ -6,8 +6,11 @@ import CinematicHero from '@/components/CinematicHero';
 import MountainScroll from '@/components/MountainScroll';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import ArchitectSidebar from '@/components/ArchitectSidebar';
-import OverrideOverlay from '@/components/OverrideOverlay';
-import TerminalEasterEgg from '@/components/TerminalEasterEgg';
+
+// Interaction-triggered overlays — dynamically imported so Framer Motion
+// and their trees stay out of the initial bundle until actually needed.
+const OverrideOverlay = dynamic(() => import('@/components/OverrideOverlay'));
+const TerminalEasterEgg = dynamic(() => import('@/components/TerminalEasterEgg'));
 
 // Allow Next.js to SSR these client components so their content is visible to search engines
 const AboutTeam = dynamic(() => import('@/components/AboutTeam'));

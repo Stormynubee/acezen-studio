@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 type AtmosphereState = {
   vfxDensity: number; // 0 to 1
@@ -29,11 +29,11 @@ const AtmosphereContext = createContext<AtmosphereContextType | undefined>(undef
 export function AtmosphereProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AtmosphereState>(defaultState);
 
-  const setVfxDensity = (vfxDensity: number) => setState(s => ({ ...s, vfxDensity }));
-  const setMood = (mood: number) => setState(s => ({ ...s, mood }));
-  const setMotionFidelity = (motionFidelity: number) => setState(s => ({ ...s, motionFidelity }));
-  const setIsActive = (isActive: boolean) => setState(s => ({ ...s, isActive }));
-  const reset = () => setState(defaultState);
+  const setVfxDensity = useCallback((vfxDensity: number) => setState(s => ({ ...s, vfxDensity })), []);
+  const setMood = useCallback((mood: number) => setState(s => ({ ...s, mood })), []);
+  const setMotionFidelity = useCallback((motionFidelity: number) => setState(s => ({ ...s, motionFidelity })), []);
+  const setIsActive = useCallback((isActive: boolean) => setState(s => ({ ...s, isActive })), []);
+  const reset = useCallback(() => setState(defaultState), []);
 
   // Sync state to CSS Variables
   useEffect(() => {
@@ -51,15 +51,17 @@ export function AtmosphereProvider({ children }: { children: React.ReactNode }) 
     root.style.setProperty('--az-accent', `rgb(${r}, ${g}, ${b})`);
   }, [state.vfxDensity, state.mood, state.motionFidelity]);
 
+  const value = useMemo(() => ({
+    ...state,
+    setVfxDensity,
+    setMood,
+    setMotionFidelity,
+    setIsActive,
+    reset,
+  }), [state, setVfxDensity, setMood, setMotionFidelity, setIsActive, reset]);
+
   return (
-    <AtmosphereContext.Provider value={{ 
-      ...state, 
-      setVfxDensity, 
-      setMood, 
-      setMotionFidelity, 
-      setIsActive, 
-      reset 
-    }}>
+    <AtmosphereContext.Provider value={value}>
       {children}
     </AtmosphereContext.Provider>
   );

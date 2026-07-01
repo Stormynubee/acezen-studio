@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, MotionValue } from 'framer-motion';
+import { useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { useAtmosphere } from '@/components/AtmosphereContext';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -20,6 +20,15 @@ function AmbientOrb() {
     const rafRef = useRef<number>(0);
 
     useEffect(() => {
+        // On touch / no-hover devices there is no cursor to follow, so skip the
+        // forever-running rAF lerp loop entirely and leave the orb centered.
+        const noHover =
+            typeof window !== 'undefined' &&
+            window.matchMedia &&
+            (window.matchMedia('(hover: none)').matches ||
+                window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        if (noHover) return;
+
         const onMove = (e: MouseEvent) => {
             posRef.current = {
                 x: e.clientX / window.innerWidth,
@@ -50,13 +59,15 @@ function AmbientOrb() {
         <div
             ref={orbRef}
             aria-hidden
-            className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
+            className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 hero-orb"
             style={{
+                left: '50%',
+                top: '40%',
                 width: 700,
                 height: 700,
                 borderRadius: '50%',
                 background: 'radial-gradient(ellipse, rgba(200,169,126,0.09) 0%, rgba(74,127,212,0.05) 45%, transparent 75%)',
-                filter: 'blur(60px)',
+                filter: 'blur(var(--orb-blur, 60px))',
                 willChange: 'left, top',
                 zIndex: 1,
             }}
@@ -177,15 +188,27 @@ function StarField() {
         delay: i * 0.07,
     }));
 
+    // Twinkle is driven by a single shared CSS @keyframes (one compositor animation
+    // per star, GPU-friendly) instead of 80 concurrent JS-driven Framer Motion loops.
+    // On mobile, half the stars are hidden to cut fill-rate cost — see CSS below.
     return (
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute inset-0 pointer-events-none hero-starfield" aria-hidden>
             {stars.map((star, i) => (
-                <motion.div
+                <span
                     key={i}
-                    className="absolute rounded-full bg-white"
-                    style={{ left: `${star.x}%`, top: `${star.y}%`, width: star.s, height: star.s }}
-                    animate={{ opacity: [star.o, star.o * 3.5, star.o] }}
-                    transition={{ duration: star.dur, repeat: Infinity, ease: 'easeInOut', delay: star.delay }}
+                    className="hero-star"
+                    data-odd={i % 2 === 1 ? '' : undefined}
+                    style={{
+                        left: `${star.x}%`,
+                        top: `${star.y}%`,
+                        width: star.s,
+                        height: star.s,
+                        // @ts-expect-error custom properties
+                        '--star-o': star.o,
+                        '--star-o-peak': star.o * 3.5,
+                        '--star-dur': `${star.dur}s`,
+                        '--star-delay': `${star.delay}s`,
+                    }}
                 />
             ))}
         </div>
@@ -371,37 +394,23 @@ function ScrollCue() {
 
 /* ─── BLUEPRINT MESH ─── */
 function BlueprintMesh({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
     const gridOpacity = useTransform(scrollProgress, [0, 0.4], [0.1, 0]);
-    
-    useEffect(() => {
-        const onMove = (e: MouseEvent) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
-        };
-        window.addEventListener('mousemove', onMove);
-        return () => window.removeEventListener('mousemove', onMove);
-    }, [mouseX, mouseY]);
 
+    // A static soft-radial mask reveals the grid toward the upper-center of the hero.
+    // (The previous mouse-tracking mask never rendered — it wrote CSS vars to an empty
+    // sibling element the mask couldn't read — so this preserves the intended look
+    // while removing a permanent mousemove listener + two springs that did nothing.)
     return (
-        <motion.div 
+        <motion.div
             className="absolute inset-0 pointer-events-none z-[5]"
             style={{ opacity: gridOpacity }}
         >
-            <div 
+            <div
                 className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px]"
                 style={{
-                  maskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
-                  WebkitMaskImage: `radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), black, transparent 80%)`,
-                } as React.CSSProperties}
-            />
-            {/* Using a motion div to hold the dynamic values for the mask */}
-            <motion.div 
-                style={{ 
-                    '--mouse-x': useSpring(mouseX, { stiffness: 100, damping: 20 }),
-                    '--mouse-y': useSpring(mouseY, { stiffness: 100, damping: 20 })
-                } as React.CSSProperties}
+                    maskImage: 'radial-gradient(800px circle at 50% 35%, black, transparent 80%)',
+                    WebkitMaskImage: 'radial-gradient(800px circle at 50% 35%, black, transparent 80%)',
+                }}
             />
         </motion.div>
     );
@@ -450,7 +459,7 @@ export default function CinematicHero() {
                         width: '90%', height: '80%',
                         borderRadius: '50%',
                         background: 'radial-gradient(ellipse, rgba(74,127,212,0.12) 0%, transparent 70%)',
-                        filter: 'blur(120px)',
+                        filter: 'blur(var(--ambient-blur, 120px))',
                     }}
                 />
                 <StarField />
@@ -538,7 +547,8 @@ export default function CinematicHero() {
                                 className="rounded-2xl p-8 xl:p-10 mb-10"
                                 style={{
                                     background: 'rgba(255,255,255,0.02)',
-                                    backdropFilter: 'blur(32px)',
+                                    backdropFilter: 'blur(var(--glass-blur, 32px))',
+                                    WebkitBackdropFilter: 'blur(var(--glass-blur, 32px))',
                                     border: '1px solid var(--az-border)',
                                     boxShadow: 'inset 0 0 0 0.5px rgba(255,255,255,0.05)',
                                 }}

@@ -10,6 +10,15 @@ function useUISound() {
     return { playClick: () => {} };
 }
 
+const SECTIONS = [
+    { text: 'AceZen', tab: '', scrolled: false },
+    { text: 'Atmosphere', tab: '', scrolled: true },
+    { text: 'The Team', tab: 'about', scrolled: true },
+    { text: 'Expertise', tab: 'services', scrolled: true },
+    { text: 'Portfolio', tab: 'work', scrolled: true },
+    { text: 'Contact', tab: 'portfolio', scrolled: true },
+] as const;
+
 export default function Navbar() {
     const [activeText, setActiveText] = useState('AceZen');
     const [activeTab, setActiveTab] = useState('');
@@ -19,37 +28,34 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const { scrollY } = useScroll();
 
+    // Cache viewport height; recompute only on resize (avoids a layout read per scroll frame)
+    const heightRef = useRef(0);
+    const sectionRef = useRef(-1);
+    useEffect(() => {
+        const setH = () => { heightRef.current = window.innerHeight; };
+        setH();
+        window.addEventListener('resize', setH, { passive: true });
+        return () => window.removeEventListener('resize', setH);
+    }, []);
+
     useMotionValueEvent(scrollY, "change", (latest) => {
-        // High-performance scroll tracking using Framer Motion (optimized API request frame)
-        if (typeof window === 'undefined') return;
+        const height = heightRef.current || 1;
+        // Section boundaries expressed in multiples of viewport height
+        let index: number;
+        if (latest < height * 0.5) index = 0;
+        else if (latest < height * 1.5) index = 1;
+        else if (latest < height * 2.5) index = 2;
+        else if (latest < height * 3.5) index = 3;
+        else if (latest < height * 5.5) index = 4;
+        else index = 5;
 
-        const height = window.innerHeight;
+        if (index === sectionRef.current) return;
+        sectionRef.current = index;
 
-        if (latest < height * 0.5) {
-            setActiveText('AceZen');
-            setActiveTab('');
-            setIsScrolled(false);
-        } else if (latest < height * 1.5) {
-            setActiveText('Atmosphere');
-            setActiveTab('');
-            setIsScrolled(true);
-        } else if (latest < height * 2.5) {
-            setActiveText('The Team');
-            setActiveTab('about');
-            setIsScrolled(true);
-        } else if (latest < height * 3.5) {
-            setActiveText('Expertise');
-            setActiveTab('services');
-            setIsScrolled(true);
-        } else if (latest < height * 5.5) {
-            setActiveText('Portfolio');
-            setActiveTab('work');
-            setIsScrolled(true);
-        } else {
-            setActiveText('Contact');
-            setActiveTab('portfolio');
-            setIsScrolled(true);
-        }
+        const section = SECTIONS[index];
+        setActiveText(section.text);
+        setActiveTab(section.tab);
+        setIsScrolled(section.scrolled);
     });
 
     const scrollToSection = (id: string) => {

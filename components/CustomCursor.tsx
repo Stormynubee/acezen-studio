@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 export default function CustomCursor() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
     const [hidden, setHidden] = useState(false);
 
@@ -25,7 +24,6 @@ export default function CustomCursor() {
         const updateMousePosition = (e: MouseEvent) => {
             cursorX.set(e.clientX - 16); // offset by half width (32/2)
             cursorY.set(e.clientY - 16);
-            setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
         const handleMouseOver = (e: MouseEvent) => {

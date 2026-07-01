@@ -25,13 +25,22 @@ export default function NeuralNexus() {
   const secondaryColor = useTransform(moodMV, [0, 1], ["#0ea5e9", "#f59e0b"]);
 
   useEffect(() => {
+    // Skip pointer tracking entirely on non-desktop viewports
+    if (typeof window === 'undefined' || window.innerWidth < 1024) return;
+
+    let rafPending = false;
+    let lastX = 0;
+    let lastY = 0;
     const handleMove = (e: MouseEvent) => {
-      // Throttle mouse updates for smoother performance
+      lastX = e.clientX;
+      lastY = e.clientY;
+      // Coalesce to at most one update per animation frame
+      if (rafPending) return;
+      rafPending = true;
       requestAnimationFrame(() => {
-        if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
-        }
+        rafPending = false;
+        mouseX.set(lastX);
+        mouseY.set(lastY);
       });
     };
     window.addEventListener('mousemove', handleMove, { passive: true });

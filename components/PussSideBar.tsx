@@ -21,36 +21,54 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
 ) {
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [currentFrame, setCurrentFrame] = useState(1);
+    const currentFrameRef = useRef(1);
     const imagesRef = useRef<HTMLImageElement[]>([]);
     const [imagesLoaded, setImagesLoaded] = useState(false);
-    
+    const scrollRafRef = useRef(0);
+
     const [isCelebrating, setIsCelebrating] = useState(false);
     const celebratingRef = useRef(false);
 
     useImperativeHandle(ref, () => ({
-        getCurrentFrame: () => currentFrame,
+        getCurrentFrame: () => currentFrameRef.current,
         setFrame: (f: number) => updateFrame(f),
     }));
 
-    // Preload all 40 frame images
+    // Lazy-load the 40 frame images only when the section nears the viewport
     useEffect(() => {
-        let loadedCount = 0;
-        const imgs: HTMLImageElement[] = [];
+        const container = containerRef.current;
+        if (!container) return;
 
-        for (let i = 1; i <= TOTAL_FRAMES; i++) {
-            const img = new Image();
-            const frameNum = String(i).padStart(3, '0');
-            img.src = `/animation/bongo-cat/ezgif-frame-${frameNum}.jpg`;
-            img.onload = () => {
-                loadedCount++;
-                if (loadedCount === TOTAL_FRAMES) {
-                    setImagesLoaded(true);
+        let started = false;
+        const startLoading = () => {
+            if (started) return;
+            started = true;
+            let loadedCount = 0;
+            const imgs: HTMLImageElement[] = [];
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                const frameNum = String(i).padStart(3, '0');
+                img.src = `/animation/bongo-cat/ezgif-frame-${frameNum}.jpg`;
+                img.onload = () => {
+                    loadedCount++;
+                    if (loadedCount === TOTAL_FRAMES) setImagesLoaded(true);
+                };
+                imgs.push(img);
+            }
+            imagesRef.current = imgs;
+        };
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    startLoading();
+                    observer.disconnect();
                 }
-            };
-            imgs.push(img);
-        }
-        imagesRef.current = imgs;
+            },
+            { rootMargin: '400px 0px' }
+        );
+        observer.observe(container);
+        return () => observer.disconnect();
     }, []);
 
     // Function to draw frame on canvas with object-cover fit
@@ -79,31 +97,32 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
 
     const updateFrame = (newFrame: number) => {
         const clamped = Math.min(TOTAL_FRAMES, Math.max(1, Math.round(newFrame)));
-        setCurrentFrame(clamped);
+        if (clamped === currentFrameRef.current) return;
+        currentFrameRef.current = clamped;
         renderFrame(clamped);
         if (onFrameChange) onFrameChange(clamped);
     };
 
-    // Sync canvas resolution to element size
+    // Sync canvas resolution to element size (stable listener — reads frame from ref)
     useEffect(() => {
         const handleResize = () => {
             if (containerRef.current && canvasRef.current) {
                 const rect = containerRef.current.getBoundingClientRect();
                 canvasRef.current.width = rect.width * (window.devicePixelRatio || 1);
                 canvasRef.current.height = rect.height * (window.devicePixelRatio || 1);
-                renderFrame(currentFrame);
+                renderFrame(currentFrameRef.current);
             }
         };
 
         handleResize();
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize, { passive: true });
         return () => window.removeEventListener('resize', handleResize);
-    }, [currentFrame, imagesLoaded]);
+    }, [imagesLoaded]);
 
     // Initial render when loaded
     useEffect(() => {
         if (imagesLoaded) {
-            renderFrame(currentFrame);
+            renderFrame(currentFrameRef.current);
         }
     }, [imagesLoaded]);
 
@@ -132,32 +151,39 @@ const PussSideBar = forwardRef<PussSideBarHandle, PussSideBarProps>(function Pus
         return () => window.removeEventListener('acezen:form-sent', handleCelebrate);
     }, []);
 
-    // Scroll-based animation & mouse wheel scrubbing
+    // Scroll-based animation & mouse wheel scrubbing (rAF-coalesced, one update per frame)
     useEffect(() => {
         const handleScroll = () => {
-            if (!containerRef.current || celebratingRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            
-            // Calculate scroll progress through section
-            const totalDistance = rect.height + windowHeight;
-            const currentPos = windowHeight - rect.top;
-            const progress = Math.min(1, Math.max(0, currentPos / totalDistance));
-            
-            const targetFrame = Math.min(TOTAL_FRAMES, Math.max(1, Math.floor(progress * TOTAL_FRAMES) + 1));
-            updateFrame(targetFrame);
+            if (scrollRafRef.current) return;
+            scrollRafRef.current = requestAnimationFrame(() => {
+                scrollRafRef.current = 0;
+                if (!containerRef.current || celebratingRef.current) return;
+                const rect = containerRef.current.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+
+                // Calculate scroll progress through section
+                const totalDistance = rect.height + windowHeight;
+                const currentPos = windowHeight - rect.top;
+                const progress = Math.min(1, Math.max(0, currentPos / totalDistance));
+
+                const targetFrame = Math.min(TOTAL_FRAMES, Math.max(1, Math.floor(progress * TOTAL_FRAMES) + 1));
+                updateFrame(targetFrame);
+            });
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll();
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (scrollRafRef.current) cancelAnimationFrame(scrollRafRef.current);
+        };
     }, []);
 
     // Direct wheel scrubbing over container
     const handleWheel = (e: React.WheelEvent) => {
         if (celebratingRef.current) return;
         const delta = e.deltaY > 0 ? 1 : -1;
-        updateFrame(currentFrame + delta);
+        updateFrame(currentFrameRef.current + delta);
     };
 
     return (

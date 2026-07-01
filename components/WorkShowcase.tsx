@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useTransform, useScroll, useVelocity, useSpring } from 'framer-motion';
+import { motion, useTransform, useScroll, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 
@@ -90,27 +90,40 @@ function DesktopWorkShowcase() {
 }
 
 function WorkCard({ work }: { work: typeof works[0] }) {
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const mx = useMotionValue(0);
+    const my = useMotionValue(0);
+    const followLight = useMotionTemplate`radial-gradient(400px circle at ${mx}px ${my}px, rgba(255,255,255,0.12), transparent 80%)`;
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+        mx.set(e.clientX - rect.left);
+        my.set(e.clientY - rect.top);
+    };
+
+    const handleMouseEnter = () => { videoRef.current?.play().catch(() => {}); };
+    const handleMouseLeave = () => {
+        const v = videoRef.current;
+        if (v) { v.pause(); v.currentTime = 0; }
     };
 
     return (
-        <div 
+        <div
             onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className="relative h-[24vh] w-[38vw] min-w-[420px] overflow-hidden bg-zinc-950 group cursor-pointer flex-none border border-white/5 shadow-2xl rounded-xl transition-all duration-700 hover:border-white/20 hover:shadow-[0_0_80px_rgba(0,0,0,0.5)]"
         >
             <div className="absolute inset-0 flex items-center justify-center bg-black overflow-hidden">
                 {work.video ? (
                     <video
+                        ref={videoRef}
                         src={work.video}
                         className="w-full h-full object-cover opacity-50 group-hover:opacity-85 group-hover:scale-105 transition-all duration-1000"
-                        autoPlay
                         loop
                         muted
                         playsInline
+                        preload="none"
                     />
                 ) : (
                     <Image
@@ -124,11 +137,9 @@ function WorkCard({ work }: { work: typeof works[0] }) {
             </div>
 
             {/* Follow Light Gradient */}
-            <div 
+            <motion.div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10 mix-blend-overlay"
-                style={{
-                    background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.12), transparent 80%)`,
-                }}
+                style={{ background: followLight }}
             />
 
             {/* Inner Shimmer Rim Light */}
@@ -194,6 +205,7 @@ function MobileWorkShowcase() {
                                     loop
                                     muted
                                     playsInline
+                                    preload="none"
                                 />
                             ) : (
                                 <Image

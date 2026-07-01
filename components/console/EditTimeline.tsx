@@ -10,9 +10,24 @@ const [playing, setPlaying] = useState<boolean>(true);
 const [playhead, setPlayhead] = useState<number>(8);
 const rafRef = useRef<number | null>(null);
 const lastRef = useRef<number>(0);
+const rootRef = useRef<HTMLDivElement>(null);
+const [visible, setVisible] = useState<boolean>(true);
+
+// Pause the playhead rAF when the timeline is scrolled off-screen so it isn't
+// re-rendering at 60fps in the background (matters most on mobile).
+useEffect(() => {
+  const el = rootRef.current;
+  if (!el) return;
+  const io = new IntersectionObserver(
+    ([entry]) => setVisible(entry.isIntersecting),
+    { threshold: 0.01 }
+  );
+  io.observe(el);
+  return () => io.disconnect();
+}, []);
 
 useEffect(() => {
-  if (!playing) return;
+  if (!playing || !visible) return;
   const step = (t: number) => {
     if (!lastRef.current) lastRef.current = t;
     const dt = (t - lastRef.current) / 1000;
@@ -22,7 +37,7 @@ useEffect(() => {
   };
   rafRef.current = requestAnimationFrame(step);
   return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); lastRef.current = 0; };
-}, [playing]);
+}, [playing, visible]);
 
 const tc = (() => {
   const totalFrames = Math.floor((playhead / 100) * DURATION * 24);
@@ -31,7 +46,7 @@ const tc = (() => {
 })();
 
 return (
-  <div className="flex h-full flex-col">
+  <div ref={rootRef} className="flex h-full flex-col">
     <div className="relative flex-1 overflow-hidden border-b border-[var(--az-border-console)]">
       <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 0%, rgba(74,127,212,0.16), transparent 60%), radial-gradient(80% 60% at 70% 100%, rgba(200,169,126,0.12), transparent 60%)" }} />
       <div className="az-scanlines absolute inset-0 opacity-40" />

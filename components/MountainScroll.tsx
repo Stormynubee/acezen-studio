@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 /**
  * MOUNTAIN SCROLL — Optimized Lazy Frame Sequence
@@ -33,7 +33,7 @@ export default function MountainScroll() {
     const loadedSetRef = useRef<Set<number>>(new Set());
     const targetFrameRef = useRef(0);
     const activeRef = useRef(false);
-    const animationLoopRef = useRef<() => void>(() => {});
+    const docHeightRef = useRef(1);
 
     const drawImage = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) => {
         const scaleX = w / img.width;
@@ -87,7 +87,7 @@ export default function MountainScroll() {
 
     const checkScrollAndLoad = useCallback(() => {
         const scrollTop = window.scrollY;
-        const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        const docHeight = docHeightRef.current;
         const progress = Math.min(Math.max(scrollTop / docHeight, 0), 1);
         const currentFrame = Math.round(progress * (TOTAL_FRAMES - 1));
         const start = Math.max(0, currentFrame - 3);
@@ -95,20 +95,23 @@ export default function MountainScroll() {
         for (let i = start; i <= end; i++) loadFrame(i);
     }, [loadFrame]);
 
-    const animationLoop = useCallback(() => {
-        if (!activeRef.current) return;
-        const scrollTop = window.scrollY;
-        const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-        const progress = Math.min(Math.max(scrollTop / docHeight, 0), 1);
-        const frame = Math.round(progress * (TOTAL_FRAMES - 1));
-        targetFrameRef.current = frame;
-        renderFrame(frame);
-        rafRef.current = requestAnimationFrame(animationLoopRef.current);
+    // rAF-coalesced scroll render: schedule at most one frame render per scroll burst
+    const scheduleRender = useCallback(() => {
+        if (!activeRef.current || rafRef.current) return;
+        rafRef.current = requestAnimationFrame(() => {
+            rafRef.current = 0;
+            const scrollTop = window.scrollY;
+            const progress = Math.min(Math.max(scrollTop / docHeightRef.current, 0), 1);
+            const frame = Math.round(progress * (TOTAL_FRAMES - 1));
+            targetFrameRef.current = frame;
+            renderFrame(frame);
+        });
     }, [renderFrame]);
 
-    useEffect(() => {
-        animationLoopRef.current = animationLoop;
-    }, [animationLoop]);
+    const onScroll = useCallback(() => {
+        checkScrollAndLoad();
+        scheduleRender();
+    }, [checkScrollAndLoad, scheduleRender]);
 
     useEffect(() => {
         const resize = () => {
@@ -117,6 +120,7 @@ export default function MountainScroll() {
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
             canvasRef.current.width = window.innerWidth * dpr;
             canvasRef.current.height = window.innerHeight * dpr;
+            docHeightRef.current = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
             lastFrameRef.current = -1;
             renderFrame(targetFrameRef.current);
         };
@@ -130,8 +134,8 @@ export default function MountainScroll() {
                     // Minimal initial load: frames 0-4
                     for (let i = 0; i <= 4; i++) loadFrame(i);
                     resize();
-                    rafRef.current = requestAnimationFrame(animationLoopRef.current);
-                    window.addEventListener('scroll', checkScrollAndLoad, { passive: true });
+                    scheduleRender();
+                    window.addEventListener('scroll', onScroll, { passive: true });
                 }
             },
             { rootMargin: '200px 0px' }
@@ -143,12 +147,12 @@ export default function MountainScroll() {
 
         return () => {
             activeRef.current = false;
-            window.removeEventListener('scroll', checkScrollAndLoad);
+            window.removeEventListener('scroll', onScroll);
             window.removeEventListener('resize', resize);
-            cancelAnimationFrame(rafRef.current);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
             if (sentinel) observer.unobserve(sentinel);
         };
-    }, [animationLoop, checkScrollAndLoad, loadFrame, renderFrame]);
+    }, [scheduleRender, onScroll, loadFrame, renderFrame]);
 
     return (
         <div className="fixed inset-0 -z-10 w-full h-full overflow-hidden bg-zinc-950 pointer-events-none">

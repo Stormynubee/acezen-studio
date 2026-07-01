@@ -39,12 +39,31 @@
 
   /* Dynamic Atmosphere */
   --grain-opacity: calc(var(--vfx-density, 0.4) * 0.08);
+
+  /* Blur budgets — full fidelity on desktop, trimmed on mobile below.
+     backdrop-filter / large blur() radii are the most expensive mobile GPU ops,
+     so these are lowered under 768px without changing desktop rendering. */
+  --glass-blur: 32px;
+  --orb-blur: 60px;
+  --ambient-blur: 120px;
+  --panel-blur: 40px;
+}
+
+/* ── Mobile GPU budget — reduce expensive blur/compositing on small screens ── */
+@media (max-width: 767px) {
+  :root {
+    --glass-blur: 14px;
+    --orb-blur: 40px;
+    --ambient-blur: 70px;
+    --panel-blur: 18px;
+  }
 }
 
 /* Custom Utilities */
 @utility glass-panel {
   background: rgba(255, 255, 255, 0.01);
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(var(--panel-blur, 40px));
+  -webkit-backdrop-filter: blur(var(--panel-blur, 40px));
   border: 1px solid var(--az-border);
   box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.2);
 }
@@ -109,8 +128,28 @@
 /* reveal up */
 @keyframes az-rise { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
+/* ── Hero star field — single shared compositor animation per star ── */
+.hero-star {
+  position: absolute;
+  border-radius: 9999px;
+  background: #fff;
+  opacity: var(--star-o, 0.3);
+  will-change: opacity;
+  animation: hero-twinkle var(--star-dur, 3s) ease-in-out var(--star-delay, 0s) infinite;
+}
+@keyframes hero-twinkle {
+  0%, 100% { opacity: var(--star-o, 0.3); }
+  50% { opacity: var(--star-o-peak, 0.9); }
+}
+
+@media (max-width: 767px) {
+  /* Halve star fill-rate on phones — hide every other star */
+  .hero-star[data-odd] { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  .cinematic-grain::before { animation: none !important; }
 }
 
 /* Smooth Scrolling */
@@ -155,6 +194,19 @@ body {
   80% { transform: translate(-15%, 0); }
   90% { transform: translate(10%, 5%); }
   100% { transform: translate(5%, 0); }
+}
+
+/* On phones, the animated 300%×300% noise layer is a heavy per-frame composite.
+   Keep the grain texture (static, smaller footprint) but stop animating it. */
+@media (max-width: 767px) {
+  .cinematic-grain::before {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    animation: none;
+    opacity: calc(var(--grain-opacity) * 0.6);
+  }
 }
 
 .lenis.lenis-smooth {
